@@ -1,0 +1,40 @@
+{
+  "settingsTitle": "Settings",
+  "learningPreferences": "LEARNING PREFERENCES",
+  "learnedLanguage": "Target Language",
+  "practiceLevel": "Practice Level",
+  "appSettings": "APP SETTINGS",
+  "dailyReminders": "Daily Reminders",
+  "saveChanges": "Save Changes",
+  "logout": "Logout",
+  "onboard1Title": "Learn Anywhere,\nAnytime",
+  "onboard1Subtitle": "Pocket-sized learning lessons designed\nfor your daily life.",
+  "onboard2Title": "Real Conversations,\nReal Progress",
+  "onboard2Subtitle": "Practice with AI-powered dialogues\nthat feel natural.",
+  "onboard3Title": "Track Your\nJourney",
+  "onboard3Subtitle": "See how far you've come with\nbeautiful progress charts.",
+  "skip": "Skip",
+  "next": "Next  →",
+  "letsStart": "Let's Start! 🚀",
+  "loginSubtitle": "Learn Languages. Live Better.",
+  "fillAllFields": "Please fill in all fields! 🌟",
+  "registerSuccess": "Registration Successful! You can sign in.",
+  "connectionError": "Connection Error!",
+  "comingSoon": "Sign in with {provider} is coming soon 🚀",
+  "@comingSoon": {
+    "placeholders": {
+      "provider": { "type": "String" }
+    }
+  },
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "username": "Username",
+  "email": "Email",
+  "password": "Password",
+  "forgotPassword": "Forgot password?",
+  "signInBtn": "🚀  Sign In",
+  "signUpBtn": "✨  Create Account",
+  "or": "or",
+  "noAccount": "Don't have an account? ",
+  "haveAccount": "Already registered? "
+}

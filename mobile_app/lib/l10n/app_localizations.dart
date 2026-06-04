@@ -1,0 +1,332 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations_en.dart';
+import 'app_localizations_tr.dart';
+
+// ignore_for_file: type=lint
+
+/// Callers can lookup localized strings with an instance of AppLocalizations
+/// returned by `AppLocalizations.of(context)`.
+///
+/// Applications need to include `AppLocalizations.delegate()` in their app's
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
+///
+/// ```dart
+/// import 'l10n/app_localizations.dart';
+///
+/// return MaterialApp(
+///   localizationsDelegates: AppLocalizations.localizationsDelegates,
+///   supportedLocales: AppLocalizations.supportedLocales,
+///   home: MyApplicationHome(),
+/// );
+/// ```
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the AppLocalizations.supportedLocales
+/// property.
+abstract class AppLocalizations {
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+
+  final String localeName;
+
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  }
+
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
+
+  /// A list of this localizations delegate along with the default localizations
+  /// delegates.
+  ///
+  /// Returns a list of localizations delegates containing this delegate along with
+  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+  /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
+
+  /// A list of this localizations delegate's supported locales.
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('tr'),
+  ];
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayarlar'**
+  String get settingsTitle;
+
+  /// No description provided for @learningPreferences.
+  ///
+  /// In tr, this message translates to:
+  /// **'ÖĞRENME TERCİHLERİ'**
+  String get learningPreferences;
+
+  /// No description provided for @learnedLanguage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öğrenilen Dil'**
+  String get learnedLanguage;
+
+  /// No description provided for @practiceLevel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pratik Seviyesi'**
+  String get practiceLevel;
+
+  /// No description provided for @appSettings.
+  ///
+  /// In tr, this message translates to:
+  /// **'UYGULAMA AYARLARI'**
+  String get appSettings;
+
+  /// No description provided for @dailyReminders.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günlük Hatırlatıcılar'**
+  String get dailyReminders;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişiklikleri Kaydet'**
+  String get saveChanges;
+
+  /// No description provided for @logout.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çıkış Yap'**
+  String get logout;
+
+  /// No description provided for @onboard1Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her Yerde,\nHer Zaman Öğren'**
+  String get onboard1Title;
+
+  /// No description provided for @onboard1Subtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günlük hayatın için tasarlanmış\ncebe sığan dersler.'**
+  String get onboard1Subtitle;
+
+  /// No description provided for @onboard2Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gerçek Diyaloglar,\nGerçek İlerleme'**
+  String get onboard2Title;
+
+  /// No description provided for @onboard2Subtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğal hissettiren yapay zeka destekli\ndiyaloglarla pratik yap.'**
+  String get onboard2Subtitle;
+
+  /// No description provided for @onboard3Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yolculuğunu\nTakip Et'**
+  String get onboard3Title;
+
+  /// No description provided for @onboard3Subtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şık ilerleme grafikleriyle\nne kadar geliştiğini gör.'**
+  String get onboard3Subtitle;
+
+  /// No description provided for @skip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Atla'**
+  String get skip;
+
+  /// No description provided for @next.
+  ///
+  /// In tr, this message translates to:
+  /// **'İleri  →'**
+  String get next;
+
+  /// No description provided for @letsStart.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hadi Başlayalım! 🚀'**
+  String get letsStart;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dil Öğren. Daha İyi Yaşa.'**
+  String get loginSubtitle;
+
+  /// No description provided for @fillAllFields.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen tüm alanları doldurun! 🌟'**
+  String get fillAllFields;
+
+  /// No description provided for @registerSuccess.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıt Başarılı! Giriş yapabilirsiniz.'**
+  String get registerSuccess;
+
+  /// No description provided for @connectionError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı Hatası!'**
+  String get connectionError;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In tr, this message translates to:
+  /// **'{provider} ile giriş yakında eklenecek 🚀'**
+  String comingSoon(String provider);
+
+  /// No description provided for @signIn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Giriş Yap'**
+  String get signIn;
+
+  /// No description provided for @signUp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıt Ol'**
+  String get signUp;
+
+  /// No description provided for @username.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanıcı Adı'**
+  String get username;
+
+  /// No description provided for @email.
+  ///
+  /// In tr, this message translates to:
+  /// **'E-posta'**
+  String get email;
+
+  /// No description provided for @password.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre'**
+  String get password;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifremi unuttum?'**
+  String get forgotPassword;
+
+  /// No description provided for @signInBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'🚀  Giriş Yap'**
+  String get signInBtn;
+
+  /// No description provided for @signUpBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'✨  Hesap Oluştur'**
+  String get signUpBtn;
+
+  /// No description provided for @or.
+  ///
+  /// In tr, this message translates to:
+  /// **'veya'**
+  String get or;
+
+  /// No description provided for @noAccount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabın yok mu? '**
+  String get noAccount;
+
+  /// No description provided for @haveAccount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zaten kayıtlı mısın? '**
+  String get haveAccount;
+}
+
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationsDelegate();
+
+  @override
+  Future<AppLocalizations> load(Locale locale) {
+    return SynchronousFuture<AppLocalizations>(lookupAppLocalizations(locale));
+  }
+
+  @override
+  bool isSupported(Locale locale) =>
+      <String>['en', 'tr'].contains(locale.languageCode);
+
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
+}
+
+AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'en':
+      return AppLocalizationsEn();
+    case 'tr':
+      return AppLocalizationsTr();
+  }
+
+  throw FlutterError(
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
+}

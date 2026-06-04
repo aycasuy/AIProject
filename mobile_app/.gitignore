@@ -1,0 +1,156 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+
+# General
+.DS_Store
+Thumbs.db
+*.log
+
+# Environment / secrets
+.env
+*.env
+.env.*
+secrets.json
+service-account.json
+
+# Python / FastAPI
+backend_app/__pycache__/
+backend_app/**/*.pyc
+backend_app/.venv/
+backend_app/venv/
+backend_app/env/
+backend_app/.pytest_cache/
+backend_app/.mypy_cache/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Flutter / Dart
+mobile_app/.dart_tool/
+mobile_app/build/
+mobile_app/.flutter-plugins
+mobile_app/.flutter-plugins-dependencies
+mobile_app/.packages
+
+# Android local files
+mobile_app/android/local.properties
+mobile_app/android/.gradle/
+mobile_app/android/app/build/
+
+# iOS / macOS generated
+mobile_app/ios/Pods/
+mobile_app/ios/.symlinks/
+mobile_app/ios/Flutter/Flutter.framework
+mobile_app/ios/Flutter/Flutter.podspec
+
+# IDE
+.vscode/
+.idea/
+
+
+# ----------------------------------------------------------------=========
+# FLUTTER & DART GEREKSİZLERİ
+# ----------------------------------------------------------------=========
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Android / iOS özel üretilen dosyalar
+/android/local.properties
+/android/.gradle/
+/android/app/src/main/res/generated/
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/flutter_export_environment.sh
+/ios/.symlinks/
+/ios/Pods/
+/ios/Flutter/App.framework
+/ios/Flutter/Flutter.framework
+
+# ----------------------------------------------------------------=========
+# PYTHON & FASTAPI BACKEND GEREKSİZLERİ
+# ----------------------------------------------------------------=========
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Çevresel değişkenler ve gizli anahtarlar (Veritabanı şifreleri vb.)
+.env
+.env.*
+*.secret
+
+# ----------------------------------------------------------------=========
+# IDE & SİSTEM DOSYALARI (VS Code, Android Studio, Mac/Windows)
+# ----------------------------------------------------------------=========
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+Thumbs.db
+
+
+# Alembic / database migration local config
+backend_app/alembic.ini
+
+# PostgreSQL dumps / backups
+*.sql
+*.dump
+*.backup

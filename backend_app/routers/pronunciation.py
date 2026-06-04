@@ -1,0 +1,662 @@
+import re
+
+from fastapi import APIRouter, Depends, HTTPException
+import json
+from google import genai
+from google.genai import types
+from requests import Session # JSON formatına zorlamak için gerekli
+from routers.user import get_db
+import models
+import schemas
+from schemas import PronunciationCorrectionRequest, PronunciationRequest 
+import config
+from schemas import GeneratePronunciationRequest
+from schemas import DictationRequest
+from sqlalchemy.sql.expression import func
+
+router = APIRouter()
+
+# Yeni SDK'da Client oluşturuyoruz (GEMINI_API_KEY ortam değişkeninden otomatik alınır)
+client = genai.Client()
+client = genai.Client(api_key=config.GOOGLE_API_KEY)
+
+from sqlalchemy.sql.expression import func
+
+from sqlalchemy import func
+
+
+def clean_pronunciation_text(text: str) -> str:
+    if not text:
+        return ""
+
+    text = text.replace("```json", "").replace("```", "")
+    text = text.replace("**", "").replace("*", "")
+    text = text.replace("\n", " ")
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
+@router.post("/generate_pronunciation_text")
+async def generate_pronunciation_text(
+    request: schemas.GeneratePronunciationRequest,
+    db: Session = Depends(get_db)
+):
+    exclude_texts = request.exclude_texts or []
+
+    # 1. ÖNCE VERİTABANINDAN DENE
+    # A1, A2, B1... fark etmez. Eğer pronunciation_texts tablosunda bu ders için hazır metin varsa onu kullan.
+    query = db.query(models.PronunciationText).filter(
+        models.PronunciationText.level == request.level,
+        models.PronunciationText.target_language == request.target_language
+    )
+
+    if request.lesson_id is not None:
+        query = query.filter(models.PronunciationText.lesson_id == request.lesson_id)
+
+    if exclude_texts:
+        query = query.filter(~models.PronunciationText.text.in_(exclude_texts))
+
+    random_record = query.order_by(func.random()).first()
+
+    if random_record:
+        selected_text = clean_pronunciation_text(random_record.text)
+        return {
+            "status": "success",
+            "source": "database",
+            "text": selected_text
+        }
+
+    # Eğer exclude yüzünden kayıt kalmadıysa aynı dersin kayıtlarından tekrar seç.
+    fallback_query = db.query(models.PronunciationText).filter(
+        models.PronunciationText.level == request.level,
+        models.PronunciationText.target_language == request.target_language
+    )
+
+    if request.lesson_id is not None:
+        fallback_query = fallback_query.filter(
+            models.PronunciationText.lesson_id == request.lesson_id
+        )
+
+    fallback_record = fallback_query.order_by(func.random()).first()
+
+    if fallback_record:
+        selected_text = clean_pronunciation_text(fallback_record.text)
+        return {
+            "status": "success",
+            "source": "database_fallback",
+            "text": selected_text
+        }
+
+    # 2. VERİTABANINDA HİÇ METİN YOKSA AI ÜRETSİN
+    # Eski hatanın sebebi: cache key sadece level + words idi.
+    # Bu yüzden 1. ve 2. adımda aynı cache metni dönüyordu.
+    # Artık lesson_id ve round da cache key'e dahil.
+    cache_key = (
+        f"lang:{request.target_language}|"
+        f"level:{request.level}|"
+        f"lesson:{request.lesson_id}|"
+        f"round:{request.round}|"
+        f"words:{request.target_words}"
+    ).lower()
+
+    cached_data = db.query(models.AICache).filter(
+        models.AICache.feature_type == "pronunciation_text",
+        models.AICache.input_text == cache_key
+    ).first()
+
+    if cached_data:
+        print("⚡ [CACHE BULDUM - METİN] Aynı round için cache döndürüldü.")
+        cached_json = json.loads(cached_data.ai_response)
+        cached_json["text"] = clean_pronunciation_text(cached_json.get("text", ""))
+        return cached_json
+
+    try:
+        print("🤖 [GEMİNİ DEVREDE - METİN] Cache yok. Yeni telaffuz metni üretiliyor...")
+
+        prompt = f"""
+Sen uzman bir {request.target_language} dil öğretmenisin.
+
+Öğrencinin seviyesi: {request.level}
+Bu görev: Telaffuz pratiği
+Bu kaçıncı metin: {request.round}
+
+Zorunlu kelimeler:
+{request.target_words}
+
+Kurallar:
+- {request.target_language} dilinde yaz.
+- Öğrencinin seviyesine uygun yaz.
+- 2 kısa cümle veya en fazla 3 kısa cümle üret.
+- Metin doğal ve sesli okunabilir olmalı.
+- Zorunlu kelimeleri doğal şekilde kullan.
+- Daha önceki metinlere benzemeyen farklı bir metin üret.
+- Markdown kullanma.
+- Kelimeleri **kalın** yapma.
+- Tırnak işareti, madde işareti veya açıklama ekleme.
+- Sadece paragrafı döndür.
+"""
+
+        response = client.models.generate_content(
+            model="gemini-2.5-flash-lite",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.9,
+                top_p=0.95
+            )
+        )
+
+        generated_text = clean_pronunciation_text(response.text or "")
+
+        if not generated_text:
+            generated_text = "Please read this sentence clearly and slowly."
+
+        result_json = {
+            "status": "success",
+            "source": "ai",
+            "text": generated_text
+        }
+
+        new_cache = models.AICache(
+            feature_type="pronunciation_text",
+            input_text=cache_key,
+            ai_response=json.dumps(result_json, ensure_ascii=False)
+        )
+        db.add(new_cache)
+        db.commit()
+
+        print("✅ [KAYDEDİLDİ] Yeni telaffuz metni cache tablosuna yazıldı.")
+        return result_json
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Metin Üretme Hatası: {str(e)}"
+        )
+
+
+@router.post("/analyze_pronunciation")
+async def analyze_pronunciation(request: schemas.PronunciationRequest, db: Session = Depends(get_db)):
+    
+    # =================================================================
+    # 🌟 SÜPER GENİŞLETİLMİŞ YAZILIMSAL TOLERANS SÖZLÜĞÜ (MVP KATİLİ) 🌟
+    # =================================================================
+    stt_corrections = {
+        "a": ["i", "ah", "uh", "hey", "eight", "ay", "ei", "an", "e", "I", "a."],
+        "the": ["da", "de", "di", "zee", "v", "they"],
+        "an": ["and", "in", "un", "on", "a"],
+        "it": ["eat", "at"],
+        "is": ["ease", "yes", "his"],
+        "yell": ["yeah", "yellow", "yal", "yale", "jail", "gel", "young", "you", "yo", "ill", "el", "yel", "yes"],
+        "buy": ["by", "bye", "boy", "my", "why", "ba", "bay", "pie", "guy"],
+        "hi": ["he", "high", "hay", "i", "bye"],
+        "he": ["hi", "see", "the", "who", "hay"],
+        "bye": ["buy", "by", "my", "pie", "bay"],
+        "yes": ["yell", "less", "guess", "is"],
+        "no": ["know", "now", "not", "oh", "knows"],
+        "know": ["no", "now", "new", "known"],
+        "please": ["place", "plays", "police", "pleas"],
+        "place": ["please", "plays", "pace", "plate"],
+        "thank": ["tank", "think", "sank", "thanks"],
+        "tank": ["thank", "think", "bank"],
+        "sorry": ["story", "sari", "starry"],
+        "story": ["sorry", "store"],
+        "good": ["food", "wood", "could", "hood", "god"],
+        "food": ["good", "foot", "fluid"],
+        "meet": ["meat", "met", "mit", "it"],
+        "meat": ["meet", "met", "mit"],
+        "met": ["meet", "meat", "mat"],
+        "night": ["knight", "not", "light", "right", "nine"],
+        "knight": ["night", "not"],
+        "how": ["hoe", "who", "now", "ha"],
+        "hoe": ["how", "who"],
+        "live": ["leave", "life", "love", "liv"],
+        "leave": ["live", "leaf", "let"],
+        "age": ["edge", "h", "each", "itch"],
+        "edge": ["age", "egg", "each"],
+        "name": ["same", "main", "nim", "game"],
+        "same": ["name", "some", "shame"],
+        "year": ["ear", "here", "hear", "your"],
+        "ear": ["year", "air", "are"],
+        "old": ["cold", "hold", "gold", "all"],
+        "cold": ["old", "gold", "hold"],
+        "like": ["lake", "lock", "luck", "light"],
+        "lake": ["like", "look", "late"],
+        "job": ["jog", "chop", "top", "hop"],
+        "jog": ["job", "dog", "jug"],
+        "speak": ["peak", "week", "speech", "big"],
+        "peak": ["speak", "beak", "pick"],
+        "learn": ["turn", "earn", "line", "burnt"],
+        "turn": ["learn", "tern", "time"],
+        "one": ["won", "on", "van", "when", "want","run"],
+        "won": ["one", "on", "win", "gone","ron"],
+        "two": ["too", "to", "do", "through", "who"],
+        "too": ["two", "to", "do"],
+        "four": ["for", "fore", "or", "door", "far"],
+        "for": ["four", "fore", "or","far"],
+        "three": ["tree", "free", "the", "try", "they"],
+        "tree": ["three", "free", "try"],
+        "five": ["fine", "fire", "live", "find"],
+        "fine": ["five", "find", "line"],
+        "six": ["sick", "seek", "sex", "sicks", "since"],
+        "sick": ["six", "seek", "thick"],
+        "eight": ["ate", "it", "hate", "a", "hey"],
+        "ate": ["eight", "eat", "at"],
+        "nine": ["line", "mine", "night", "fine", "none"],
+        "line": ["nine", "mine", "lane"],
+        "ten": ["pen", "pan", "then", "tan", "time","on"],
+        "pen": ["ten", "pan", "pin"],
+        "thirteen": ["thirty", "13", "third in"],
+        "thirty": ["thirteen", "dirty"],
+        "fourteen": ["forty", "14", "four in"],
+        "forty": ["fourteen", "party"],
+        "fifteen": ["fifty", "15", "fifth in"],
+        "fifty": ["fifteen", "nifty","50","elli"],
+        "sixteen": ["sixty", "16", "six in"],
+        "sixty": ["sixteen"]
+    }
+    
+    orig_clean = request.original_text.strip().lower()
+    spoken_clean = request.spoken_text.strip().lower()
+    
+    # =================================================================
+    # 🌟 YENİ: SÜPER AKILLI EŞLEŞTİRME (SMART MATCHING) 🌟
+    # Hedef kelime veya tolerans kelimelerinden HERHANGİ BİRİ okunan cümlenin İÇİNDE geçiyorsa doğru say!
+    # =================================================================
+    is_smart_match = False
+    
+    # Metni kelimelere bölüyoruz ki "a" harfi "banana" kelimesinin içinde geçiyor diye doğru saymasın
+    spoken_words = spoken_clean.split()
+
+    # 1. İhtimal: Orijinal kelime cümlenin içinde ayrı bir kelime olarak geçiyor mu?
+    if orig_clean in spoken_words:
+        is_smart_match = True
+        
+    # 2. İhtimal: Tolerans sözlüğündeki kelimelerden biri geçiyor mu? 
+    elif orig_clean in stt_corrections:
+        for correction_word in stt_corrections[orig_clean]:
+            if correction_word in spoken_words:
+                is_smart_match = True
+                print(f"🔧 [STT HİLESİ] Mikrofon '{spoken_clean}' duydu, içinde '{correction_word}' yakalandı!")
+                break
+
+    # Eğer akıllı eşleşme başarılıysa, metni arka planda zorla "doğru" yapıyoruz
+    if is_smart_match:
+        request.spoken_text = request.original_text 
+        spoken_clean = orig_clean
+
+    # =================================================================
+    # 🌟 MÜKEMMEL EŞLEŞME BYPASS'I (SÜPER HIZ) 🌟
+    # =================================================================
+    if orig_clean == spoken_clean:
+        print("⚡ [KESTİRME] Birebir eşleşme! Gemini'ye gitmeden 100 puan veriliyor (Maliyet: 0, Hız: Anında)")
+        return {
+            "status": "success",
+            "analysis": {
+                "score": 100,
+                "mispronounced_words": [],
+                "feedback": "Mükemmel! Tıpkı bir anadil konuşuru gibi okudun. 🎯"
+            },
+            "added_xp": 50
+        }
+
+    # =================================================================
+    # CACHE KONTROLÜ
+    # =================================================================
+    search_text = f"lang: {request.target_language} | original: {request.original_text.strip()} | spoken: {request.spoken_text.strip()}".lower()
+    
+    cached_data = db.query(models.AICache).filter(
+        models.AICache.feature_type == "pronunciation_analysis", 
+        models.AICache.input_text == search_text            
+    ).first()
+    
+    if cached_data:
+        print("⚡ Analiz Sonucu Cache'ten geldi (Maliyet: 0)")
+        return json.loads(cached_data.ai_response)
+
+    # =================================================================
+    # CACHE'TE YOKSA GEMİNİ'YE ANALİZ ETTİR
+    # =================================================================
+    try:
+        print("🤖 [GEMİNİ DEVREDE - ANALİZ] Yeni bir ses geldi! Telaffuz değerlendirmesi için API'ye gidiliyor...")
+        prompt = f"""
+        Sen uzman bir {request.target_language} dil öğretmeni ve telaffuz koçusun.
+        Öğrencinin okuması gereken "Orijinal Metin" ve ses-yazı teknolojisiyle elde edilen "Okunan Metin" aşağıdadır:
+
+        Orijinal Metin: "{request.original_text}"
+        Okunan Metin: "{request.spoken_text}"
+
+        Görevlerin:
+        1. İki metni karşılaştırarak telaffuz doğruluğunu analiz et.
+        2. 0 ile 100 arasında bir puan ver (score).
+        3. Yanlış veya eksik okunan kelimeleri tespit et (mispronounced_words dizisi).
+        4. Öğrenciye motive edici, Türkçe kısa bir geri bildirim yaz (feedback).
+        
+        ÇIKTIN KESİNLİKLE JSON FORMATINDA OLMALIDIR. 
+        Beklenen Şablon:
+        {{
+            "score": 85,
+            "mispronounced_words": ["yanlış1", "yanlış2"],
+            "feedback": "Harika okudun, sadece şu kelimelere dikkat et..."
+        }}
+        """
+        
+        response = client.models.generate_content(
+            model='gemini-2.5-flash-lite',
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json", 
+                temperature=0.1
+            ),
+        )
+        
+        analysis_data = json.loads(response.text)
+        added_xp = 50 if analysis_data.get("score", 0) >= 70 else 10
+
+        result_json = {
+            "status": "success",
+            "analysis": analysis_data,
+            "added_xp": added_xp
+        }
+
+        # ANALİZ SONUCUNU VERİTABANINA KAYDET
+        new_cache = models.AICache(
+            feature_type="pronunciation_analysis", 
+            input_text=search_text, 
+            ai_response=json.dumps(result_json)
+        )
+        db.add(new_cache)
+        db.commit()
+
+        print("✅ [KAYDEDİLDİ] Gemini analizi tamamladı, sonuçlar gelecekteki denemeler için Cache'e kaydedildi!")
+        return result_json
+
+    except Exception as e:
+        print("AI Hatası:", str(e))
+        raise HTTPException(status_code=500, detail="Analiz sırasında hata oluştu.")
+    
+
+
+
+@router.post("/analyze_listening")
+async def analyze_listening(request: DictationRequest):
+    try:
+        # 🧠 HOŞGÖRÜLÜ DİNLEME KOÇU PROMPTU
+        prompt = f"""
+        Sen uzman bir {request.target_language} dil öğretmenisin.
+        Öğrencinin "Duyduğunu Yazma" (Dictation) pratiğini değerlendireceksin.
+        
+        Orijinal Metin (Robotun Söylediği): "{request.original_text}"
+        Öğrencinin Yazdığı Metin: "{request.user_text}"
+        
+        Görevlerin:
+        1. İki metni karşılaştır. Büyük/küçük harf (A-a) ve ufak noktalama işaretleri (, .) hatalarını tamamen GÖRMEZDEN GEL.
+        2. Ufak harf hatalarını (typo) çok az cezalandır, ancak eksik veya tamamen yanlış duyulan kelimeleri tespit et.
+        3. 0 ile 100 arasında bir puan (score) ver.
+        4. Öğrenciye motive edici, kısa bir geri bildirim (feedback) yaz.
+        5. Öğrencinin yanlış yazdığı veya duyamadığı kelimeleri tespit et (missed_words).
+
+        ÇIKTI FORMATI:
+        Sadece aşağıdaki JSON formatında çıktı ver:
+        {{
+            "score": 90,
+            "feedback": "Harika dinleme becerisi! Sadece 'environment' kelimesinde ufak bir yazım hatası yapmışsın.",
+            "missed_words": ["environment"]
+        }}
+        """
+        
+        response = client.models.generate_content(
+            model='gemini-2.5-flash-lite',
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+            ),
+        )
+        
+        analysis_data = json.loads(response.text)
+        
+        # Ödül: 70 ve üstü alırsa 50 XP kazanır!
+        added_xp = 50 if analysis_data.get("score", 0) >= 70 else 10
+        
+        return {
+            "status": "success",
+            "analysis": analysis_data,
+            "added_xp": added_xp
+        }
+
+    except Exception as e:
+        print("Dinleme Analizi Hatası:", str(e))
+        raise HTTPException(status_code=500, detail="Analiz yapılamadı.")
+
+
+from sqlalchemy.sql.expression import func # 🌟 Eğer sayfanın en üstünde yoksa bu kütüphaneyi eklemeyi unutma!
+
+@router.get("/fetch_minimal_pairs/{lesson_id}")
+async def fetch_minimal_pairs(lesson_id: int, target_language: str, db: Session = Depends(get_db)):
+    # 🌟 SÜPER DEĞİŞİKLİK: Sadece o derse ait olanlardan RASTGELE 7 tanesini getir!
+    pairs = db.query(models.MinimalPair)\
+        .filter(models.MinimalPair.lesson_id == lesson_id, models.MinimalPair.target_language == target_language)\
+        .order_by(func.random())\
+        .limit(7)\
+        .all()
+    
+    if not pairs:
+        return []
+        
+    # Flutter'ın kolayca okuyabileceği bir liste formatında gönder
+    return [{
+        "id": p.id,
+        "word_1": p.word_1,
+        "ipa_1": p.ipa_1,
+        "translation_1": p.translation_1,
+        "word_2": p.word_2,
+        "ipa_2": p.ipa_2,
+        "translation_2": p.translation_2
+    } for p in pairs]
+
+
+@router.post("/get_pronunciation_feedback")
+async def get_pronunciation_feedback(
+    request: PronunciationCorrectionRequest, 
+    db: Session = Depends(get_db)
+):
+    target = request.target_word.strip().lower()
+    spoken = request.spoken_word.strip().lower()
+    
+    # =================================================================
+    # 🌟 SÜPER GENİŞLETİLMİŞ YAZILIMSAL TOLERANS SÖZLÜĞÜ (MVP KATİLİ) 🌟
+    # =================================================================
+    stt_corrections = {
+        "a": ["i", "ah", "uh", "hey", "eight", "ay", "ei", "an", "e", "I", "a."],
+        "the": ["da", "de", "di", "zee", "v", "they"],
+        "an": ["and", "in", "un", "on", "a"],
+        "it": ["eat", "at"],
+        "is": ["ease", "yes", "his"],
+        "yell": ["yeah", "yellow", "yal", "yale", "jail", "gel", "young", "you", "yo", "ill", "el", "yel", "yes"],
+        "buy": ["by", "bye", "boy", "my", "why", "ba", "bay", "pie", "guy"],
+        "hi": ["he", "high", "hay", "i", "bye"],
+        "he": ["hi", "see", "the", "who", "hay"],
+        "bye": ["buy", "by", "my", "pie", "bay"],
+        "yes": ["yell", "less", "guess", "is"],
+        "no": ["know", "now", "not", "oh", "knows"],
+        "know": ["no", "now", "new", "known"],
+        "please": ["place", "plays", "police", "pleas"],
+        "place": ["please", "plays", "pace", "plate"],
+        "thank": ["tank", "think", "sank", "thanks"],
+        "tank": ["thank", "think", "bank"],
+        "sorry": ["story", "sari", "starry"],
+        "story": ["sorry", "store"],
+        "good": ["food", "wood", "could", "hood", "god"],
+        "food": ["good", "foot", "fluid"],
+        "meet": ["meat", "met", "mit", "it"],
+        "meat": ["meet", "met", "mit"],
+        "met": ["meet", "meat", "mat"],
+        "night": ["knight", "not", "light", "right", "nine"],
+        "knight": ["night", "not"],
+        "how": ["hoe", "who", "now", "ha"],
+        "hoe": ["how", "who"],
+        "live": ["leave", "life", "love", "liv"],
+        "leave": ["live", "leaf", "let"],
+        "age": ["edge", "h", "each", "itch"],
+        "edge": ["age", "egg", "each"],
+        "name": ["same", "main", "nim", "game"],
+        "same": ["name", "some", "shame"],
+        "year": ["ear", "here", "hear", "your"],
+        "ear": ["year", "air", "are"],
+        "old": ["cold", "hold", "gold", "all"],
+        "cold": ["old", "gold", "hold"],
+        "like": ["lake", "lock", "luck", "light"],
+        "lake": ["like", "look", "late"],
+        "job": ["jog", "chop", "top", "hop"],
+        "jog": ["job", "dog", "jug"],
+        "speak": ["peak", "week", "speech", "big"],
+        "peak": ["speak", "beak", "pick"],
+        "learn": ["turn", "earn", "line", "burnt"],
+        "turn": ["learn", "tern", "time"],
+        "one": ["won", "on", "van", "when", "want","run"],
+        "won": ["one", "on", "win","gone","ron"],
+        "two": ["too", "to", "do", "through", "who"],
+        "too": ["two", "to", "do"],
+        "four": ["for", "fore", "or", "door", "far"],
+        "for": ["four", "fore", "or","far"],
+        "three": ["tree", "free", "the", "try", "they"],
+        "tree": ["three", "free", "try"],
+        "five": ["fine", "fire", "live", "find"],
+        "fine": ["five", "find", "line"],
+        "six": ["sick", "seek", "sex", "sicks", "since"],
+        "sick": ["six", "seek", "thick"],
+        "eight": ["ate", "it", "hate", "a", "hey"],
+        "ate": ["eight", "eat", "at"],
+        "nine": ["line", "mine", "night", "fine", "none"],
+        "line": ["nine", "mine", "lane"],
+        "ten": ["pen", "pan", "then", "tan", "time","on"],
+        "pen": ["ten", "pan", "pin","10"],
+        "thirteen": ["thirty", "13", "third in"],
+        "thirty": ["thirteen", "dirty"],
+        "fourteen": ["forty", "14", "four in"],
+        "forty": ["fourteen", "party","kırk","40"],
+        "fifteen": ["fifty", "15", "fifth in"],
+        "fifty": ["fifteen", "nifty","50","elli"],
+        "sixteen": ["sixty", "16", "six in"],
+        "sixty": ["sixteen"]
+    }
+
+    # =================================================================
+    # 🌟 YENİ: SÜPER AKILLI EŞLEŞTİRME (SMART MATCHING) 🌟
+    # =================================================================
+    is_smart_match = False
+    
+    # Metni kelimelere bölüyoruz
+    spoken_words = spoken.split()
+
+    # 1. İhtimal: Hedef kelime cümlenin içinde ayrı bir kelime olarak geçiyor mu?
+    if target in spoken_words:
+        is_smart_match = True
+        
+    # 2. İhtimal: Tolerans sözlüğündeki kelimelerden biri geçiyor mu? 
+    elif target in stt_corrections:
+        for correction_word in stt_corrections[target]:
+            if correction_word in spoken_words:
+                is_smart_match = True
+                print(f"🔧 [STT HİLESİ] Mikrofon '{spoken}' duydu, içinde '{correction_word}' yakalandı!")
+                break
+
+    # Eğer akıllı eşleşme başarılıysa, metni arka planda zorla "doğru" yapıyoruz
+    if is_smart_match:
+        spoken = target 
+
+    # =================================================================
+    # 🌟 2. BİREBİR EŞLEŞME (YAPAY ZEKAYI BYPASS ET) 🌟
+    # =================================================================
+    if target == spoken:
+        return {"status": "success", "feedback": "Mükemmel telaffuz! 🎯"}
+
+    # =================================================================
+    # 3. CACHE KONTROLÜ
+    # =================================================================
+    cache_input_key = f"{target}_{spoken}_{request.native_language.lower()}"
+    
+    cached_result = db.query(models.AICache).filter(
+        models.AICache.feature_type == "pronunciation_words",
+        models.AICache.input_text == cache_input_key
+    ).first()
+    
+    if cached_result:
+        print(f"⚡ [CACHE HIT] '{cache_input_key}' anahtarı için veri veritabanından çekildi.")
+        return {
+            "status": "success", 
+            "feedback": cached_result.ai_response 
+        }
+
+    # =================================================================
+    # 4. CACHE'DE YOKSA GEMINI'YE SOR
+    # =================================================================
+    try:
+        print(f"🤖 [API CALL] '{cache_input_key}' için Gemini çağrılıyor...")
+
+        prompt = f"""
+        Sen uzman bir {request.target_language} telaffuz öğretmenisin.
+        Öğrencinin ana dili: {request.native_language}.
+        
+        Öğrenci "{request.target_word}" kelimesini söylemeye çalıştı, 
+        ancak mikrofon onu "{request.spoken_word}" olarak anladı.
+        
+        Görevlerin:
+        1. Öğrenciye '{request.native_language}' dilinde, samimi ve motive edici bir şekilde hatasını açıkla.
+        2. Bu iki kelime arasındaki ses/fonetik farkını basitçe anlat ve nasıl düzeltmesi gerektiğini 1-2 cümleyle söyle.
+        3. Asla gereksiz uzatma, doğrudan hedefe (sese) odaklan.
+
+        ÇIKTI FORMATI:
+        Sadece aşağıdaki JSON formatında çıktı ver:
+        {{
+            "feedback": "Seni '{request.spoken_word}' olarak duydum. '{request.target_word}' derken i harfini daha kısa ve kesik çıkarmaya dikkat et!"
+        }}
+        """
+        
+        response = client.models.generate_content(
+            model='gemini-2.5-flash-lite',
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+            ),
+        )
+        
+        analysis_data = json.loads(response.text)
+        final_feedback = analysis_data.get("feedback", "Harika deneme, bir kez daha üstünden geçelim!")
+
+        # YENİ CEVABI CACHE'E KAYDET
+        new_cache_entry = models.AICache(
+            feature_type="pronunciation_words",
+            input_text=cache_input_key,
+            ai_response=final_feedback
+        )
+        db.add(new_cache_entry)
+        db.commit()
+        print(f"🤖 [LOG] Koçun analizi hafızaya eklendi! (Key: {cache_input_key})")
+        return {"status": "success", "feedback": final_feedback}
+
+    except Exception as e:
+        print("Telaffuz Analizi Hatası:", str(e))
+        return {"status": "error", "feedback": "Şu an sesini tam alamadım, tekrar dener misin?"}
+    
+
+
+
+    
+@router.get("/api/get_single_minimal_pair/{puzzle_id}")
+async def get_single_minimal_pair(puzzle_id: int, db: Session = Depends(get_db)):
+    # 🌟 Sadece tek bir satırı (soruyu) bul
+    p = db.query(models.MinimalPair).filter(models.MinimalPair.id == puzzle_id).first()
+    
+    if not p:
+        return []
+        
+    # 🌟 Flutter tarafı listeye alışkın olduğu için, tek elemanlı bir liste olarak gönderiyoruz!
+    return [{
+        "id": p.id,
+        "word_1": p.word_1,
+        "ipa_1": p.ipa_1,
+        "translation_1": p.translation_1,
+        "word_2": p.word_2,
+        "ipa_2": p.ipa_2,
+        "translation_2": p.translation_2
+    }]
