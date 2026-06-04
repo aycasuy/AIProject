@@ -1,0 +1,3 @@
+files:
+  - source: /mobile_app/lib/l10n/app_tr.arb
+    translation: /mobile_app/lib/l10n/app_%two_letters_code%.arb
