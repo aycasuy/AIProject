@@ -39,27 +39,33 @@
   "or": "or",
   "noAccount": "Don't have an account? ",
   "haveAccount": "Already registered? ",
-  "langEnglish": "English",
-  "langSpanish": "Spanish",
-  "langGerman": "German",
-  "langFrench": "French",
-  "langTurkish": "Turkish",
-  "readyToLearn": "Ready to learn a new language? 🌍",
-  "continueLearning": "Which language would you like to continue with? 🚀",
-  "whatIsNativeLanguage": "What is your native language?",
-  "makeSelectionToPersonalize": "Please make a selection so we can personalize your experience.",
-  "stepProgress": "Step {current} / {total}",
+  "langEnglish": "İngilizce",
+  "langSpanish": "İspanyolca",
+  "langGerman": "Almanca",
+  "langFrench": "Fransızca",
+  "langTurkish": "Türkçe",
+  "readyToLearn": "Yeni bir dil öğrenmeye hazır mısın? 🌍",
+  "continueLearning": "Hangi dilden devam etmek istersiniz? 🚀",
+  "whatIsNativeLanguage": "Ana dilin nedir?",
+  "makeSelectionToPersonalize": "Sana en uygun deneyimi sunabilmemiz için lütfen seçim yap.",
+  "stepProgress": "Adım {current} / {total}",
   "@stepProgress": {
     "placeholders": {
-      "current": { "type": "int" },
-      "total": { "type": "int" }
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-  "languageComingSoonMsg": "{lang} is coming soon! Let's start with English or Spanish for now. 🚀",
+  "languageComingSoonMsg": "{lang} yakında eklenecek! Şimdilik İngilizce veya İspanyolca ile başlayalım. 🚀",
   "@languageComingSoonMsg": {
     "placeholders": {
-      "lang": { "type": "String" }
+      "lang": {
+        "type": "String"
+      }
     }
   },
-  "connectionErrorServer": "Connection error! Is the server running?"
+  "connectionErrorServer": "Bağlantı hatası! Sunucu açık mı?"
 }
