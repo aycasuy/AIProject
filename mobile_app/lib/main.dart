@@ -77,7 +77,11 @@ class LinguaApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [Locale('tr', ''), Locale('en', '')],
+          supportedLocales: const [
+            Locale('tr', ''),
+            Locale('en', ''),
+            Locale('es', ''),
+          ],
           home: const OnboardingScreen(),
         );
       },

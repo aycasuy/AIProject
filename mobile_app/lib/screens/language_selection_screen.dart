@@ -104,6 +104,12 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
       "flag": "🇺🇸",
       "available": true,
     },
+    {
+      "name": "İspanyolca",
+      "db_value": "Spanish",
+      "flag": "🇪🇸",
+      "available": true,
+    },
   ];
 
   Future<void> _saveLanguagesToDatabase() async {
