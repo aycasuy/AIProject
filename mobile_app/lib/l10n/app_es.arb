@@ -39,16 +39,16 @@
   "or": "o",
   "noAccount": "¿No tienes una cuenta?  ",
   "haveAccount": "¿Ya está registrado? ",
-  "langEnglish": "İngilizce",
-  "langSpanish": "İspanyolca",
-  "langGerman": "Almanca",
-  "langFrench": "Fransızca",
-  "langTurkish": "Türkçe",
-  "readyToLearn": "Yeni bir dil öğrenmeye hazır mısın? 🌍",
-  "continueLearning": "Hangi dilden devam etmek istersiniz? 🚀",
-  "whatIsNativeLanguage": "Ana dilin nedir?",
-  "makeSelectionToPersonalize": "Sana en uygun deneyimi sunabilmemiz için lütfen seçim yap.",
-  "stepProgress": "Adım {current} / {total}",
+  "langEnglish": "Inglés",
+  "langSpanish": "Español",
+  "langGerman": "Alemán",
+  "langFrench": "Francés",
+  "langTurkish": "Turco",
+  "readyToLearn": "¿Listo para aprender un nuevo idioma? 🌍",
+  "continueLearning": "¿Con qué idioma te gustaría continuar? 🚀",
+  "whatIsNativeLanguage": "¿Cuál es tu idioma nativo?",
+  "makeSelectionToPersonalize": "Por favor, haz una selección para personalizar tu experiencia.",
+  "stepProgress": "Paso {current} / {total}",
   "@stepProgress": {
     "placeholders": {
       "current": {
@@ -59,7 +59,7 @@
       }
     }
   },
-  "languageComingSoonMsg": "{lang} yakında eklenecek! Şimdilik İngilizce veya İspanyolca ile başlayalım. 🚀",
+  "languageComingSoonMsg": "¡{lang} estará disponible pronto! Comencemos con Inglés o Español por ahora. 🚀",
   "@languageComingSoonMsg": {
     "placeholders": {
       "lang": {
@@ -67,5 +67,5 @@
       }
     }
   },
-  "connectionErrorServer": "Bağlantı hatası! Sunucu açık mı?"
+  "connectionErrorServer": "¡Error de conexión! ¿Está funcionando el servidor?"
 }
