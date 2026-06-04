@@ -1,0 +1,42 @@
+{
+  "settingsTitle": "Ayarlar",
+  "learningPreferences": "ÖĞRENME TERCİHLERİ",
+  "learnedLanguage": "Öğrenilen Dil",
+  "practiceLevel": "Pratik Seviyesi",
+  "appSettings": "UYGULAMA AYARLARI",
+  "dailyReminders": "Günlük Hatırlatıcılar",
+  "saveChanges": "Değişiklikleri Kaydet",
+  "logout": "Çıkış Yap",
+  "onboard1Title": "Her Yerde,\nHer Zaman Öğren",
+  "onboard1Subtitle": "Günlük hayatın için tasarlanmış\ncebe sığan dersler.",
+  "onboard2Title": "Gerçek Diyaloglar,\nGerçek İlerleme",
+  "onboard2Subtitle": "Doğal hissettiren yapay zeka destekli\ndiyaloglarla pratik yap.",
+  "onboard3Title": "Yolculuğunu\nTakip Et",
+  "onboard3Subtitle": "Şık ilerleme grafikleriyle\nne kadar geliştiğini gör.",
+  "skip": "Atla",
+  "next": "İleri  →",
+  "letsStart": "Hadi Başlayalım! 🚀",
+  "loginSubtitle": "Dil Öğren. Daha İyi Yaşa.",
+  "fillAllFields": "Lütfen tüm alanları doldurun! 🌟",
+  "registerSuccess": "Kayıt Başarılı! Giriş yapabilirsiniz.",
+  "connectionError": "Bağlantı Hatası!",
+  "comingSoon": "{provider} ile giriş yakında eklenecek 🚀",
+  "@comingSoon": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "signIn": "Giriş Yap",
+  "signUp": "Kayıt Ol",
+  "username": "Kullanıcı Adı",
+  "email": "E-posta",
+  "password": "Şifre",
+  "forgotPassword": "Şifremi unuttum?",
+  "signInBtn": "🚀  Giriş Yap",
+  "signUpBtn": "✨  Hesap Oluştur",
+  "or": "veya",
+  "noAccount": "Hesabın yok mu? ",
+  "haveAccount": "Zaten kayıtlı mısın? "
+}

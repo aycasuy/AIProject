@@ -23,7 +23,9 @@
   "comingSoon": "Sign in with {provider} is coming soon 🚀",
   "@comingSoon": {
     "placeholders": {
-      "provider": { "type": "String" }
+      "provider": {
+        "type": "String"
+      }
     }
   },
   "signIn": "Sign In",
