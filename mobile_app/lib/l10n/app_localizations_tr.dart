@@ -111,4 +111,45 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get haveAccount => 'Zaten kayıtlı mısın? ';
+
+  @override
+  String get langEnglish => 'İngilizce';
+
+  @override
+  String get langSpanish => 'İspanyolca';
+
+  @override
+  String get langGerman => 'Almanca';
+
+  @override
+  String get langFrench => 'Fransızca';
+
+  @override
+  String get langTurkish => 'Türkçe';
+
+  @override
+  String get readyToLearn => 'Yeni bir dil öğrenmeye hazır mısın? 🌍';
+
+  @override
+  String get continueLearning => 'Hangi dilden devam etmek istersiniz? 🚀';
+
+  @override
+  String get whatIsNativeLanguage => 'Ana dilin nedir?';
+
+  @override
+  String get makeSelectionToPersonalize =>
+      'Sana en uygun deneyimi sunabilmemiz için lütfen seçim yap.';
+
+  @override
+  String stepProgress(int current, int total) {
+    return 'Adım $current / $total';
+  }
+
+  @override
+  String languageComingSoonMsg(String lang) {
+    return '$lang yakında eklenecek! Şimdilik İngilizce veya İspanyolca ile başlayalım. 🚀';
+  }
+
+  @override
+  String get connectionErrorServer => 'Bağlantı hatası! Sunucu açık mı?';
 }

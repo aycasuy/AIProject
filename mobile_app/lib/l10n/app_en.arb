@@ -38,5 +38,28 @@
   "signUpBtn": "✨  Create Account",
   "or": "or",
   "noAccount": "Don't have an account? ",
-  "haveAccount": "Already registered? "
+  "haveAccount": "Already registered? ",
+  "langEnglish": "English",
+  "langSpanish": "Spanish",
+  "langGerman": "German",
+  "langFrench": "French",
+  "langTurkish": "Turkish",
+  "readyToLearn": "Ready to learn a new language? 🌍",
+  "continueLearning": "Which language would you like to continue with? 🚀",
+  "whatIsNativeLanguage": "What is your native language?",
+  "makeSelectionToPersonalize": "Please make a selection so we can personalize your experience.",
+  "stepProgress": "Step {current} / {total}",
+  "@stepProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "languageComingSoonMsg": "{lang} is coming soon! Let's start with English or Spanish for now. 🚀",
+  "@languageComingSoonMsg": {
+    "placeholders": {
+      "lang": { "type": "String" }
+    }
+  },
+  "connectionErrorServer": "Connection error! Is the server running?"
 }

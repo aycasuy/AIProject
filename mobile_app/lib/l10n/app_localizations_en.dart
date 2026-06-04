@@ -111,4 +111,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get haveAccount => 'Already registered? ';
+
+  @override
+  String get langEnglish => 'English';
+
+  @override
+  String get langSpanish => 'Spanish';
+
+  @override
+  String get langGerman => 'German';
+
+  @override
+  String get langFrench => 'French';
+
+  @override
+  String get langTurkish => 'Turkish';
+
+  @override
+  String get readyToLearn => 'Ready to learn a new language? 🌍';
+
+  @override
+  String get continueLearning =>
+      'Which language would you like to continue with? 🚀';
+
+  @override
+  String get whatIsNativeLanguage => 'What is your native language?';
+
+  @override
+  String get makeSelectionToPersonalize =>
+      'Please make a selection so we can personalize your experience.';
+
+  @override
+  String stepProgress(int current, int total) {
+    return 'Step $current / $total';
+  }
+
+  @override
+  String languageComingSoonMsg(String lang) {
+    return '$lang is coming soon! Let\'s start with English or Spanish for now. 🚀';
+  }
+
+  @override
+  String get connectionErrorServer =>
+      'Connection error! Is the server running?';
 }

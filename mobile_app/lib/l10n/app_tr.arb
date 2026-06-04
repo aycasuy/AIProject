@@ -36,5 +36,28 @@
   "signUpBtn": "✨  Hesap Oluştur",
   "or": "veya",
   "noAccount": "Hesabın yok mu? ",
-  "haveAccount": "Zaten kayıtlı mısın? "
+  "haveAccount": "Zaten kayıtlı mısın? ",
+  "langEnglish": "İngilizce",
+  "langSpanish": "İspanyolca",
+  "langGerman": "Almanca",
+  "langFrench": "Fransızca",
+  "langTurkish": "Türkçe",
+  "readyToLearn": "Yeni bir dil öğrenmeye hazır mısın? 🌍",
+  "continueLearning": "Hangi dilden devam etmek istersiniz? 🚀",
+  "whatIsNativeLanguage": "Ana dilin nedir?",
+  "makeSelectionToPersonalize": "Sana en uygun deneyimi sunabilmemiz için lütfen seçim yap.",
+  "stepProgress": "Adım {current} / {total}",
+  "@stepProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "languageComingSoonMsg": "{lang} yakında eklenecek! Şimdilik İngilizce veya İspanyolca ile başlayalım. 🚀",
+  "@languageComingSoonMsg": {
+    "placeholders": {
+      "lang": { "type": "String" }
+    }
+  },
+  "connectionErrorServer": "Bağlantı hatası! Sunucu açık mı?"
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'level_decision_screen.dart';
-// 🌟 1. TEMİZLİK: PathScreen importunu sildik, yerine MainNavigationScreen'i ekledik
 import 'main_navigation.dart';
-
 import '../main.dart';
+// 🌟 ÇEVİRİ KÜTÜPHANESİ EKLENDİ
+import '../l10n/app_localizations.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   final String username;
@@ -64,57 +64,39 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     }
   }
 
+  // 🌟 DİNAMİK YAPILDI: "name" alanını çıkardık, çeviriyi db_value'dan UI'da anlık yapacağız.
   final List<Map<String, dynamic>> _targetLanguages = [
-    {
-      "name": "İngilizce",
-      "db_value": "English",
-      "flag": "🇬🇧",
-      "available": true,
-    },
-    {
-      "name": "İspanyolca",
-      "db_value": "Spanish",
-      "flag": "🇪🇸",
-      "available": true,
-    },
-    {
-      "name": "Almanca",
-      "db_value": "German",
-      "flag": "🇩🇪",
-      "available": false,
-    },
-    {
-      "name": "Fransızca",
-      "db_value": "French",
-      "flag": "🇫🇷",
-      "available": false,
-    },
+    {"db_value": "English", "flag": "🇬🇧", "available": true},
+    {"db_value": "Spanish", "flag": "🇪🇸", "available": true},
+    {"db_value": "German", "flag": "🇩🇪", "available": false},
+    {"db_value": "French", "flag": "🇫🇷", "available": false},
   ];
 
   final List<Map<String, dynamic>> _nativeLanguages = [
-    {
-      "name": "Türkçe",
-      "db_value": "Turkish",
-      "flag": "🇹🇷",
-      "available": true,
-    },
-    {
-      "name": "English",
-      "db_value": "English",
-      "flag": "🇺🇸",
-      "available": true,
-    },
-    {
-      "name": "İspanyolca",
-      "db_value": "Spanish",
-      "flag": "🇪🇸",
-      "available": true,
-    },
+    {"db_value": "Turkish", "flag": "🇹🇷", "available": true},
+    {"db_value": "English", "flag": "🇺🇸", "available": true},
   ];
 
+  // 🌟 YARDIMCI FONKSİYON: Veritabanı değerine göre anlık çevrilmiş dil adını döndürür
+  String _getLocalizedLangName(String dbValue, AppLocalizations l10n) {
+    switch (dbValue) {
+      case "English":
+        return l10n.langEnglish;
+      case "Spanish":
+        return l10n.langSpanish;
+      case "German":
+        return l10n.langGerman;
+      case "French":
+        return l10n.langFrench;
+      case "Turkish":
+        return l10n.langTurkish;
+      default:
+        return dbValue;
+    }
+  }
+
   Future<void> _saveLanguagesToDatabase() async {
-    print("🚀 GİDEN HEDEF DİL: $_selectedTargetLanguage");
-    print("🚀 GİDEN ANA DİL: $_selectedNativeLanguage");
+    final l10n = AppLocalizations.of(context)!;
 
     setState(() => _isLoading = true);
 
@@ -134,13 +116,11 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
       if (response.statusCode == 200) {
         if (!mounted) return;
 
-        // 🌟 2. EKLENEN KOD: Seçilen ana dile göre uygulamanın arayüzünü anında çevir!
         if (_selectedNativeLanguage == "Turkish") {
           LinguaApp.localeNotifier.value = const Locale('tr', '');
         } else if (_selectedNativeLanguage == "English") {
           LinguaApp.localeNotifier.value = const Locale('en', '');
         }
-
         // 🌟 MÜKEMMEL DOKUNUŞ: Kullanıcı dili seçtiğine göre,
         // ŞİMDİ gidip o dildeki GERÇEK seviyesini soralım!
         final statsUrl = Uri.parse(
@@ -154,7 +134,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           realLevel = statsData['level'] ?? "";
         }
 
-        // 2. Eğer bu SEÇTİĞİ DİLDE bir seviyesi varsa Haritaya (İskelete) git
         if (realLevel.isNotEmpty && realLevel != "Belirlenmedi") {
           Navigator.pushAndRemoveUntil(
             context,
@@ -163,14 +142,12 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 username: widget.username,
                 targetLanguage: _selectedTargetLanguage,
                 nativeLanguage: _selectedNativeLanguage,
-                minLevel:
-                    realLevel, // 🌟 Yanlışlıkla İngilizce değil, gerçek seviyesi!
+                minLevel: realLevel,
               ),
             ),
             (Route<dynamic> route) => false,
           );
         } else {
-          // Bu dili İLK KEZ seçenler seviye belirleme sınavına (Test'e) gidiyor
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -185,7 +162,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         }
       }
     } catch (e) {
-      _showError("Bağlantı hatası! Sunucu açık mı?");
+      _showError(l10n.connectionErrorServer); // 🌟 DİNAMİK YAPILDI
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -198,12 +175,15 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   }
 
   void _onLanguageSelected(Map<String, dynamic> lang) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (lang["available"] == false) {
+      final langName = _getLocalizedLangName(lang["db_value"], l10n);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            "${lang["name"]} yakında eklenecek! Şimdilik İngilizce veya İspanyolca ile başlayalım. 🚀",
-          ),
+            l10n.languageComingSoonMsg(langName),
+          ), // 🌟 DİNAMİK YAPILDI
           backgroundColor: const Color(0xFF073B4C),
           duration: const Duration(seconds: 2),
         ),
@@ -216,13 +196,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         _selectedTargetLanguage = lang["db_value"];
       });
 
-      // 🌟 3. UX İYİLEŞTİRMESİ: Eski kullanıcının zaten ana dili kayıtlı. Ona tekrar 2. adımı sorma!
       if (_isReturningUser && _selectedNativeLanguage.isNotEmpty) {
-        _saveLanguagesToDatabase(); // Direkt kaydet ve haritaya geç
+        _saveLanguagesToDatabase();
       } else {
-        setState(
-          () => _currentStep = 2,
-        ); // Yeni kullanıcıysa 2. adımı (Ana dili) sor
+        setState(() => _currentStep = 2);
       }
     } else {
       setState(() {
@@ -234,22 +211,22 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!; // 🌟 L10N ÇAĞRILDI
+
     final currentList = _currentStep == 1 ? _targetLanguages : _nativeLanguages;
 
     String titleText;
     if (_currentStep == 1) {
       if (_isReturningUser) {
-        titleText = _selectedNativeLanguage == "Turkish"
-            ? "Hangi dilden devam etmek istersiniz? 🚀"
-            : "Which language would you like to continue with? 🚀";
+        titleText = l10n.continueLearning; // 🌟 DİNAMİK YAPILDI
       } else {
-        titleText = "Yeni bir dil öğrenmeye hazır mısın? 🌍";
+        titleText = l10n.readyToLearn; // 🌟 DİNAMİK YAPILDI
       }
     } else {
-      titleText = "Ana dilin nedir?";
+      titleText = l10n.whatIsNativeLanguage; // 🌟 DİNAMİK YAPILDI
     }
 
-    final stepText = "Adım $_currentStep / 2";
+    final stepText = l10n.stepProgress(_currentStep, 2); // 🌟 DİNAMİK YAPILDI
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FF),
@@ -291,7 +268,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    "Sana en uygun deneyimi sunabilmemiz için lütfen seçim yap.",
+                    l10n.makeSelectionToPersonalize, // 🌟 DİNAMİK YAPILDI
                     style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
                   const SizedBox(height: 40),
@@ -301,6 +278,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                       itemBuilder: (context, index) {
                         final lang = currentList[index];
                         final isAvailable = lang["available"];
+                        final langName = _getLocalizedLangName(
+                          lang["db_value"],
+                          l10n,
+                        ); // 🌟 DİNAMİK ÇEVİRİ
 
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
@@ -337,7 +318,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                   const SizedBox(width: 20),
                                   Expanded(
                                     child: Text(
-                                      lang["name"],
+                                      langName, // 🌟 ÇEVRİLMİŞ İSİM BASILDI
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w600,

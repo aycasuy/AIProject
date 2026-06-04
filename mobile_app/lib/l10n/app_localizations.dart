@@ -297,6 +297,78 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Zaten kayıtlı mısın? '**
   String get haveAccount;
+
+  /// No description provided for @langEnglish.
+  ///
+  /// In tr, this message translates to:
+  /// **'İngilizce'**
+  String get langEnglish;
+
+  /// No description provided for @langSpanish.
+  ///
+  /// In tr, this message translates to:
+  /// **'İspanyolca'**
+  String get langSpanish;
+
+  /// No description provided for @langGerman.
+  ///
+  /// In tr, this message translates to:
+  /// **'Almanca'**
+  String get langGerman;
+
+  /// No description provided for @langFrench.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fransızca'**
+  String get langFrench;
+
+  /// No description provided for @langTurkish.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkçe'**
+  String get langTurkish;
+
+  /// No description provided for @readyToLearn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni bir dil öğrenmeye hazır mısın? 🌍'**
+  String get readyToLearn;
+
+  /// No description provided for @continueLearning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hangi dilden devam etmek istersiniz? 🚀'**
+  String get continueLearning;
+
+  /// No description provided for @whatIsNativeLanguage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana dilin nedir?'**
+  String get whatIsNativeLanguage;
+
+  /// No description provided for @makeSelectionToPersonalize.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sana en uygun deneyimi sunabilmemiz için lütfen seçim yap.'**
+  String get makeSelectionToPersonalize;
+
+  /// No description provided for @stepProgress.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adım {current} / {total}'**
+  String stepProgress(int current, int total);
+
+  /// No description provided for @languageComingSoonMsg.
+  ///
+  /// In tr, this message translates to:
+  /// **'{lang} yakında eklenecek! Şimdilik İngilizce veya İspanyolca ile başlayalım. 🚀'**
+  String languageComingSoonMsg(String lang);
+
+  /// No description provided for @connectionErrorServer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı hatası! Sunucu açık mı?'**
+  String get connectionErrorServer;
 }
 
 class _AppLocalizationsDelegate
