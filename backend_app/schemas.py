@@ -56,6 +56,7 @@ class AddVocabularyRequest(BaseModel):
     word: str
     translation: str
     cefr_level: str
+    target_language: str = "English"
 
 class AddXPRequest(BaseModel):
     username: str
@@ -84,6 +85,7 @@ class DictationRequest(BaseModel):
     target_language: str
     original_text: str
     user_text: str
+    native_language: str = "Turkish"
 
 
 # Günlük Roleplay Kilidi İçin

@@ -379,32 +379,32 @@ async def analyze_pronunciation(request: schemas.PronunciationRequest, db: Sessi
 
 @router.post("/analyze_listening")
 async def analyze_listening(request: DictationRequest):
+    print(f"🔍 native_language: {request.native_language}")  # 👈 ekle
+    print(f"🔍 target_language: {request.target_language}")  # 👈 ekle
     try:
-        # 🧠 HOŞGÖRÜLÜ DİNLEME KOÇU PROMPTU
-        prompt = f"""
+     prompt = f"""
         Sen uzman bir {request.target_language} dil öğretmenisin.
-        Öğrencinin "Duyduğunu Yazma" (Dictation) pratiğini değerlendireceksin.
-        
+        Öğrencinin ana dili: {request.native_language}.
+
         Orijinal Metin (Robotun Söylediği): "{request.original_text}"
         Öğrencinin Yazdığı Metin: "{request.user_text}"
-        
+
         Görevlerin:
-        1. İki metni karşılaştır. Büyük/küçük harf (A-a) ve ufak noktalama işaretleri (, .) hatalarını tamamen GÖRMEZDEN GEL.
-        2. Ufak harf hatalarını (typo) çok az cezalandır, ancak eksik veya tamamen yanlış duyulan kelimeleri tespit et.
-        3. 0 ile 100 arasında bir puan (score) ver.
-        4. Öğrenciye motive edici, kısa bir geri bildirim (feedback) yaz.
-        5. Öğrencinin yanlış yazdığı veya duyamadığı kelimeleri tespit et (missed_words).
+        1. İki metni karşılaştır. Büyük/küçük harf ve ufak noktalama hatalarını GÖRMEZDEN GEL.
+        2. Ufak harf hatalarını (typo) az cezalandır, eksik veya tamamen yanlış kelimeleri tespit et.
+        3. 0 ile 100 arasında puan (score) ver.
+        4. Öğrenciye '{request.native_language}' dilinde motive edici, kısa geri bildirim (feedback) yaz.
+        5. Yanlış yazılan veya duyulamayan kelimeleri tespit et (missed_words).
 
         ÇIKTI FORMATI:
-        Sadece aşağıdaki JSON formatında çıktı ver:
         {{
             "score": 90,
-            "feedback": "Harika dinleme becerisi! Sadece 'environment' kelimesinde ufak bir yazım hatası yapmışsın.",
-            "missed_words": ["environment"]
+            "feedback": "Harika dinleme becerisi! Sadece 'buenos' kelimesinde ufak bir yazım hatası var.",
+            "missed_words": ["buenos"]
         }}
         """
         
-        response = client.models.generate_content(
+     response = client.models.generate_content(
             model='gemini-2.5-flash-lite',
             contents=prompt,
             config=types.GenerateContentConfig(
@@ -412,12 +412,12 @@ async def analyze_listening(request: DictationRequest):
             ),
         )
         
-        analysis_data = json.loads(response.text)
+     analysis_data = json.loads(response.text)
         
         # Ödül: 70 ve üstü alırsa 50 XP kazanır!
-        added_xp = 50 if analysis_data.get("score", 0) >= 70 else 10
+     added_xp = 50 if analysis_data.get("score", 0) >= 70 else 10
         
-        return {
+     return {
             "status": "success",
             "analysis": analysis_data,
             "added_xp": added_xp
@@ -537,7 +537,35 @@ async def get_pronunciation_feedback(
         "fifteen": ["fifty", "15", "fifth in"],
         "fifty": ["fifteen", "nifty","50","elli"],
         "sixteen": ["sixty", "16", "six in"],
-        "sixty": ["sixteen"]
+        "sixty": ["sixteen"],
+        # 🌟 İSPANYOLCA A1 - LESSON 9
+        "hola": ["ola", "holy", "holla", "hold", "hora", "cola"],
+        "adiós": ["adios", "radios", "audio", "addios"],
+        "buenos días": ["buenos dias", "buenas dias", "when is", "bonus dias", "buenos"],
+        "buenas tardes": ["bonus tardes", "when is tardes", "buenas", "buenas tarde"],
+        "buenas noches": ["bonus notice", "bonus noches", "buenas noche", "buenas"],
+        "por favor": ["favor", "labor", "four favor", "poor favor", "por"],
+        "gracias": ["grass", "grassy", "garcia", "gracia", "grosses"],
+        "perdón": ["pardon", "perdon", "burden", "person", "gordon"],
+        "mucho gusto": ["mucho", "gousto", "much gusto", "musho gusto"],
+        "sí": ["see", "sea", "si", "she", "say", "c"],
+        "lo siento": ["siento", "science", "silent", "silo", "lo siento"],
+        "chao": ["chow", "ciao", "wow", "cow", "show", "cho"],
+        "¿cómo estás?": ["como estas", "como esta", "coma estas"],
+        "estoy bien": ["estoy", "stay bien", "being", "been", "a stay"],
+        "ola": ["hola", "ola", "cola", "hora"],
+        "nos": ["no", "not", "knows", "nous","NAS","nas"],
+        "quien": ["bien", "queen", "keen", "when", "kien","gene"],
+        "nuevas": ["buenas", "nueve", "nuevos", "nueva"],
+        "dios": ["adiós", "adios", "dias", "ios"],
+        "vor": ["por", "four", "more", "bore"],
+        "labor": ["favor", "por favor", "labrador", "layer","la voz"],
+        "macho": ["mucho", "matcho", "march", "much","nacho"],
+        "bien": ["bean", "been", "bin", "ban", "when", "queen", "keen", "vien", "b"],
+        "gracia": ["gracias", "garcia", "grass", "grassy","francia"],
+        "nuevas": ["buenas", "nueve", "nueva", "nuevos"],
+        "por": ["favor", "four", "bore", "more", "door"],
+        "si": ["sí", "see", "sea", "she", "say"],
     }
 
     # =================================================================

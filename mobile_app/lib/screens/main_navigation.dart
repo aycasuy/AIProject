@@ -100,6 +100,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         username: widget.username,
         selectedLanguage: widget.targetLanguage,
         displayLevel: widget.minLevel,
+        nativeLanguage: widget.nativeLanguage,
       ),
 
       // 🤖 YENİ AKILLI ROLEPLAY EKRANI

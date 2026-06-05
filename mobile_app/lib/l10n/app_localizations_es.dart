@@ -114,43 +114,44 @@ class AppLocalizationsEs extends AppLocalizations {
   String get haveAccount => '¿Ya está registrado? ';
 
   @override
-  String get langEnglish => 'İngilizce';
+  String get langEnglish => 'Inglés';
 
   @override
-  String get langSpanish => 'İspanyolca';
+  String get langSpanish => 'Español';
 
   @override
-  String get langGerman => 'Almanca';
+  String get langGerman => 'Alemán';
 
   @override
-  String get langFrench => 'Fransızca';
+  String get langFrench => 'Francés';
 
   @override
-  String get langTurkish => 'Türkçe';
+  String get langTurkish => 'Turco';
 
   @override
-  String get readyToLearn => 'Yeni bir dil öğrenmeye hazır mısın? 🌍';
+  String get readyToLearn => '¿Listo para aprender un nuevo idioma? 🌍';
 
   @override
-  String get continueLearning => 'Hangi dilden devam etmek istersiniz? 🚀';
+  String get continueLearning => '¿Con qué idioma te gustaría continuar? 🚀';
 
   @override
-  String get whatIsNativeLanguage => 'Ana dilin nedir?';
+  String get whatIsNativeLanguage => '¿Cuál es tu idioma nativo?';
 
   @override
   String get makeSelectionToPersonalize =>
-      'Sana en uygun deneyimi sunabilmemiz için lütfen seçim yap.';
+      'Por favor, haz una selección para personalizar tu experiencia.';
 
   @override
   String stepProgress(int current, int total) {
-    return 'Adım $current / $total';
+    return 'Paso $current / $total';
   }
 
   @override
   String languageComingSoonMsg(String lang) {
-    return '$lang yakında eklenecek! Şimdilik İngilizce veya İspanyolca ile başlayalım. 🚀';
+    return '¡$lang estará disponible pronto! Comencemos con Inglés o Español por ahora. 🚀';
   }
 
   @override
-  String get connectionErrorServer => 'Bağlantı hatası! Sunucu açık mı?';
+  String get connectionErrorServer =>
+      '¡Error de conexión! ¿Está funcionando el servidor?';
 }

@@ -91,7 +91,10 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
 
   // Okuma motorunu İngilizceye ayarla
   Future<void> _initTts() async {
-    await _flutterTts.setLanguage("en-US");
+    final String ttsLanguage = widget.targetLanguage == "Spanish"
+        ? "es-ES"
+        : "en-US";
+    await _flutterTts.setLanguage(ttsLanguage);
     await _flutterTts.setSpeechRate(0.4);
     await _flutterTts.setPitch(1.0);
   }
@@ -139,8 +142,13 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
       );
       if (available) {
         setState(() => _isListening = true);
+        final String localeId = widget.targetLanguage == "Spanish"
+            ? "es_ES"
+            : "en_US";
         _speech.listen(
-          localeId: "en_US",
+          listenOptions: stt.SpeechListenOptions(
+            localeId: localeId, // 👈 yeni yol
+          ),
           onResult: (val) => setState(() {
             _recognizedText = val.recognizedWords;
             if (val.hasConfidenceRating && val.confidence > 0) {

@@ -172,6 +172,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
           isPracticeMode: true,
           practicePuzzleId: puzzleId,
           sectionIndex: 0,
+          nativeLanguage: widget.nativeLanguage,
         );
         break;
 
@@ -189,6 +190,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
           isPracticeMode: true,
           practicePuzzleId: puzzleId,
           sectionIndex: 0,
+          nativeLanguage: widget.nativeLanguage,
         );
         break;
 

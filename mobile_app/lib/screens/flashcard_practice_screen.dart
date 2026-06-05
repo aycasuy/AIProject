@@ -35,7 +35,7 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
   Future<void> _fetchWords() async {
     try {
       final url = Uri.parse(
-        'http://10.0.2.2:8000/get_flashcard_practice/${widget.username}',
+        'http://10.0.2.2:8000/get_flashcard_practice/${widget.username}?target_language=${widget.targetLanguage}',
       );
       final response = await http.get(url);
 

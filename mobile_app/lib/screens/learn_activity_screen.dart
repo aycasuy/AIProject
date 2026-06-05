@@ -17,6 +17,7 @@ class LearnActivityScreen extends StatefulWidget {
   final bool isPracticeMode;
   final int? practicePuzzleId;
   final int sectionIndex;
+  final String nativeLanguage;
 
   const LearnActivityScreen({
     Key? key,
@@ -30,6 +31,7 @@ class LearnActivityScreen extends StatefulWidget {
     this.isPracticeMode = false,
     this.practicePuzzleId,
     required this.sectionIndex,
+    required this.nativeLanguage,
   }) : super(key: key);
 
   @override
@@ -186,6 +188,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
           card["word"]!,
           card["translation"]!,
           widget.minLevel,
+          widget.targetLanguage,
         );
       } catch (e) {
         print("Kelime kaydedilemedi: $e");
@@ -2569,7 +2572,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                   200,
                   widget.minLevel,
                   widget.lessonId,
-                  "Turkish",
+                  widget.nativeLanguage,
                 );
                 if (result == true && mounted) {
                   Navigator.pop(context, true);

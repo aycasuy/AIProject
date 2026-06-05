@@ -20,12 +20,13 @@ class PathScreen extends StatefulWidget {
   final String selectedLanguage;
   final String
   displayLevel; // Ayarlardan seçilen harita/pratik seviyesi. Örn: gerçek seviye A2 iken A1 gösterilebilir.
-
+  final String nativeLanguage;
   const PathScreen({
     Key? key,
     required this.username,
     required this.selectedLanguage,
     required this.displayLevel,
+    required this.nativeLanguage,
   }) : super(key: key);
 
   @override
@@ -581,7 +582,7 @@ class _PathScreenState extends State<PathScreen> {
             username: progress.userName,
             themeColor: themeColor,
             targetLanguage: widget.selectedLanguage,
-            nativeLanguage: "Turkish",
+            nativeLanguage: widget.nativeLanguage,
           ),
         ),
       );
@@ -598,6 +599,7 @@ class _PathScreenState extends State<PathScreen> {
             targetLanguage: widget.selectedLanguage,
             lessonId: lesson['id'] ?? 1,
             sectionIndex: lessonIndex + 1, // 🌟 Python için Bölüm Numarası!
+            nativeLanguage: widget.nativeLanguage,
           ),
         ),
       );
@@ -626,6 +628,7 @@ class _PathScreenState extends State<PathScreen> {
             targetWords: lesson['target_words'] ?? "",
             lessonId: lesson['id'],
             sectionIndex: lessonIndex + 1, // 🌟 Python için Bölüm Numarası!
+            nativeLanguage: widget.nativeLanguage,
           ),
         ),
       );

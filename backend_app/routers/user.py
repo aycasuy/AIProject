@@ -49,21 +49,14 @@ def register(request: schemas.UserRegister, db: Session = Depends(get_db)):
         username=request.username, 
         email=request.email, 
         hashed_password=hashed_pwd, 
-        native_language="Turkish"
+        native_language=""
     )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
 
     # 3. İLİŞKİLİ TABLOYA (user_progress) İLK DİL DOSYASINI AÇMA
-    new_progress = models.UserProgressDB(
-        user_id=new_user.id,
-        target_language="English", # Şimdilik herkes İngilizce ile başlıyor
-        level="Belirlenmedi",
-        xp_score=0
-    )
-    db.add(new_progress)
-    db.commit()
+    
 
     return {"mesaj": "Kayıt başarıyla oluşturuldu ve dil dosyası açıldı!"}
 
@@ -80,7 +73,22 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
     if not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail="Şifre hatalı!")
 
-    return {"message": "Giriş Başarılı", "username": db_user.username}
+    # 🌟 1. Kullanıcının seviyesini öğrenmek için ilerleme tablosuna bakıyoruz
+    user_prog = db.query(UserProgressDB).filter(UserProgressDB.user_id == db_user.id).first()
+    
+    # 🌟 2. Eğer kayıtlı bir seviyesi yoksa çökmemsi için varsayılan değer atıyoruz
+    # (Senin veritabanında sütun adın current_level veya level olabilir, ona göre düzeltirsin)
+    level_value = user_prog.current_level if user_prog and hasattr(user_prog, 'current_level') else "Belirlenmedi"
+
+    # 🌟 3. FLUTTER'A GİDECEK OLAN DOLU DOLU KARGO PAKETİ
+    return {
+        "message": "Giriş Başarılı", 
+        "username": db_user.username,
+        # db_user içindeki sütun adlarına göre eşleştir (native_language ve target_language):
+        "native_language": getattr(db_user, 'native_language', ""),
+        "target_language": getattr(db_user, 'target_language', ""),
+        "level": level_value
+    }
 
 # --- 3. İLERLEME KAYDET ---
 #@router.post("/save_progress")
@@ -155,19 +163,20 @@ def get_user_stats(username: str, target_language: str = "English", db: Session 
     # 2. Kullanıcının SEÇTİĞİ DİLDEKİ gelişimini bul
     progress = db.query(models.UserProgressDB).filter(
         models.UserProgressDB.user_id == user.id,
-        models.UserProgressDB.target_language == target_language # 🌟 Hardcoded "English" silindi!
+        models.UserProgressDB.target_language == target_language
     ).first()
 
-    level = progress.level if progress else "A1"
+    level = progress.level if progress else "Belirlenmedi"
     xp = progress.xp_score if progress else 0
 
+    # 🌟 İŞTE MÜKEMMEL UX'İ KURTARACAK O PAKET:
     return {
         "username": user.username,
         "target_language": target_language,
         "level": level,
-        "xp_score": xp
+        "xp_score": xp,
+        "native_language": user.native_language if user.native_language else "" # 🌟 EKSİK OLAN SATIR EKLENDİ!
     }
-
 
 # 1. Kelimeyi Veritabanına Kaydetme Kapısı
 @router.post("/add_vocabulary")
@@ -179,13 +188,15 @@ def add_vocabulary(request: schemas.AddVocabularyRequest, db: Session = Depends(
     # Kelime zaten eklenmiş mi kontrol et
     existing_word = db.query(models.VocabularyDB).filter(
         models.VocabularyDB.user_id == user.id, 
-        models.VocabularyDB.word == request.word
+        models.VocabularyDB.word == request.word,
+        models.VocabularyDB.target_language == request.target_language
+
     ).first()
     
     if not existing_word:
         new_word = models.VocabularyDB(
             user_id=user.id, word=request.word, 
-            translation=request.translation, cefr_level=request.cefr_level
+            translation=request.translation, cefr_level=request.cefr_level, target_language=request.target_language
         )
         db.add(new_word)
         db.commit()

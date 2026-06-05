@@ -139,7 +139,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get makeSelectionToPersonalize =>
-      'Please make a selection so we can personalize your experience.';
+      'Please make a selection so we can provide you with the best experience.';
 
   @override
   String stepProgress(int current, int total) {
@@ -148,7 +148,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String languageComingSoonMsg(String lang) {
-    return '$lang is coming soon! Let\'s start with English or Spanish for now. 🚀';
+    return '$lang is coming soon! ';
   }
 
   @override

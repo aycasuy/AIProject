@@ -45,15 +45,18 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
         if (mounted) {
           setState(() {
-            final gelenSeviye = data['level'];
+            // 🌟 1. MİMARİ DEĞİŞİKLİK: Seviyeye (gelenSeviye) bakmayı TAMAMEN BIRAKTIK!
+            // Sadece veritabanından gelen Ana Dile bakıyoruz.
+            final String? dbNativeLang = data['native_language'];
 
-            if (gelenSeviye != null &&
-                gelenSeviye.toString().trim() != "" &&
-                gelenSeviye.toString().trim() != "Belirlenmedi") {
+            if (dbNativeLang != null && dbNativeLang.trim().isNotEmpty) {
+              // Veritabanında bir ana dili var! Bu KESİNLİKLE ESKİ KULLANICI.
               _isReturningUser = true;
-              _selectedNativeLanguage = data['native_language'] ?? "Turkish";
+              _selectedNativeLanguage = dbNativeLang;
             } else {
+              // Veritabanında ana dili yok. Bu YENİ KULLANICI.
               _isReturningUser = false;
+              _selectedNativeLanguage = "";
             }
             _isLoadingStats = false;
           });
@@ -177,13 +180,12 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   void _onLanguageSelected(Map<String, dynamic> lang) {
     final l10n = AppLocalizations.of(context)!;
 
+    // Yakında eklenecek diller için kilit kontrolü
     if (lang["available"] == false) {
       final langName = _getLocalizedLangName(lang["db_value"], l10n);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            l10n.languageComingSoonMsg(langName),
-          ), // 🌟 DİNAMİK YAPILDI
+          content: Text(l10n.languageComingSoonMsg(langName)),
           backgroundColor: const Color(0xFF073B4C),
           duration: const Duration(seconds: 2),
         ),
@@ -191,17 +193,23 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
       return;
     }
 
+    // 🌟 KAYA GİBİ SAĞLAM, NET MANTIK:
     if (_currentStep == 1) {
       setState(() {
         _selectedTargetLanguage = lang["db_value"];
       });
 
+      // 🌟 2. KUSURSUZ UX:
       if (_isReturningUser && _selectedNativeLanguage.isNotEmpty) {
+        // Eski kullanıcıysa, 2. adımı HİÇ GÖSTERMEDEN direkt kaydet ve haritaya geç!
+        // (_selectedNativeLanguage zaten veritabanından çekilmişti, bozulmadan tekrar gönderilecek)
         _saveLanguagesToDatabase();
       } else {
+        // Yeni kullanıcıysa, 2. adımı (Ana dili) seçmesi için ekranı kaydır.
         setState(() => _currentStep = 2);
       }
     } else {
+      // 2. Adımdaysa (Sadece yeni kullanıcılar burayı görebilir)
       setState(() {
         _selectedNativeLanguage = lang["db_value"];
       });

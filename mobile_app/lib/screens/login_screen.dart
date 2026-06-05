@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/main.dart';
+import 'package:mobile_app/screens/main_navigation.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -111,12 +113,56 @@ class _LoginScreenState extends State<LoginScreen>
 
         if (response.statusCode == 200) {
           if (!mounted) return;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LanguageSelectionScreen(username: username),
-            ),
-          );
+
+          // 🌟 1. FastAPI'den gelen kullanıcı verisini çöz
+          final userData = jsonDecode(utf8.decode(response.bodyBytes));
+
+          // 🌟 2. Kullanıcının veritabanındaki ANA DİLİNİ ve HEDEF DİLİNİ al
+          // (Dikkat: FastAPI /login ucunun bu verileri döndüğünden emin olmalısın)
+          final String? nativeLanguage = userData['native_language'];
+          final String? targetLanguage = userData['target_language'];
+          final String? minLevel = userData['level']; // Eğer level dönüyorsa
+
+          // 🌟 3. EĞER ANA DİLİ VARSA (Eski Kullanıcı), UYGULAMANIN DİLİNİ ANINDA DEĞİŞTİR!
+          if (nativeLanguage != null && nativeLanguage.isNotEmpty) {
+            if (nativeLanguage == "English") {
+              LinguaApp.localeNotifier.value = const Locale('en', '');
+            } else if (nativeLanguage == "Turkish") {
+              LinguaApp.localeNotifier.value = const Locale('tr', '');
+            } else if (nativeLanguage == "Spanish") {
+              LinguaApp.localeNotifier.value = const Locale('es', '');
+            }
+          }
+
+          // 🌟 4. YÖNLENDİRME MANTIĞI:
+          // Eğer ana dili ve hedef dili zaten belliyse onu bir daha LanguageSelectionScreen'e yorma!
+          if (nativeLanguage != null &&
+              targetLanguage != null &&
+              nativeLanguage.isNotEmpty &&
+              targetLanguage.isNotEmpty) {
+            // KULLANICIYI DİREKT ANA SAYFAYA (HARİTAYA) GÖNDER
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainNavigationScreen(
+                  username: username,
+                  targetLanguage: targetLanguage,
+                  nativeLanguage: nativeLanguage,
+                  minLevel:
+                      minLevel ?? "Belirlenmedi", // Eğer boşsa default değer
+                ),
+              ),
+            );
+          } else {
+            // EĞER DİLLERİ YOKSA (Yepyeni bir kullanıcıysa), DİL SEÇİMİNE GÖNDER
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    LanguageSelectionScreen(username: username),
+              ),
+            );
+          }
         } else {
           final errorData = jsonDecode(utf8.decode(response.bodyBytes));
           if (!mounted) return;

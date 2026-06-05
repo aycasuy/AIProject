@@ -14,6 +14,7 @@ class ListeningScreen extends StatefulWidget {
   final String targetWords;
   final int sectionIndex;
   final int lessonId;
+  final String nativeLanguage;
 
   const ListeningScreen({
     super.key,
@@ -23,6 +24,7 @@ class ListeningScreen extends StatefulWidget {
     required this.targetWords,
     required this.sectionIndex,
     required this.lessonId,
+    required this.nativeLanguage,
   });
 
   @override
@@ -257,6 +259,7 @@ class _ListeningScreenState extends State<ListeningScreen>
           "target_language": widget.targetLanguage,
           "original_text": _targetText,
           "user_text": _textController.text,
+          "native_language": widget.nativeLanguage,
         }),
       );
 

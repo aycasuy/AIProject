@@ -582,7 +582,9 @@ def get_mistake_details(username: str, target_language: str, db: Session = Depen
 
 # 1. Sadece öğrenilmemiş kelimeleri çeken GET endpoint'i
 @router.get("/get_flashcard_practice/{username}")
-def get_flashcard_practice(username: str, db: Session = Depends(get_db)):
+def get_flashcard_practice(username: str,
+                           target_language: str = "English",
+                            db: Session = Depends(get_db)):
     user = db.query(models.UserDB).filter(models.UserDB.username == username).first()
     if not user:
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
@@ -590,7 +592,8 @@ def get_flashcard_practice(username: str, db: Session = Depends(get_db)):
     # Kullanıcıyı boğmamak için tek seferde en fazla 15 kelime getir
     unlearned_words = db.query(models.VocabularyDB).filter(
         models.VocabularyDB.user_id == user.id,
-        models.VocabularyDB.is_learned == False
+        models.VocabularyDB.is_learned == False,
+        models.VocabularyDB.target_language == target_language
     ).limit(15).all()
     
     return unlearned_words

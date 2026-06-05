@@ -106,6 +106,7 @@ class ApiService {
     String word,
     String translation,
     String cefrLevel,
+    String targetLanguage,
   ) async {
     try {
       final response = await http.post(
@@ -116,6 +117,7 @@ class ApiService {
           "word": word,
           "translation": translation,
           "cefr_level": cefrLevel,
+          "target_language": targetLanguage,
         }),
       );
 

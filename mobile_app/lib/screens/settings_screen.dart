@@ -295,7 +295,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required Function(String?) onChanged,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -328,24 +328,51 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
-          DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: value,
-              icon: const Icon(
-                Icons.arrow_drop_down_rounded,
-                color: Colors.grey,
+
+          // 🌟 MÜKEMMEL UX DOKUNUŞU BURADA BAŞLIYOR:
+          // Eğer listede 1 veya daha az seçenek varsa, açılır menüyü HİÇ ÇİZME! Sadece metni göster.
+          if (items.length <= 1)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text(
+                value,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: iconColor, // Aynı renkte kalsın ama tıklanamaz olsun
+                ),
               ),
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: iconColor,
+            )
+          else
+            // 🌟 EĞER LİSTEDE BİRDEN FAZLA SEÇENEK VARSA (Örn: İspanyolca eklendiyse) MENÜYÜ AÇ!
+            DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: value,
+                isDense: true,
+                dropdownColor: Colors
+                    .white, // 🌟 O garip pembe/gri tonu siler, kutuyu bembeyaz yapar
+                borderRadius: BorderRadius.circular(
+                  16,
+                ), // 🌟 Menü köşelerini modern bir şekilde yuvarlatır
+                elevation: 4, // Şık bir gölge ekler
+                icon: const Icon(
+                  Icons.arrow_drop_down_rounded,
+                  color: Colors.grey,
+                ),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: iconColor,
+                ),
+                items: items.map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item),
+                  );
+                }).toList(),
+                onChanged: onChanged,
               ),
-              items: items.map((String item) {
-                return DropdownMenuItem<String>(value: item, child: Text(item));
-              }).toList(),
-              onChanged: onChanged,
             ),
-          ),
         ],
       ),
     );

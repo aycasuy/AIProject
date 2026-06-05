@@ -326,58 +326,52 @@ async def generate_speed_reading(username: str, target_language: str,native_lang
     
     # 3. Senin Fonksiyonun İçin Parametreleri Hazırla
     feature_type = "speed_reading"
-    PROMPT_VERSION = "v5" # 🌟 Versiyonu v4 yaptık ki eski yanlış hikayeleri hafızadan (cache) silsin!
+# 🌟 1. ÖNBELLEĞİ (CACHE) SİLMEK İÇİN VERSİYONU v6 YAPTIK
+    PROMPT_VERSION = "v6" 
     cache_key_input = f"{PROMPT_VERSION}-{target_language}-{native_language}-{level}-lesson{lesson_id}-{','.join(words)}"
 
-    # 🌟 YENİ, GÜÇLENDİRİLMİŞ PROMPT:
+    # 🌟 2. İÇİNDEKİ TÜRKÇE ÖRNEKLERDEN ARINDIRILMIŞ YENİ PROMPT
     system_prompt = f"""
     Sen profesyonel bir {target_language} öğretmenisin. Karşındaki öğrenci tam olarak {level} seviyesinde.
 
-        ÖNEMLİ PEDAGOJİK KURALLAR:
-        - Eğer seviye A1 veya A2 ise: KESİNLİKLE çok basit, gündelik kelimeler kullan.
-        - Cümleleri çok kısa tut. Maksimum 5-7 kelime.
-        - Karmaşık gramer yapılarından kaçın.
-        - Sadece Present Simple kullan.
-        - Metin, öğrencinin şu kelimelerini KESİNLİKLE içermelidir: {', '.join(words)}.
+    ÖNEMLİ PEDAGOJİK KURALLAR:
+    - Eğer seviye A1 veya A2 ise: KESİNLİKLE çok basit, gündelik kelimeler kullan.
+    - Cümleleri çok kısa tut. Maksimum 5-7 kelime.
+    - Karmaşık gramer yapılarından kaçın.
+    - Sadece Present Simple kullan.
+    - Metin, öğrencinin şu kelimelerini KESİNLİKLE içermelidir: {', '.join(words)}.
 
-        Bana {target_language} dilinde, içinde bu kelimelerin geçtiği kısa, akıcı ve heyecanlı bir hikaye yaz.
-        Hikaye en fazla 4-5 cümleden oluşsun.
+    Bana {target_language} dilinde, içinde bu kelimelerin geçtiği kısa, akıcı ve heyecanlı bir hikaye yaz.
+    Hikaye en fazla 4-5 cümleden oluşsun.
 
-        SORU KURALLARI:
-        - question alanı {target_language} dilinde olsun.
-        - question_translation alanı öğrencinin ana dili olan {native_language} dilinde olsun.
-        - options alanındaki şıklar {target_language} dilinde kalsın.
-        - Şıkları {native_language} diline çevirme.
-        - correct_answer kısmına şıkkın tamamını yaz. Sadece A, B, C yazma.
+    SORU KURALLARI:
+    - question alanı {target_language} dilinde olsun.
+    - question_translation alanı KESİNLİKLE öğrencinin ana dili olan {native_language} dilinde olsun!
+    - options alanındaki şıklar {target_language} dilinde kalsın.
+    - Şıkları {native_language} diline çevirme.
+    - correct_answer kısmına şıkkın tamamını yaz. Sadece A, B, C yazma.
 
-        ÇIKTIYI SADECE AŞAĞIDAKİ JSON FORMATINDA VER, BAŞKA AÇIKLAMA YAZMA:
-        {{
-            "story_text": "Hikaye metni burada...",
-            "comprehension_questions": [
-                {{
-                    "question": "What is the girl's name?",
-                    "question_translation": "Kızın adı ne?",
-                    "options": ["A) Tom", "B) Lily", "C) Peter", "D) Ann"],
-                    "correct_answer": "B) Lily"
-                }}
-            ],
-            "vocabulary_questions": [
-                {{
-                    "question": "What does 'bread' mean?",
-                    "question_translation": "'Bread' ne demek?",
-                    "options": ["A) Bread", "B) Milk", "C) Apple", "D) Water"],
-                    "correct_answer": "A) Bread"
-                }}
-            ]
-        }}
-
-        DİKKAT:
-        - Her comprehension_questions elemanında question_translation olmalı.
-        - Her vocabulary_questions elemanında question_translation olmalı.
-        - question_translation mutlaka {native_language} dilinde olmalı.
-        - options {target_language} dilinde kalmalı.
-        - correct_answer kısmına SADECE "A", "B", "C" yazma.
-        - Şıkkın tamamını tam olarak yaz. Örn: "C) Play".
+    ÇIKTIYI SADECE AŞAĞIDAKİ JSON FORMATINDA VER, BAŞKA AÇIKLAMA YAZMA:
+    {{
+        "story_text": "Story text goes here...",
+        "comprehension_questions": [
+            {{
+                "question": "Example question in {target_language}?",
+                "question_translation": "Translation of the question in {native_language}",
+                "options": ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"],
+                "correct_answer": "B) Option 2"
+            }}
+        ],
+        "vocabulary_questions": [
+            {{
+                "question": "What does 'example' mean?",
+                "question_translation": "Translation of the vocabulary question in {native_language}",
+                "options": ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"],
+                "correct_answer": "A) Option 1"
+            }}
+        ]
+    }}
+    
     """
     
     # 4. İŞTE SENİN EFSANE FONKSİYONUNU ÇAĞIRIYORUZ!
