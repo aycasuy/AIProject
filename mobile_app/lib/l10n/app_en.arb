@@ -39,16 +39,16 @@
   "or": "or",
   "noAccount": "Don't have an account? ",
   "haveAccount": "Already registered? ",
-  "langEnglish": "İngilizce",
-  "langSpanish": "İspanyolca",
-  "langGerman": "Almanca",
-  "langFrench": "Fransızca",
-  "langTurkish": "Türkçe",
-  "readyToLearn": "Yeni bir dil öğrenmeye hazır mısın? 🌍",
-  "continueLearning": "Hangi dilden devam etmek istersiniz? 🚀",
-  "whatIsNativeLanguage": "Ana dilin nedir?",
-  "makeSelectionToPersonalize": "Sana en uygun deneyimi sunabilmemiz için lütfen seçim yap.",
-  "stepProgress": "Adım {current} / {total}",
+  "langEnglish": "English",
+  "langSpanish": "Spanish",
+  "langGerman": "German",
+  "langFrench": "French",
+  "langTurkish": "Turkish",
+  "readyToLearn": "Ready to learn a new language? 🌍",
+  "continueLearning": "Which language would you like to continue with? 🚀",
+  "whatIsNativeLanguage": "What is your native language?",
+  "makeSelectionToPersonalize": "Please make a selection so we can provide you with the best experience.",
+  "stepProgress": "Step {current} / {total}",
   "@stepProgress": {
     "placeholders": {
       "current": {
@@ -59,7 +59,7 @@
       }
     }
   },
-  "languageComingSoonMsg": "{lang} yakında eklenecek! Şimdilik İngilizce veya İspanyolca ile başlayalım. 🚀",
+  "languageComingSoonMsg": "{lang} is coming soon! ",
   "@languageComingSoonMsg": {
     "placeholders": {
       "lang": {
@@ -67,5 +67,5 @@
       }
     }
   },
-  "connectionErrorServer": "Bağlantı hatası! Sunucu açık mı?"
+  "connectionErrorServer": "Connection error! Is the server running?"
 }
