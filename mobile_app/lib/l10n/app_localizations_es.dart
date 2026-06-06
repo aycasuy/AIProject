@@ -157,20 +157,20 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String roleplayIntro(String lessonTitle, String targetLanguage, int count) {
-    return 'Senaryo: $lessonTitle 🎭\n\nHedefin bu senaryoya uygun, $targetLanguage dilinde $count hatasız cümle kurmak. Hazırsan ilk mesajını yazarak sohbeti başlat! 😊';
+    return 'Escenario: $lessonTitle 🎭\n\nTu objetivo es construir $count oraciones sin errores en $targetLanguage. ¡Escribe tu primer mensaje para comenzar! 😊';
   }
 
   @override
   String roleplayGoal(int current, int count) {
-    return 'Hedef: $current / $count doğru cümle';
+    return 'Objetivo: $current / $count oraciones correctas';
   }
 
   @override
-  String get roleplayHint => 'Tıkandım, İpucu ver';
+  String get roleplayHint => 'Me quedé atascado, dame una pista';
 
   @override
-  String get writtenAnswer => 'Cevabını yaz...';
+  String get writtenAnswer => 'Escribe tu respuesta...';
 
   @override
-  String get correctedAnswer => 'Düzeltilmiş halini yaz...';
+  String get correctedAnswer => 'Escribe la versión corregida...';
 }
