@@ -217,4 +217,40 @@ class AppLocalizationsTr extends AppLocalizations {
   String mistakesFound(int count) {
     return '$count hata bulundu';
   }
+
+  @override
+  String get levelJourneyTitle => 'Yolculuğun Başlıyor!';
+
+  @override
+  String levelJourneySubtitle(String language) {
+    return '$language öğrenirken sana en uygun başlangıcı seçelim.';
+  }
+
+  @override
+  String get startFromA1Title => 'A1’den başlayabilirsin';
+
+  @override
+  String get startFromA1Subtitle =>
+      'Temelden ilerleyip tüm modülleri sırayla açarsın.';
+
+  @override
+  String get placementInfoTitle => 'Seviye testi çözebilirsin';
+
+  @override
+  String get placementInfoSubtitle =>
+      'Sana uygun seviyeyi kısa bir test ile belirleriz.';
+
+  @override
+  String get startFromScratchA1 => 'Sıfırdan Başlayalım (A1)';
+
+  @override
+  String get knowMyLevelTest => 'Seviyemi Biliyorum / Test Et';
+
+  @override
+  String get levelSaveFailed => 'Seviye kaydedilemedi!';
+
+  @override
+  String connectionErrorWithDetail(String error) {
+    return 'Bağlantı hatası: $error';
+  }
 }

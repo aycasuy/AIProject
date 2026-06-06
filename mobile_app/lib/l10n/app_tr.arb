@@ -106,6 +106,30 @@
         "type": "int"
       }
     }
+  },
+
+  "levelJourneyTitle": "Yolculuğun Başlıyor!",
+  "levelJourneySubtitle": "{language} öğrenirken sana en uygun başlangıcı seçelim.",
+  "@levelJourneySubtitle": {
+    "placeholders": {
+      "language": { "type": "String" }
+    }
+  },
+
+  "startFromA1Title": "A1’den başlayabilirsin",
+  "startFromA1Subtitle": "Temelden ilerleyip tüm modülleri sırayla açarsın.",
+  "placementInfoTitle": "Seviye testi çözebilirsin",
+  "placementInfoSubtitle": "Sana uygun seviyeyi kısa bir test ile belirleriz.",
+
+  "startFromScratchA1": "Sıfırdan Başlayalım (A1)",
+  "knowMyLevelTest": "Seviyemi Biliyorum / Test Et",
+
+  "levelSaveFailed": "Seviye kaydedilemedi!",
+  "connectionErrorWithDetail": "Bağlantı hatası: {error}",
+  "@connectionErrorWithDetail": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
   }
 
 

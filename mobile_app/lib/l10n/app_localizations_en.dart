@@ -175,48 +175,84 @@ class AppLocalizationsEn extends AppLocalizations {
   String get correctedAnswer => 'Write the corrected version...';
 
   @override
-  String get dailyLimitTitle => 'Bugünlük Yeter!';
+  String get dailyLimitTitle => 'That\'s enough for today!';
 
   @override
   String get dailyLimitMessage =>
-      'Günlük ücretsiz yapay zeka roleplay hakkını doldurdun. Harika iş çıkardın! Yeni bir senaryo için yarın tekrar gel veya sınırsız sohbet için Premium\'u keşfet.';
+      'You have used your free daily AI roleplay attempt. Great job! Come back tomorrow for a new scenario or explore Premium for unlimited chat.';
 
   @override
-  String get useBottomMenuHint => '👇 Başka etkinlikler için alt menüyü kullan';
+  String get useBottomMenuHint => '👇 Use the bottom menu for other activities';
 
   @override
-  String get dailyWords => 'Günün Kelimeleri';
+  String get dailyWords => 'Today\'s Words';
 
   @override
-  String get aiResults => 'İşte sonuçların:';
+  String get aiResults => 'Here are your results:';
 
   @override
-  String get coachThinking => 'Koç düşünüyor...';
+  String get coachThinking => 'Coach is thinking...';
 
   @override
-  String get finishLessonWithXp => '✅ Dersi Bitir (+50 XP)';
+  String get finishLessonWithXp => '✅ Finish Lesson (+50 XP)';
 
   @override
-  String get greatJobTitle => '🎉 Harika İş!';
+  String get greatJobTitle => '🎉 Great Job!';
 
   @override
   String get greatJobMessage =>
-      'Senaryoyu başarıyla tamamladın ve +50 XP kazandın!';
+      'You completed the scenario successfully and earned +50 XP!';
 
   @override
-  String get ok => 'Tamam';
+  String get ok => 'OK';
 
   @override
-  String get translationTitle => 'Çeviri';
+  String get translationTitle => 'Translation';
 
   @override
-  String get holdForTranslation => 'Çeviri için basılı tut';
+  String get holdForTranslation => 'Long press to translate';
 
   @override
-  String get noMistakeFound => 'Harika! Hiç hata bulunmadı.';
+  String get noMistakeFound => 'Great! No mistakes found.';
 
   @override
   String mistakesFound(int count) {
-    return '$count hata bulundu';
+    return '$count mistakes found';
+  }
+
+  @override
+  String get levelJourneyTitle => 'Yolculuğun Başlıyor!';
+
+  @override
+  String levelJourneySubtitle(String language) {
+    return '$language öğrenirken sana en uygun başlangıcı seçelim.';
+  }
+
+  @override
+  String get startFromA1Title => 'A1’den başlayabilirsin';
+
+  @override
+  String get startFromA1Subtitle =>
+      'Temelden ilerleyip tüm modülleri sırayla açarsın.';
+
+  @override
+  String get placementInfoTitle => 'Seviye testi çözebilirsin';
+
+  @override
+  String get placementInfoSubtitle =>
+      'Sana uygun seviyeyi kısa bir test ile belirleriz.';
+
+  @override
+  String get startFromScratchA1 => 'Sıfırdan Başlayalım (A1)';
+
+  @override
+  String get knowMyLevelTest => 'Seviyemi Biliyorum / Test Et';
+
+  @override
+  String get levelSaveFailed => 'Seviye kaydedilemedi!';
+
+  @override
+  String connectionErrorWithDetail(String error) {
+    return 'Bağlantı hatası: $error';
   }
 }

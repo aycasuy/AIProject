@@ -483,6 +483,66 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'{count} hata bulundu'**
   String mistakesFound(int count);
+
+  /// No description provided for @levelJourneyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yolculuğun Başlıyor!'**
+  String get levelJourneyTitle;
+
+  /// No description provided for @levelJourneySubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{language} öğrenirken sana en uygun başlangıcı seçelim.'**
+  String levelJourneySubtitle(String language);
+
+  /// No description provided for @startFromA1Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'A1’den başlayabilirsin'**
+  String get startFromA1Title;
+
+  /// No description provided for @startFromA1Subtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Temelden ilerleyip tüm modülleri sırayla açarsın.'**
+  String get startFromA1Subtitle;
+
+  /// No description provided for @placementInfoTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seviye testi çözebilirsin'**
+  String get placementInfoTitle;
+
+  /// No description provided for @placementInfoSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sana uygun seviyeyi kısa bir test ile belirleriz.'**
+  String get placementInfoSubtitle;
+
+  /// No description provided for @startFromScratchA1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıfırdan Başlayalım (A1)'**
+  String get startFromScratchA1;
+
+  /// No description provided for @knowMyLevelTest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seviyemi Biliyorum / Test Et'**
+  String get knowMyLevelTest;
+
+  /// No description provided for @levelSaveFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seviye kaydedilemedi!'**
+  String get levelSaveFailed;
+
+  /// No description provided for @connectionErrorWithDetail.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı hatası: {error}'**
+  String connectionErrorWithDetail(String error);
 }
 
 class _AppLocalizationsDelegate

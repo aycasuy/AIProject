@@ -123,7 +123,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
   @override
   void dispose() {
     _scrollController.dispose();
-
     _textController.dispose();
     _lottieController.dispose();
     _flutterTts.stop();
@@ -220,9 +219,9 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
               children: [
                 const Text("⏳", style: TextStyle(fontSize: 80)),
                 const SizedBox(height: 20),
-                const Text(
-                  "Bugünlük Yeter!",
-                  style: TextStyle(
+                Text(
+                  loc.dailyLimitTitle,
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF2D2D2D),
@@ -230,7 +229,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  "Günlük ücretsiz yapay zeka roleplay hakkını doldurdun. Harika iş çıkardın! Yeni bir senaryo için yarın tekrar gel veya sınırsız sohbet için Premium'u keşfet.",
+                  loc.dailyLimitMessage,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -248,9 +247,9 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                     color: Colors.blueAccent.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: const Text(
-                    "👇 Başka etkinlikler için alt menüyü kullan",
-                    style: TextStyle(
+                  child: Text(
+                    loc.useBottomMenuHint,
+                    style: const TextStyle(
                       color: Colors.blueAccent,
                       fontWeight: FontWeight.bold,
                     ),
@@ -290,7 +289,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
             padding: const EdgeInsets.only(top: 20.0),
             child: Center(child: _buildAiAvatar()),
           ),
-
           Expanded(
             child: ListView(
               controller: _scrollController,
@@ -301,7 +299,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
               children: [
                 _buildDailyWords(),
                 const SizedBox(height: 16),
-
                 if (!isLessonFinished)
                   Align(
                     alignment: Alignment.centerLeft,
@@ -337,9 +334,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                       ),
                     ),
                   ),
-
                 const SizedBox(height: 16),
-
                 _buildAiMessage(
                   loc.roleplayIntro(
                     widget.lessonTitle,
@@ -348,16 +343,13 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                   ),
                   isHighlight: true,
                 ),
-
                 ...chatMessages.map((msg) {
                   if (msg["role"] == "user") {
                     return _buildUserMessage(msg["text"]);
                   } else {
                     return Column(
                       children: [
-                        _buildAiMessage(
-                          msg["ai_message"] ?? "İşte sonuçların:",
-                        ),
+                        _buildAiMessage(msg["ai_message"] ?? loc.aiResults),
                         _buildCorrectionCard(msg["corrections"] ?? []),
                         if (!isLessonFinished &&
                             msg == chatMessages.last &&
@@ -368,7 +360,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                     );
                   }
                 }).toList(),
-
                 if (isLoading)
                   TweenAnimationBuilder(
                     duration: const Duration(milliseconds: 300),
@@ -413,7 +404,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              "Koç düşünüyor...",
+                              loc.coachThinking,
                               style: TextStyle(
                                 color: Colors.grey.shade600,
                                 fontStyle: FontStyle.italic,
@@ -425,12 +416,10 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                       ),
                     ),
                   ),
-
                 if (isLessonFinished) _buildFinishButton(),
               ],
             ),
           ),
-
           if (!isLessonFinished) _buildBottomInput(),
         ],
       ),
@@ -474,6 +463,8 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
   }
 
   Widget _buildDailyWords() {
+    final loc = AppLocalizations.of(context)!;
+
     List<String> targetWords = widget.targetWordsStr.isEmpty
         ? []
         : widget.targetWordsStr.split(',').map((e) => e.trim()).toList();
@@ -483,9 +474,9 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Günün Kelimeleri",
-          style: TextStyle(
+        Text(
+          loc.dailyWords,
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.grey,
             fontSize: 14,
@@ -518,6 +509,8 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
   }
 
   Widget _buildFinishButton() {
+    final loc = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: ElevatedButton(
@@ -568,10 +561,8 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                title: const Text("🎉 Harika İş!"),
-                content: const Text(
-                  "Senaryoyu başarıyla tamamladın ve +50 XP kazandın!",
-                ),
+                title: Text(loc.greatJobTitle),
+                content: Text(loc.greatJobMessage),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -580,9 +571,9 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                         _isLocked = true;
                       });
                     },
-                    child: const Text(
-                      "Tamam",
-                      style: TextStyle(
+                    child: Text(
+                      loc.ok,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -595,9 +586,9 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
             Navigator.pop(context, true);
           }
         },
-        child: const Text(
-          "✅ Dersi Bitir (+50 XP)",
-          style: TextStyle(
+        child: Text(
+          loc.finishLessonWithXp,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -608,6 +599,8 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
   }
 
   Widget _buildAiMessage(String text, {bool isHighlight = false}) {
+    final loc = AppLocalizations.of(context)!;
+
     return TweenAnimationBuilder(
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeOutCubic,
@@ -653,13 +646,16 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.g_translate, color: Colors.blueAccent),
-                          SizedBox(width: 10),
+                          const Icon(
+                            Icons.g_translate,
+                            color: Colors.blueAccent,
+                          ),
+                          const SizedBox(width: 10),
                           Text(
-                            "Çeviri",
-                            style: TextStyle(
+                            loc.translationTitle,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -715,9 +711,9 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  "Çeviri için basılı tut",
-                  style: TextStyle(
+                Text(
+                  loc.holdForTranslation,
+                  style: const TextStyle(
                     fontSize: 10,
                     color: Colors.grey,
                     fontStyle: FontStyle.italic,
@@ -773,6 +769,8 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
   }
 
   Widget _buildCorrectionCard(List<dynamic> corrections) {
+    final loc = AppLocalizations.of(context)!;
+
     if (corrections.isEmpty) {
       return Container(
         margin: const EdgeInsets.only(bottom: 16, right: 40),
@@ -787,7 +785,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
             const Text("🎉", style: TextStyle(fontSize: 20)),
             const SizedBox(width: 8),
             Text(
-              "Harika! Hiç hata bulunmadı.",
+              loc.noMistakeFound,
               style: TextStyle(
                 color: Colors.green.shade700,
                 fontWeight: FontWeight.bold,
@@ -814,7 +812,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
               const Text("🏷️", style: TextStyle(fontSize: 18)),
               const SizedBox(width: 10),
               Text(
-                "${corrections.length} hata bulundu",
+                loc.mistakesFound(corrections.length),
                 style: const TextStyle(
                   color: Color(0xFFD32F2F),
                   fontWeight: FontWeight.bold,
