@@ -71,7 +71,8 @@ class PronunciationRequest(BaseModel):
     target_language: str
     original_text: str
     spoken_text: str
-    
+    native_language: str = "Turkish"
+
 class GeneratePronunciationRequest(BaseModel):
     target_language: str
     level: str
@@ -251,9 +252,11 @@ class HintRequest(BaseModel):
     topic: str
     target_language: str
     history: list
+    native_language: str = "Turkish"
 
 class TranslateRequest(BaseModel):
     text: str
+    native_language: str = "Turkish"
 
 
 

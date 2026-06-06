@@ -114,6 +114,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         topic: selectedScenario["topic"]!, // AI'a gizlice verilecek Prompt
         targetWordsStr: "",
         sectionIndex: 0,
+        nativeLanguage: widget.nativeLanguage,
       ),
 
       ReadingScreen(

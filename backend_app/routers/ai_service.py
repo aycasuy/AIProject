@@ -433,13 +433,17 @@ def mark_roleplay_done(request: schemas.RoleplayDoneRequest, db: Session = Depen
 @router.post("/get_chat_hint")
 def get_chat_hint(request: HintRequest, db: Session = Depends(get_db)):
     try:
-        # Geçmişi formatla
         formatted_history = "\n".join([f"{m['role']}: {m['content']}" for m in request.history])
         
         prompt = f"""
-        Öğrenci '{request.topic}' konusunda '{request.target_language}' dilinde roleplay yapıyor ama tıkandı ve ne yazacağını bilemiyor.
-        Aşağıdaki sohbet geçmişine bakarak, öğrencinin şu an söyleyebileceği kısa, doğal ve konuya uygun tek bir cümle öner.
+        Öğrenci '{request.topic}' konusunda '{request.target_language}' dilinde roleplay yapıyor.
+        Bu senaryoda yapay zeka öğretmen rolündedir ve konuşmayı başlatan taraftır.
+        Öğrenci (user) yapay zekanın mesajlarına cevap vermektedir.
+        Öğrenci şu an tıkandı ve ne yazacağını bilemiyor.
+        
+        Aşağıdaki sohbet geçmişine bakarak, öğrencinin şu an yapay zekanın son mesajına verebileceği kısa, doğal ve konuya uygun tek bir cümle öner.
         SADECE önerdiğin cümleyi '{request.target_language}' dilinde yaz. Açıklama veya çeviri ekleme.
+        Cümle öğrenci perspektifinden olmalı, yapay zeka perspektifinden değil.
         
         Geçmiş:
         {formatted_history}
@@ -450,13 +454,14 @@ def get_chat_hint(request: HintRequest, db: Session = Depends(get_db)):
         )
         return {"hint": response.text.strip()}
     except Exception as e:
-        return {"hint": "I think we should..."} # Hata olursa varsayılan bir ipucu
+        return {"hint": "I think we should..."}
 
 # 🌟 2. ÇEVİRİ API'Sİ
 @router.post("/translate_text")
 def translate_text(request: TranslateRequest, db: Session = Depends(get_db)):
+    
     try:
-        prompt = f"Şu metni profesyonelce Türkçeye çevir. Sadece çeviriyi ver:\n\n{request.text}"
+        prompt = f"Şu metni profesyonelce {request.native_language} diline çevir. Sadece çeviriyi ver:\n\n{request.text}"
         response = client.models.generate_content(
             model='gemini-2.5-flash-lite',
             contents=prompt,

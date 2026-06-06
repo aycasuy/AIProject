@@ -13,6 +13,7 @@ class PronunciationScreen extends StatefulWidget {
   final String targetWords; // API'ye gidecek kelimeler
   final int lessonId;
   final int sectionIndex;
+  final String nativeLanguage;
 
   const PronunciationScreen({
     super.key,
@@ -22,6 +23,7 @@ class PronunciationScreen extends StatefulWidget {
     required this.targetWords,
     required this.lessonId,
     required this.sectionIndex,
+    required this.nativeLanguage,
   });
 
   @override
@@ -362,6 +364,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
           "target_language": widget.targetLanguage,
           "original_text": _cleanPronunciationText(_targetText),
           "spoken_text": _recognizedText,
+          "native_language": widget.nativeLanguage,
         }),
       );
 
@@ -397,10 +400,11 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
           if (_currentRound == _totalRounds) {
             // Kullanıcı 3 metni de bitirdi! Haritada ilerleme zamanı.
             // XP'yi ve tekrar (replay) olup olmadığını Python belirleyecek.
+            xpToGive = data['added_xp'] ?? 50;
           } else {
             // Ara metinleri (1. veya 2. metin) başarıyla okudu. Arayüzde küçük bir görsel motivasyon (15 XP) gösterebilirsin.
             xpToGive =
-                0; // 🌟 Sembolik görsel XP, gerçek veritabanına işlenmez.
+                15; // 🌟 Sembolik görsel XP, gerçek veritabanına işlenmez.
           }
         }
 

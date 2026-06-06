@@ -614,6 +614,7 @@ class _PathScreenState extends State<PathScreen> {
             targetWords: lesson['target_words'] ?? "",
             lessonId: lesson['id'],
             sectionIndex: lessonIndex + 1, // 🌟 Python için Bölüm Numarası!
+            nativeLanguage: widget.nativeLanguage,
           ),
         ),
       );

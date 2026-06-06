@@ -717,6 +717,7 @@ class ApiService {
     String topic,
     String targetLanguage,
     List<Map<String, String>> history,
+    String nativeLanguage,
   ) async {
     try {
       final response = await http.post(
@@ -726,6 +727,7 @@ class ApiService {
           "topic": topic,
           "target_language": targetLanguage,
           "history": history,
+          "native_language": nativeLanguage,
         }),
       );
       if (response.statusCode == 200) {
@@ -738,12 +740,15 @@ class ApiService {
   }
 
   // --- ÇEVİRİ ÇEKME ---
-  static Future<String> translateText(String text) async {
+  static Future<String> translateText(
+    String text, {
+    String nativeLanguage = "Turkish",
+  }) async {
     try {
       final response = await http.post(
         Uri.parse("http://10.0.2.2:8000/translate_text"),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"text": text}),
+        body: jsonEncode({"text": text, "native_language": nativeLanguage}),
       );
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes))["translation"];

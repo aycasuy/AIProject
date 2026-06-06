@@ -14,6 +14,7 @@ class AiTeacherCorrectionScreen extends StatefulWidget {
   final String username;
   final String targetLanguage;
   final int sectionIndex;
+  final String nativeLanguage;
 
   const AiTeacherCorrectionScreen({
     super.key,
@@ -25,6 +26,7 @@ class AiTeacherCorrectionScreen extends StatefulWidget {
     required this.username,
     required this.targetLanguage,
     required this.sectionIndex,
+    required this.nativeLanguage,
   });
 
   @override
@@ -580,12 +582,12 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                 widget.targetLanguage,
               );
 
-              await ApiService.updateProgress(
+              await ApiService.addXp(
                 widget.username,
+                widget.targetLanguage,
+                50,
                 progress.currentSection,
                 progress.currentLesson,
-                50, // Günlük görev
-                widget.targetLanguage,
               );
             } catch (e) {
               print("Günlük görev XP hatası: $e");
@@ -672,7 +674,10 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
               ),
             );
 
-            String translation = await ApiService.translateText(text);
+            String translation = await ApiService.translateText(
+              text,
+              nativeLanguage: widget.targetLanguage,
+            );
 
             if (context.mounted) {
               Navigator.pop(context); // Yükleniyor'u kapat
@@ -1003,6 +1008,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                       widget.topic,
                       widget.targetLanguage,
                       formattedHistory,
+                      widget.nativeLanguage,
                     );
 
                     setState(() {

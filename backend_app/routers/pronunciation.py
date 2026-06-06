@@ -320,6 +320,7 @@ async def analyze_pronunciation(request: schemas.PronunciationRequest, db: Sessi
         print("🤖 [GEMİNİ DEVREDE - ANALİZ] Yeni bir ses geldi! Telaffuz değerlendirmesi için API'ye gidiliyor...")
         prompt = f"""
         Sen uzman bir {request.target_language} dil öğretmeni ve telaffuz koçusun.
+        Öğrencinin ana dili: {request.native_language}.
         Öğrencinin okuması gereken "Orijinal Metin" ve ses-yazı teknolojisiyle elde edilen "Okunan Metin" aşağıdadır:
 
         Orijinal Metin: "{request.original_text}"
@@ -329,7 +330,7 @@ async def analyze_pronunciation(request: schemas.PronunciationRequest, db: Sessi
         1. İki metni karşılaştırarak telaffuz doğruluğunu analiz et.
         2. 0 ile 100 arasında bir puan ver (score).
         3. Yanlış veya eksik okunan kelimeleri tespit et (mispronounced_words dizisi).
-        4. Öğrenciye motive edici, Türkçe kısa bir geri bildirim yaz (feedback).
+        4. Öğrenciye motive edici, '{request.native_language}' dilinde kısa bir geri bildirim yaz (feedback).
         
         ÇIKTIN KESİNLİKLE JSON FORMATINDA OLMALIDIR. 
         Beklenen Şablon:
