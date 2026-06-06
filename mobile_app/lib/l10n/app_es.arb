@@ -117,8 +117,8 @@
       }
     }
   },
-  "levelJourneyTitle": "Yolculuğun Başlıyor!",
-  "levelJourneySubtitle": "{language} öğrenirken sana en uygun başlangıcı seçelim.",
+  "levelJourneyTitle": "¡Tu viaje comienza!",
+  "levelJourneySubtitle": "Elijamos el mejor punto de inicio para ti mientras aprendes {language}.",
   "@levelJourneySubtitle": {
     "placeholders": {
       "language": {
@@ -126,14 +126,14 @@
       }
     }
   },
-  "startFromA1Title": "A1’den başlayabilirsin",
-  "startFromA1Subtitle": "Temelden ilerleyip tüm modülleri sırayla açarsın.",
-  "placementInfoTitle": "Seviye testi çözebilirsin",
-  "placementInfoSubtitle": "Sana uygun seviyeyi kısa bir test ile belirleriz.",
-  "startFromScratchA1": "Sıfırdan Başlayalım (A1)",
-  "knowMyLevelTest": "Seviyemi Biliyorum / Test Et",
-  "levelSaveFailed": "Seviye kaydedilemedi!",
-  "connectionErrorWithDetail": "Bağlantı hatası: {error}",
+  "startFromA1Title": "Puedes empezar desde A1",
+  "startFromA1Subtitle": "Avanza desde lo básico y desbloquea todos los módulos paso a paso.",
+  "placementInfoTitle": "Puedes hacer una prueba de nivel",
+  "placementInfoSubtitle": "Determinaremos tu nivel adecuado con una prueba corta.",
+  "startFromScratchA1": "Empecemos desde cero (A1)",
+  "knowMyLevelTest": "Sé mi nivel / Hacer prueba",
+  "levelSaveFailed": "¡No se pudo guardar el nivel!",
+  "connectionErrorWithDetail": "Error de conexión: {error}",
   "@connectionErrorWithDetail": {
     "placeholders": {
       "error": {
