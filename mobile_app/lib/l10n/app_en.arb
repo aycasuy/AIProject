@@ -67,5 +67,33 @@
       }
     }
   },
-  "connectionErrorServer": "Connection error! Is the server running?"
+  "connectionErrorServer": "Connection error! Is the server running?",
+  "roleplayIntro": "Senaryo: {lessonTitle} 🎭\n\nHedefin bu senaryoya uygun, {targetLanguage} dilinde {count} hatasız cümle kurmak. Hazırsan ilk mesajını yazarak sohbeti başlat! 😊",
+  "@roleplayIntro": {
+    "placeholders": {
+      "lessonTitle": {
+        "type": "String"
+      },
+      "targetLanguage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roleplayGoal": "Hedef: {current} / {count} doğru cümle",
+  "@roleplayGoal": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roleplayHint": "Tıkandım, İpucu ver",
+  "writtenAnswer": "Cevabını yaz...",
+  "correctedAnswer": "Düzeltilmiş halini yaz..."
 }
