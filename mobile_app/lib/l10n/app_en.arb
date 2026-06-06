@@ -68,4 +68,6 @@
     }
   },
   "connectionErrorServer": "Connection error! Is the server running?"
+
+  
 }
