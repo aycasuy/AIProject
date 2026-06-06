@@ -68,7 +68,7 @@
     }
   },
   "connectionErrorServer": "Connection error! Is the server running?",
-  "roleplayIntro": "Senaryo: {lessonTitle} 🎭\n\nHedefin bu senaryoya uygun, {targetLanguage} dilinde {count} hatasız cümle kurmak. Hazırsan ilk mesajını yazarak sohbeti başlat! 😊",
+  "roleplayIntro": "Scenario: {lessonTitle} 🎭\n\nYour goal is to build {count} error-free sentences in {targetLanguage}. Type your first message to begin! 😊",
   "@roleplayIntro": {
     "placeholders": {
       "lessonTitle": {
@@ -82,7 +82,7 @@
       }
     }
   },
-  "roleplayGoal": "Hedef: {current} / {count} doğru cümle",
+  "roleplayGoal": "Goal: {current} / {count} correct sentences",
   "@roleplayGoal": {
     "placeholders": {
       "current": {
@@ -93,7 +93,7 @@
       }
     }
   },
-  "roleplayHint": "Tıkandım, İpucu ver",
-  "writtenAnswer": "Cevabını yaz...",
-  "correctedAnswer": "Düzeltilmiş halini yaz..."
+  "roleplayHint": "I'm stuck, give me a hint",
+  "writtenAnswer": "Write your answer...",
+  "correctedAnswer": "Write the corrected version..."
 }
