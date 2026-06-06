@@ -95,5 +95,26 @@
   },
   "roleplayHint": "I'm stuck, give me a hint",
   "writtenAnswer": "Write your answer...",
-  "correctedAnswer": "Write the corrected version..."
+  "correctedAnswer": "Write the corrected version...",
+  "dailyLimitTitle": "Bugünlük Yeter!",
+  "dailyLimitMessage": "Günlük ücretsiz yapay zeka roleplay hakkını doldurdun. Harika iş çıkardın! Yeni bir senaryo için yarın tekrar gel veya sınırsız sohbet için Premium'u keşfet.",
+  "useBottomMenuHint": "👇 Başka etkinlikler için alt menüyü kullan",
+  "dailyWords": "Günün Kelimeleri",
+  "aiResults": "İşte sonuçların:",
+  "coachThinking": "Koç düşünüyor...",
+  "finishLessonWithXp": "✅ Dersi Bitir (+50 XP)",
+  "greatJobTitle": "🎉 Harika İş!",
+  "greatJobMessage": "Senaryoyu başarıyla tamamladın ve +50 XP kazandın!",
+  "ok": "Tamam",
+  "translationTitle": "Çeviri",
+  "holdForTranslation": "Çeviri için basılı tut",
+  "noMistakeFound": "Harika! Hiç hata bulunmadı.",
+  "mistakesFound": "{count} hata bulundu",
+  "@mistakesFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
