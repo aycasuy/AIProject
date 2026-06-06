@@ -95,5 +95,26 @@
   },
   "roleplayHint": "Me quedé atascado, dame una pista",
   "writtenAnswer": "Escribe tu respuesta...",
-  "correctedAnswer": "Escribe la versión corregida..."
+  "correctedAnswer": "Escribe la versión corregida...",
+  "dailyLimitTitle": "¡Suficiente por hoy!",
+  "dailyLimitMessage": "Has usado tu intento diario gratuito de roleplay con IA. ¡Buen trabajo! Vuelve mañana para un nuevo escenario o explora Premium para tener chat ilimitado.",
+  "useBottomMenuHint": "👇 Usa el menú inferior para otras actividades",
+  "dailyWords": "Palabras del día",
+  "aiResults": "Aquí están tus resultados:",
+  "coachThinking": "El entrenador está pensando...",
+  "finishLessonWithXp": "✅ Terminar lección (+50 XP)",
+  "greatJobTitle": "🎉 ¡Buen trabajo!",
+  "greatJobMessage": "Completaste el escenario con éxito y ganaste +50 XP.",
+  "ok": "Aceptar",
+  "translationTitle": "Traducción",
+  "holdForTranslation": "Mantén pulsado para traducir",
+  "noMistakeFound": "¡Genial! No se encontraron errores.",
+  "mistakesFound": "Se encontraron {count} errores",
+  "@mistakesFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

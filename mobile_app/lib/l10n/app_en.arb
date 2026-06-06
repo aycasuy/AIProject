@@ -95,5 +95,26 @@
   },
   "roleplayHint": "I'm stuck, give me a hint",
   "writtenAnswer": "Write your answer...",
-  "correctedAnswer": "Write the corrected version..."
+  "correctedAnswer": "Write the corrected version...",
+  "dailyLimitTitle": "That's enough for today!",
+  "dailyLimitMessage": "You have used your free daily AI roleplay attempt. Great job! Come back tomorrow for a new scenario or explore Premium for unlimited chat.",
+  "useBottomMenuHint": "👇 Use the bottom menu for other activities",
+  "dailyWords": "Today's Words",
+  "aiResults": "Here are your results:",
+  "coachThinking": "Coach is thinking...",
+  "finishLessonWithXp": "✅ Finish Lesson (+50 XP)",
+  "greatJobTitle": "🎉 Great Job!",
+  "greatJobMessage": "You completed the scenario successfully and earned +50 XP!",
+  "ok": "OK",
+  "translationTitle": "Translation",
+  "holdForTranslation": "Long press to translate",
+  "noMistakeFound": "Great! No mistakes found.",
+  "mistakesFound": "{count} mistakes found",
+  "@mistakesFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
