@@ -116,5 +116,29 @@
         "type": "int"
       }
     }
+  },
+  "levelJourneyTitle": "Your Journey Begins!",
+  "levelJourneySubtitle": "Let's choose the best starting point for you while learning {language}.",
+  "@levelJourneySubtitle": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "startFromA1Title": "You can start from A1",
+  "startFromA1Subtitle": "Start from the basics and unlock all modules step by step.",
+  "placementInfoTitle": "You can take a level test",
+  "placementInfoSubtitle": "We'll determine the right level for you with a short test.",
+  "startFromScratchA1": "Let's Start from Scratch (A1)",
+  "knowMyLevelTest": "I Know My Level / Take Test",
+  "levelSaveFailed": "Level could not be saved!",
+  "connectionErrorWithDetail": "Connection error: {error}",
+  "@connectionErrorWithDetail": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }
