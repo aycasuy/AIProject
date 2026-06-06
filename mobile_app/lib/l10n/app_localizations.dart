@@ -369,6 +369,36 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bağlantı hatası! Sunucu açık mı?'**
   String get connectionErrorServer;
+
+  /// No description provided for @roleplayIntro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Senaryo: {lessonTitle} 🎭\n\nHedefin bu senaryoya uygun, {targetLanguage} dilinde {count} hatasız cümle kurmak. Hazırsan ilk mesajını yazarak sohbeti başlat! 😊'**
+  String roleplayIntro(String lessonTitle, String targetLanguage, int count);
+
+  /// No description provided for @roleplayGoal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedef: {current} / {count} doğru cümle'**
+  String roleplayGoal(int current, int count);
+
+  /// No description provided for @roleplayHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tıkandım, İpucu ver'**
+  String get roleplayHint;
+
+  /// No description provided for @writtenAnswer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cevabını yaz...'**
+  String get writtenAnswer;
+
+  /// No description provided for @correctedAnswer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düzeltilmiş halini yaz...'**
+  String get correctedAnswer;
 }
 
 class _AppLocalizationsDelegate

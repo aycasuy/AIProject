@@ -154,4 +154,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get connectionErrorServer =>
       'Connection error! Is the server running?';
+
+  @override
+  String roleplayIntro(String lessonTitle, String targetLanguage, int count) {
+    return 'Senaryo: $lessonTitle 🎭\n\nHedefin bu senaryoya uygun, $targetLanguage dilinde $count hatasız cümle kurmak. Hazırsan ilk mesajını yazarak sohbeti başlat! 😊';
+  }
+
+  @override
+  String roleplayGoal(int current, int count) {
+    return 'Hedef: $current / $count doğru cümle';
+  }
+
+  @override
+  String get roleplayHint => 'Tıkandım, İpucu ver';
+
+  @override
+  String get writtenAnswer => 'Cevabını yaz...';
+
+  @override
+  String get correctedAnswer => 'Düzeltilmiş halini yaz...';
 }
