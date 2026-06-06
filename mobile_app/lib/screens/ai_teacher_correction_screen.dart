@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tts/flutter_tts.dart'; // 🌟 EKLENDİ
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt; // 🌟 EKLENDİ
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+
 import '../services/api_service.dart';
+import '../l10n/app_localizations.dart';
 
 class AiTeacherCorrectionScreen extends StatefulWidget {
   final int lessonId;
@@ -36,7 +38,6 @@ class AiTeacherCorrectionScreen extends StatefulWidget {
 
 class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
     with TickerProviderStateMixin {
-  late TabController _tabController;
   final TextEditingController _textController = TextEditingController();
 
   String? submittedText;
@@ -50,26 +51,22 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
   bool _isLocked = false;
   bool _isLockChecking = true;
 
-  // 🌟 YENİ: Ses ve İpucu Değişkenleri
   late FlutterTts _flutterTts;
   late stt.SpeechToText _speech;
   bool _isListening = false;
   bool _isHintLoading = false;
   String? _currentHint;
 
-  // 🌟 YENİ: Lottie ve Animasyon Değişkenleri
   late final AnimationController _lottieController;
   bool _isAiSpeaking = false;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
 
-    // 🌟 YENİ: Lottie kontrolcüsünü başlat
     _lottieController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3), // Animasyonun kendi uzunluğuna göre
+      duration: const Duration(seconds: 3),
     );
 
     if (widget.lessonId == 999) {
@@ -78,35 +75,33 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
       _isLockChecking = false;
     }
 
-    _initAudioTools(); // 🌟 Ses motorlarını başlat
+    _initAudioTools();
   }
 
-  // 🌟 YENİ: Ses Motorlarını Başlatma
   void _initAudioTools() async {
     _flutterTts = FlutterTts();
     _speech = stt.SpeechToText();
+
     await _speech.initialize();
 
-    // Dil kodunu targetLanguage'a göre dinamik yapabilirsin, şimdilik en-US
     await _flutterTts.setLanguage("en-US");
     await _flutterTts.setSpeechRate(0.45);
 
     _flutterTts.setStartHandler(() {
       if (mounted) {
         setState(() => _isAiSpeaking = true);
-        _lottieController.repeat(); // Animasyonu döngüye sok
+        _lottieController.repeat();
       }
     });
 
     _flutterTts.setCompletionHandler(() {
       if (mounted) {
         setState(() => _isAiSpeaking = false);
-        _lottieController.stop(); // Animasyonu durdur
+        _lottieController.stop();
       }
     });
   }
 
-  // 🌟 YENİ: Sesli Okuma Fonksiyonu
   Future<void> _speak(String text) async {
     await _flutterTts.speak(text);
   }
@@ -116,6 +111,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
       widget.username,
       widget.targetLanguage,
     );
+
     if (mounted) {
       setState(() {
         _isLocked = locked;
@@ -127,10 +123,10 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
   @override
   void dispose() {
     _scrollController.dispose();
-    _tabController.dispose();
+
     _textController.dispose();
-    _lottieController.dispose(); // 🌟 Lottie'yi temizle
-    _flutterTts.stop(); // 🌟 Bellek temizliği
+    _lottieController.dispose();
+    _flutterTts.stop();
     super.dispose();
   }
 
@@ -142,7 +138,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
     setState(() {
       chatMessages.add({"role": "user", "text": userText});
       isLoading = true;
-      _currentHint = null; // 🌟 YENİ: Mesaj atınca eski ipucunu temizle
+      _currentHint = null;
     });
 
     _textController.clear();
@@ -174,7 +170,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
           "next_step": response["next_step"],
         });
 
-        // 🌟 YENİ: AI cevap verince otomatik sesli okusun
         _speak(response["ai_message"] ?? "");
 
         Future.delayed(const Duration(milliseconds: 100), () {
@@ -190,7 +185,10 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
         if (response["corrections"] != null &&
             (response["corrections"] as List).isEmpty) {
           successfulAttempts++;
-          if (successfulAttempts >= requiredAttempts) isLessonFinished = true;
+
+          if (successfulAttempts >= requiredAttempts) {
+            isLessonFinished = true;
+          }
         }
       });
     } catch (e) {
@@ -200,6 +198,8 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     if (_isLockChecking) {
       return const Scaffold(
         backgroundColor: Color(0xFFF4F7FE),
@@ -262,6 +262,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
         ),
       );
     }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FE),
       appBar: AppBar(
@@ -282,194 +283,160 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
             fontSize: 20,
           ),
         ),
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: Colors.blueAccent.shade700,
-          unselectedLabelColor: Colors.grey,
-          indicatorColor: Colors.blueAccent.shade700,
-          indicatorWeight: 3,
-          labelStyle: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          tabs: const [
-            Tab(text: "Öğren"),
-            Tab(text: "Kullan"),
-          ],
-        ),
       ),
-      body: TabBarView(
-        controller: _tabController,
+      body: Column(
         children: [
-          const Center(
-            child: Text(
-              "📖 Öğrenme modülü buraya gelecek",
-              style: TextStyle(color: Colors.grey),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Center(child: _buildAiAvatar()),
+          ),
+
+          Expanded(
+            child: ListView(
+              controller: _scrollController,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              children: [
+                _buildDailyWords(),
+                const SizedBox(height: 16),
+
+                if (!isLessonFinished)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.blueAccent.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.flag,
+                            color: Colors.blueAccent,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            loc.roleplayGoal(
+                              successfulAttempts,
+                              requiredAttempts,
+                            ),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                const SizedBox(height: 16),
+
+                _buildAiMessage(
+                  loc.roleplayIntro(
+                    widget.lessonTitle,
+                    widget.targetLanguage,
+                    requiredAttempts,
+                  ),
+                  isHighlight: true,
+                ),
+
+                ...chatMessages.map((msg) {
+                  if (msg["role"] == "user") {
+                    return _buildUserMessage(msg["text"]);
+                  } else {
+                    return Column(
+                      children: [
+                        _buildAiMessage(
+                          msg["ai_message"] ?? "İşte sonuçların:",
+                        ),
+                        _buildCorrectionCard(msg["corrections"] ?? []),
+                        if (!isLessonFinished &&
+                            msg == chatMessages.last &&
+                            msg["next_step"] != null &&
+                            msg["next_step"].toString().trim().isNotEmpty)
+                          _buildAiMessage(msg["next_step"]),
+                      ],
+                    );
+                  }
+                }).toList(),
+
+                if (isLoading)
+                  TweenAnimationBuilder(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                    tween: Tween<double>(begin: 0, end: 1),
+                    builder: (context, value, child) {
+                      return Opacity(
+                        opacity: value,
+                        child: Transform.scale(
+                          scale: 0.8 + (value * 0.2),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 12, right: 100),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 14,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                            bottomLeft: Radius.circular(4),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: Colors.blueAccent,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              "Koç düşünüyor...",
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                if (isLessonFinished) _buildFinishButton(),
+              ],
             ),
           ),
-          // 2. SEKME: KULLAN (Ana Yapay Zeka Etkileşim Alanı)
-          Column(
-            children: [
-              // 🌟 1. AVATARI LİSTENİN DIŞINA, EN TEPEYE SABİTLEDİK! 🌟
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 20.0,
-                ), // Yukarıdan biraz boşluk
-                child: Center(child: _buildAiAvatar()),
-              ),
 
-              // 🌟 2. MESAJLARIN KAYACAĞI ALAN BURADAN BAŞLIYOR 🌟
-              Expanded(
-                child: ListView(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
-                  children: [
-                    // GÜNÜN KELİMELERİ (Burası kayabilir sorun yok)
-                    _buildDailyWords(),
-                    const SizedBox(height: 16),
-
-                    // İLERLEME DURUMU SAYACI (Hedef 1/3)
-                    if (!isLessonFinished)
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.blueAccent.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.flag,
-                                color: Colors.blueAccent,
-                                size: 18,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "Hedef: $successfulAttempts / $requiredAttempts doğru cümle",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blueAccent,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    const SizedBox(height: 16),
-
-                    // AI GİRİŞ MESAJI (Sabit)
-                    _buildAiMessage(
-                      "Senaryo: ${widget.lessonTitle} 🎭\n\nHedefin bu senaryoya uygun, ${widget.targetLanguage} dilinde $requiredAttempts hatasız cümle kurmak. Hazırsan ilk mesajını yazarak sohbeti başlat! 😊",
-                      isHighlight: true,
-                    ),
-
-                    // SOHBET GEÇMİŞİ
-                    ...chatMessages.map((msg) {
-                      if (msg["role"] == "user") {
-                        return _buildUserMessage(msg["text"]);
-                      } else {
-                        return Column(
-                          children: [
-                            _buildAiMessage(
-                              msg["ai_message"] ?? "İşte sonuçların:",
-                            ),
-                            _buildCorrectionCard(msg["corrections"] ?? []),
-                            if (!isLessonFinished &&
-                                msg == chatMessages.last &&
-                                msg["next_step"] != null &&
-                                msg["next_step"].toString().trim().isNotEmpty)
-                              _buildAiMessage(msg["next_step"]),
-                          ],
-                        );
-                      }
-                    }).toList(),
-
-                    // YÜKLENİYOR (KOÇ DÜŞÜNÜYOR) BALONCUĞU
-                    if (isLoading)
-                      TweenAnimationBuilder(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeOut,
-                        tween: Tween<double>(begin: 0, end: 1),
-                        builder: (context, value, child) {
-                          return Opacity(
-                            opacity: value,
-                            child: Transform.scale(
-                              scale: 0.8 + (value * 0.2),
-                              child: child,
-                            ),
-                          );
-                        },
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            margin: const EdgeInsets.only(
-                              bottom: 12,
-                              right: 100,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 14,
-                            ),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                                bottomLeft: Radius.circular(4),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: Colors.blueAccent,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  "Koç düşünüyor...",
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-
-                    // DERSİ BİTİR BUTONU
-                    if (isLessonFinished) _buildFinishButton(),
-                  ],
-                ),
-              ),
-
-              // 🌟 3. ALT MESAJ KUTUSU
-              if (!isLessonFinished) _buildBottomInput(),
-            ],
-          ),
+          if (!isLessonFinished) _buildBottomInput(),
         ],
       ),
     );
   }
 
-  // --- 🌟 TASARIM: HAREKETLİ AI ÖĞRETMEN AVATARI ---
   Widget _buildAiAvatar() {
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
@@ -490,13 +457,13 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
             : [],
       ),
       child: CircleAvatar(
-        radius: 60, // Avatarın büyüklüğü
+        radius: 60,
         backgroundColor: Colors.white,
         child: ClipOval(
           child: Transform.scale(
-            scale: 1.5, // Animasyon küçükse buradan büyütebilirsin
+            scale: 1.5,
             child: Lottie.asset(
-              'assets/lottie/talkingcharacter.json', // 🌟 Dinleme modülündeki dosya yolun
+              'assets/lottie/talkingcharacter.json',
               controller: _lottieController,
               fit: BoxFit.cover,
             ),
@@ -567,15 +534,11 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
           setState(() => isLoading = true);
 
           if (widget.lessonId == 999) {
-            // 🌟 1. GÜNLÜK ROLEPLAY (HARİTA DIŞI)
-            // Önce görevi yapıldı olarak kilitle
             await ApiService.markRoleplayDone(
               widget.username,
               widget.targetLanguage,
             );
 
-            // Sonra GÜVENLİ motorumuzla 50 XP ver!
-            // (Haritayı yanlışlıkla ilerletmemek için kullanıcının mevcut konumunu yolluyoruz)
             try {
               final progress = await ApiService.fetchUserProgress(
                 widget.username,
@@ -593,7 +556,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
               print("Günlük görev XP hatası: $e");
             }
           }
-          // 🌟 2. HARİTA MODUNDA (Burada XP vermiyoruz, haritaya dönünce harita kendisi verecek!)
 
           if (!mounted) return;
           setState(() => isLoading = false);
@@ -615,7 +577,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                     onPressed: () {
                       Navigator.pop(context);
                       setState(() {
-                        _isLocked = true; // Ekranı kilitli duruma getir
+                        _isLocked = true;
                       });
                     },
                     child: const Text(
@@ -630,7 +592,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
               ),
             );
           } else {
-            // Haritadan gelindiyse haritaya başarıyla dön
             Navigator.pop(context, true);
           }
         },
@@ -646,7 +607,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
     );
   }
 
-  // 🌟 YENİ: BASILI TUTUNCA ÇEVİRİ YAPAN AI MESAJ BALONU
   Widget _buildAiMessage(String text, {bool isHighlight = false}) {
     return TweenAnimationBuilder(
       duration: const Duration(milliseconds: 500),
@@ -680,7 +640,8 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
             );
 
             if (context.mounted) {
-              Navigator.pop(context); // Yükleniyor'u kapat
+              Navigator.pop(context);
+
               showModalBottomSheet(
                 context: context,
                 backgroundColor: Colors.white,
@@ -876,6 +837,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                 ),
               );
             }
+
             if (item is Map) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
@@ -925,6 +887,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                 ),
               );
             }
+
             return const SizedBox.shrink();
           }).toList(),
         ],
@@ -932,8 +895,9 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
     );
   }
 
-  // 🌟 YENİ: İPUCU VE MİKROFON İÇEREN ALT GİRDİ ALANI
   Widget _buildBottomInput() {
+    final loc = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -950,7 +914,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // İPUCU ALANI
             if (_isHintLoading)
               const Padding(
                 padding: EdgeInsets.only(bottom: 8.0),
@@ -1021,17 +984,15 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                     color: Colors.amber,
                     size: 18,
                   ),
-                  label: const Text(
-                    "Tıkandım, İpucu ver",
-                    style: TextStyle(
+                  label: Text(
+                    loc.roleplayHint,
+                    style: const TextStyle(
                       color: Colors.amber,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-
-            // MESAJ KUTUSU VE BUTONLAR
             Row(
               children: [
                 Expanded(
@@ -1045,8 +1006,8 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintText: realAiResponse == null
-                            ? "Cevabını yaz..."
-                            : "Düzeltilmiş halini yaz...",
+                            ? loc.writtenAnswer
+                            : loc.correctedAnswer,
                         hintStyle: const TextStyle(color: Colors.white54),
                         border: InputBorder.none,
                         contentPadding: const EdgeInsets.symmetric(
@@ -1058,14 +1019,14 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                   ),
                 ),
                 const SizedBox(width: 8),
-
-                // MİKROFON BUTONU
                 GestureDetector(
                   onTap: () async {
                     if (!_isListening) {
                       bool available = await _speech.initialize();
+
                       if (available) {
                         setState(() => _isListening = true);
+
                         _speech.listen(
                           onResult: (val) => setState(() {
                             _textController.text = val.recognizedWords;
@@ -1088,8 +1049,6 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                   ),
                 ),
                 const SizedBox(width: 8),
-
-                // GÖNDER BUTONU
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.blueAccent.shade700,

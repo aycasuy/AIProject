@@ -399,6 +399,90 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Düzeltilmiş halini yaz...'**
   String get correctedAnswer;
+
+  /// No description provided for @dailyLimitTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugünlük Yeter!'**
+  String get dailyLimitTitle;
+
+  /// No description provided for @dailyLimitMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günlük ücretsiz yapay zeka roleplay hakkını doldurdun. Harika iş çıkardın! Yeni bir senaryo için yarın tekrar gel veya sınırsız sohbet için Premium\'u keşfet.'**
+  String get dailyLimitMessage;
+
+  /// No description provided for @useBottomMenuHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'👇 Başka etkinlikler için alt menüyü kullan'**
+  String get useBottomMenuHint;
+
+  /// No description provided for @dailyWords.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günün Kelimeleri'**
+  String get dailyWords;
+
+  /// No description provided for @aiResults.
+  ///
+  /// In tr, this message translates to:
+  /// **'İşte sonuçların:'**
+  String get aiResults;
+
+  /// No description provided for @coachThinking.
+  ///
+  /// In tr, this message translates to:
+  /// **'Koç düşünüyor...'**
+  String get coachThinking;
+
+  /// No description provided for @finishLessonWithXp.
+  ///
+  /// In tr, this message translates to:
+  /// **'✅ Dersi Bitir (+50 XP)'**
+  String get finishLessonWithXp;
+
+  /// No description provided for @greatJobTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'🎉 Harika İş!'**
+  String get greatJobTitle;
+
+  /// No description provided for @greatJobMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Senaryoyu başarıyla tamamladın ve +50 XP kazandın!'**
+  String get greatJobMessage;
+
+  /// No description provided for @ok.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tamam'**
+  String get ok;
+
+  /// No description provided for @translationTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çeviri'**
+  String get translationTitle;
+
+  /// No description provided for @holdForTranslation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çeviri için basılı tut'**
+  String get holdForTranslation;
+
+  /// No description provided for @noMistakeFound.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika! Hiç hata bulunmadı.'**
+  String get noMistakeFound;
+
+  /// No description provided for @mistakesFound.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} hata bulundu'**
+  String mistakesFound(int count);
 }
 
 class _AppLocalizationsDelegate

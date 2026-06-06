@@ -173,4 +173,50 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get correctedAnswer => 'Escribe la versión corregida...';
+
+  @override
+  String get dailyLimitTitle => 'Bugünlük Yeter!';
+
+  @override
+  String get dailyLimitMessage =>
+      'Günlük ücretsiz yapay zeka roleplay hakkını doldurdun. Harika iş çıkardın! Yeni bir senaryo için yarın tekrar gel veya sınırsız sohbet için Premium\'u keşfet.';
+
+  @override
+  String get useBottomMenuHint => '👇 Başka etkinlikler için alt menüyü kullan';
+
+  @override
+  String get dailyWords => 'Günün Kelimeleri';
+
+  @override
+  String get aiResults => 'İşte sonuçların:';
+
+  @override
+  String get coachThinking => 'Koç düşünüyor...';
+
+  @override
+  String get finishLessonWithXp => '✅ Dersi Bitir (+50 XP)';
+
+  @override
+  String get greatJobTitle => '🎉 Harika İş!';
+
+  @override
+  String get greatJobMessage =>
+      'Senaryoyu başarıyla tamamladın ve +50 XP kazandın!';
+
+  @override
+  String get ok => 'Tamam';
+
+  @override
+  String get translationTitle => 'Çeviri';
+
+  @override
+  String get holdForTranslation => 'Çeviri için basılı tut';
+
+  @override
+  String get noMistakeFound => 'Harika! Hiç hata bulunmadı.';
+
+  @override
+  String mistakesFound(int count) {
+    return '$count hata bulundu';
+  }
 }
