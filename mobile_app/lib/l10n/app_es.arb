@@ -67,5 +67,33 @@
       }
     }
   },
-  "connectionErrorServer": "¡Error de conexión! ¿Está funcionando el servidor?"
+  "connectionErrorServer": "¡Error de conexión! ¿Está funcionando el servidor?",
+  "roleplayIntro": "Escenario: {lessonTitle} 🎭\n\nTu objetivo es construir {count} oraciones sin errores en {targetLanguage}. ¡Escribe tu primer mensaje para comenzar! 😊",
+  "@roleplayIntro": {
+    "placeholders": {
+      "lessonTitle": {
+        "type": "String"
+      },
+      "targetLanguage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roleplayGoal": "Objetivo: {current} / {count} oraciones correctas",
+  "@roleplayGoal": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roleplayHint": "Me quedé atascado, dame una pista",
+  "writtenAnswer": "Escribe tu respuesta...",
+  "correctedAnswer": "Escribe la versión corregida..."
 }

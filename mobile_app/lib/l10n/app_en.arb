@@ -67,7 +67,33 @@
       }
     }
   },
-  "connectionErrorServer": "Connection error! Is the server running?"
-
-  
+  "connectionErrorServer": "Connection error! Is the server running?",
+  "roleplayIntro": "Scenario: {lessonTitle} 🎭\n\nYour goal is to build {count} error-free sentences in {targetLanguage}. Type your first message to begin! 😊",
+  "@roleplayIntro": {
+    "placeholders": {
+      "lessonTitle": {
+        "type": "String"
+      },
+      "targetLanguage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roleplayGoal": "Goal: {current} / {count} correct sentences",
+  "@roleplayGoal": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roleplayHint": "I'm stuck, give me a hint",
+  "writtenAnswer": "Write your answer...",
+  "correctedAnswer": "Write the corrected version..."
 }
