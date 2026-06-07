@@ -167,5 +167,102 @@
   "placementListenButton": "Escuchar",
   "placementStopButton": "Detener",
   "placementListenInstruction": "Pulsa el botón para escuchar el texto",
-  "placementNoQuestion": "No se encontraron preguntas."
+  "placementNoQuestion": "No se encontraron preguntas.",
+  "learnHintTitle": "¡Aquí tienes una pista!",
+  "learnHintContent": "La respuesta empieza con la letra '{firstLetter}'...\\n¡Y tiene exactamente {length} caracteres!",
+  "@learnHintContent": {
+    "placeholders": {
+      "firstLetter": {
+        "type": "String"
+      },
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "learnHintThanks": "¡Gracias!",
+  "learnHintBubble": "¿Pista?",
+  "learnCorrectAnswer": "Respuesta correcta: {answer}",
+  "@learnCorrectAnswer": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "learnGenericError": "Error: {error}",
+  "@learnGenericError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "learnNoCards": "Aún no hay tarjetas en esta lección.",
+  "learnGreatJob": "¡Buen trabajo!",
+  "learnDeckCompleted": "Completaste el mazo de palabras",
+  "learnWordsAddedToVocabulary": "{count} palabras fueron añadidas a tu cuaderno de vocabulario. 📚",
+  "@learnWordsAddedToVocabulary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "learnBackToMap": "Volver al mapa",
+  "learnSwipeInstruction": "Desliza a la derecha si lo aprendiste 👉 | 👈 Desliza a la izquierda para repasar",
+  "learnTapToSeeTranslation": "Toca para ver la traducción",
+  "learnQuestionsCouldNotLoad": "No se pudieron cargar las preguntas. Revisa tu conexión a internet.",
+  "learnNoBlankQuestions": "Aún no hay preguntas de completar espacios en esta lección.",
+  "learnNoSentenceQuestions": "Aún no hay preguntas de formar oraciones en esta lección.",
+  "learnNewQuestionsComing": "Las nuevas preguntas aparecerán aquí cuando se agreguen.",
+  "learnGameOverTitle": "¡Sin vidas!",
+  "learnGameOverBlankMessage": "Descansa un poco, puedes seguir completando los espacios cuando se recarguen tus vidas.",
+  "learnGameOverOrderMessage": "Descansa un poco, puedes continuar de nuevo cuando se recarguen tus vidas.",
+  "learnNewLife": "Nueva vida en: {time}",
+  "@learnNewLife": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "learnRefillLives": "Recargar vidas por 300 XP",
+  "learnLivesRefilled": "¡Vidas recargadas! La aventura continúa 🚀",
+  "learnPerfectTitle": "¡Perfecto!",
+  "learnBlankCompleted": "Completaste todas las preguntas de rellenar espacios.",
+  "learnOrderCompleted": "Completaste con éxito la tarea de formar oraciones.",
+  "learnBlankTitle": "Completar espacios",
+  "learnSentenceOrderTitle": "Formar oraciones",
+  "learnQuestionCounter": "{current} / {total} preguntas",
+  "@learnQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "learnCompleteMissingWord": "Completa la palabra que falta",
+  "learnAnswerInputHint": "Escribe tu respuesta aquí...",
+  "learnWrongWordError": "Palabra incorrecta, perdiste una vida. Inténtalo de nuevo.",
+  "learnStuckHintText": "Puedes pedir una pista si te atascas.",
+  "learnGetHint": "Obtener una pista",
+  "learnCheckAnswer": "Comprobar ✨",
+  "learnSkipBlank": "No pude completar el espacio, saltar",
+  "learnSkipOrder": "No pude formar la oración, saltar",
+  "learnTranslateFromNative": "Traducir del {language}",
+  "@learnTranslateFromNative": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "learnBuildSentence": "Forma tu oración",
+  "learnTapWordsToBuildSentence": "Toca las palabras para formar la oración",
+  "learnWords": "Palabras",
+  "learnTapAndOrder": "Tocar y ordenar"
 }

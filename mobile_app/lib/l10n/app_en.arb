@@ -167,5 +167,102 @@
   "placementListenButton": "Listen",
   "placementStopButton": "Stop",
   "placementListenInstruction": "Press the button to listen to the text",
-  "placementNoQuestion": "No questions found."
+  "placementNoQuestion": "No questions found.",
+  "learnHintTitle": "Here's a Hint!",
+  "learnHintContent": "The answer starts with the letter '{firstLetter}'...\\nAnd it is exactly {length} characters long!",
+  "@learnHintContent": {
+    "placeholders": {
+      "firstLetter": {
+        "type": "String"
+      },
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "learnHintThanks": "Thanks!",
+  "learnHintBubble": "Hint?",
+  "learnCorrectAnswer": "Correct Answer: {answer}",
+  "@learnCorrectAnswer": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "learnGenericError": "Error: {error}",
+  "@learnGenericError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "learnNoCards": "There are no cards in this lesson yet.",
+  "learnGreatJob": "Great Job!",
+  "learnDeckCompleted": "You completed the word deck.",
+  "learnWordsAddedToVocabulary": "{count} words were added to your Vocabulary Notebook. 📚",
+  "@learnWordsAddedToVocabulary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "learnBackToMap": "Back to Map",
+  "learnSwipeInstruction": "Swipe right if you learned it 👉 | 👈 Swipe left to review",
+  "learnTapToSeeTranslation": "Tap to see the translation",
+  "learnQuestionsCouldNotLoad": "Questions could not be loaded. Please check your internet connection.",
+  "learnNoBlankQuestions": "There are no fill-in-the-blank questions in this lesson yet.",
+  "learnNoSentenceQuestions": "There are no sentence building questions in this lesson yet.",
+  "learnNewQuestionsComing": "New questions will appear here when added.",
+  "learnGameOverTitle": "Out of Lives!",
+  "learnGameOverBlankMessage": "Rest a bit, you can continue filling in the blanks when your lives refill.",
+  "learnGameOverOrderMessage": "Rest a bit, you can continue again when your lives refill.",
+  "learnNewLife": "New life in: {time}",
+  "@learnNewLife": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "learnRefillLives": "Refill Lives for 300 XP",
+  "learnLivesRefilled": "Lives Refilled! Adventure Continues 🚀",
+  "learnPerfectTitle": "Perfect!",
+  "learnBlankCompleted": "You completed all fill-in-the-blank questions.",
+  "learnOrderCompleted": "You successfully completed the sentence building task.",
+  "learnBlankTitle": "Fill in the Blanks",
+  "learnSentenceOrderTitle": "Sentence Building",
+  "learnQuestionCounter": "{current} / {total} questions",
+  "@learnQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "learnCompleteMissingWord": "Complete the missing word",
+  "learnAnswerInputHint": "Type your answer here...",
+  "learnWrongWordError": "Wrong word, you lost a life. Try again.",
+  "learnStuckHintText": "You can get a hint if you're stuck.",
+  "learnGetHint": "Get a hint",
+  "learnCheckAnswer": "Check ✨",
+  "learnSkipBlank": "I couldn't fill the blank, skip it",
+  "learnSkipOrder": "I couldn't build the sentence, skip it",
+  "learnTranslateFromNative": "Translate from {language}",
+  "@learnTranslateFromNative": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "learnBuildSentence": "Build your sentence",
+  "learnTapWordsToBuildSentence": "Tap the words to build the sentence",
+  "learnWords": "Words",
+  "learnTapAndOrder": "Tap and order"
 }
