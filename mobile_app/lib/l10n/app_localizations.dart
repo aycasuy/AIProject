@@ -855,6 +855,30 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Dokun ve sırala'**
   String get learnTapAndOrder;
+
+  /// No description provided for @learnWeakPointHunterTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zayıf Nokta Avcısı'**
+  String get learnWeakPointHunterTitle;
+
+  /// No description provided for @learnWeakPointHunterDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yapay zeka, geçmişte hata yaptığın kelimeleri analiz ederek sana özel, zamana karşı bir okuma testi hazırlayacak. Meydan okumaya hazır mısın?'**
+  String get learnWeakPointHunterDescription;
+
+  /// No description provided for @learnChallengeButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Meydan Oku!'**
+  String get learnChallengeButton;
+
+  /// No description provided for @learnModuleNotFound.
+  ///
+  /// In tr, this message translates to:
+  /// **'Modül bulunamadı.'**
+  String get learnModuleNotFound;
 }
 
 class _AppLocalizationsDelegate

@@ -293,152 +293,166 @@ class AppLocalizationsEs extends AppLocalizations {
   String get placementNoQuestion => 'No se encontraron preguntas.';
 
   @override
-  String get learnHintTitle => 'Sana Bir İpucu!';
+  String get learnHintTitle => '¡Aquí tienes una pista!';
 
   @override
   String learnHintContent(String firstLetter, int length) {
-    return 'Cevap \'$firstLetter\' harfi ile başlıyor...\nVe tam $length karakter uzunluğunda!';
+    return 'La respuesta empieza con la letra \'$firstLetter\'...\\n¡Y tiene exactamente $length caracteres!';
   }
 
   @override
-  String get learnHintThanks => 'Teşekkürler!';
+  String get learnHintThanks => '¡Gracias!';
 
   @override
-  String get learnHintBubble => 'İpucu?';
+  String get learnHintBubble => '¿Pista?';
 
   @override
   String learnCorrectAnswer(String answer) {
-    return 'Doğru Cevap: $answer';
+    return 'Respuesta correcta: $answer';
   }
 
   @override
   String learnGenericError(String error) {
-    return 'Hata: $error';
+    return 'Error: $error';
   }
 
   @override
-  String get learnNoCards => 'Bu derste henüz kart bulunmuyor.';
+  String get learnNoCards => 'Aún no hay tarjetas en esta lección.';
 
   @override
-  String get learnGreatJob => 'Harika İş!';
+  String get learnGreatJob => '¡Buen trabajo!';
 
   @override
-  String get learnDeckCompleted => 'Kelime destesini tamamladın.';
+  String get learnDeckCompleted => 'Completaste el mazo de palabras';
 
   @override
   String learnWordsAddedToVocabulary(int count) {
-    return '$count kelime \'Kelime Defteri\'ne eklendi. 📚';
+    return '$count palabras fueron añadidas a tu cuaderno de vocabulario. 📚';
   }
 
   @override
-  String get learnBackToMap => 'Haritaya Dön';
+  String get learnBackToMap => 'Volver al mapa';
 
   @override
   String get learnSwipeInstruction =>
-      'Öğrendiysen Sağa 👉  |  👈 Tekrar için Sola';
+      'Desliza a la derecha si lo aprendiste 👉 | 👈 Desliza a la izquierda para repasar';
 
   @override
-  String get learnTapToSeeTranslation => 'Çeviriyi görmek için dokun';
+  String get learnTapToSeeTranslation => 'Toca para ver la traducción';
 
   @override
   String get learnQuestionsCouldNotLoad =>
-      'Sorular yüklenemedi. İnternetinizi kontrol edin.';
+      'No se pudieron cargar las preguntas. Revisa tu conexión a internet.';
 
   @override
   String get learnNoBlankQuestions =>
-      'Bu derste henüz boşluk doldurma sorusu yok.';
+      'Aún no hay preguntas de completar espacios en esta lección.';
 
   @override
   String get learnNoSentenceQuestions =>
-      'Bu derste henüz cümle kurma sorusu yok.';
+      'Aún no hay preguntas de formar oraciones en esta lección.';
 
   @override
   String get learnNewQuestionsComing =>
-      'Yeni sorular eklendiğinde burada görünecek.';
+      'Las nuevas preguntas aparecerán aquí cuando se agreguen.';
 
   @override
-  String get learnGameOverTitle => 'Hakların Doldu!';
+  String get learnGameOverTitle => '¡Sin vidas!';
 
   @override
   String get learnGameOverBlankMessage =>
-      'Biraz dinlen, canların yenilenince boşluk doldurmaya tekrar devam edebilirsin.';
+      'Descansa un poco, puedes seguir completando los espacios cuando se recarguen tus vidas.';
 
   @override
   String get learnGameOverOrderMessage =>
-      'Biraz dinlen, canların yenilenince tekrar devam edebilirsin.';
+      'Descansa un poco, puedes continuar de nuevo cuando se recarguen tus vidas.';
 
   @override
   String learnNewLife(String time) {
-    return 'Yeni can: $time';
+    return 'Nueva vida en: $time';
   }
 
   @override
-  String get learnRefillLives => '300 XP ile Canları Fulle';
+  String get learnRefillLives => 'Recargar vidas por 300 XP';
 
   @override
-  String get learnLivesRefilled => 'Canlar Fullendi! Maceraya Devam 🚀';
+  String get learnLivesRefilled => '¡Vidas recargadas! La aventura continúa 🚀';
 
   @override
-  String get learnPerfectTitle => 'Mükemmel!';
+  String get learnPerfectTitle => '¡Perfecto!';
 
   @override
   String get learnBlankCompleted =>
-      'Tüm boşluk doldurma sorularını tamamladın.';
+      'Completaste todas las preguntas de rellenar espacios.';
 
   @override
   String get learnOrderCompleted =>
-      'Cümle kurma görevini başarıyla tamamladın.';
+      'Completaste con éxito la tarea de formar oraciones.';
 
   @override
-  String get learnBlankTitle => 'Boşluk Doldurma';
+  String get learnBlankTitle => 'Completar espacios';
 
   @override
-  String get learnSentenceOrderTitle => 'Cümle Kurma';
+  String get learnSentenceOrderTitle => 'Formar oraciones';
 
   @override
   String learnQuestionCounter(int current, int total) {
-    return '$current / $total soru';
+    return '$current / $total preguntas';
   }
 
   @override
-  String get learnCompleteMissingWord => 'Eksik kelimeyi tamamla';
+  String get learnCompleteMissingWord => 'Completa la palabra que falta';
 
   @override
-  String get learnAnswerInputHint => 'Cevabını buraya yaz...';
+  String get learnAnswerInputHint => 'Escribe tu respuesta aquí...';
 
   @override
   String get learnWrongWordError =>
-      'Yanlış kelime, bir can gitti. Tekrar dene.';
+      'Palabra incorrecta, perdiste una vida. Inténtalo de nuevo.';
 
   @override
-  String get learnStuckHintText => 'Takılırsan ipucu alabilirsin.';
+  String get learnStuckHintText => 'Puedes pedir una pista si te atascas.';
 
   @override
-  String get learnGetHint => 'İpucu al';
+  String get learnGetHint => 'Obtener una pista';
 
   @override
-  String get learnCheckAnswer => 'Kontrol Et ✨';
+  String get learnCheckAnswer => 'Comprobar ✨';
 
   @override
-  String get learnSkipBlank => 'Boşluğu dolduramadım, pas geç';
+  String get learnSkipBlank => 'No pude completar el espacio, saltar';
 
   @override
-  String get learnSkipOrder => 'Cümleyi kuramadım, pas geç';
+  String get learnSkipOrder => 'No pude formar la oración, saltar';
 
   @override
   String learnTranslateFromNative(String language) {
-    return '$language dilinden çevir';
+    return 'Traducir del $language';
   }
 
   @override
-  String get learnBuildSentence => 'Cümleni oluştur';
+  String get learnBuildSentence => 'Forma tu oración';
 
   @override
-  String get learnTapWordsToBuildSentence => 'Kelimelere dokunarak cümleyi kur';
+  String get learnTapWordsToBuildSentence =>
+      'Toca las palabras para formar la oración';
 
   @override
-  String get learnWords => 'Kelimeler';
+  String get learnWords => 'Palabras';
 
   @override
-  String get learnTapAndOrder => 'Dokun ve sırala';
+  String get learnTapAndOrder => 'Tocar y ordenar';
+
+  @override
+  String get learnWeakPointHunterTitle => 'Cazador de puntos débiles';
+
+  @override
+  String get learnWeakPointHunterDescription =>
+      'La IA analizará las palabras en las que cometiste errores antes y preparará una prueba de lectura cronometrada personalizada para ti. ¿Aceptas el desafío?';
+
+  @override
+  String get learnChallengeButton => '¡Aceptar el desafío!';
+
+  @override
+  String get learnModuleNotFound => 'Módulo no encontrado.';
 }

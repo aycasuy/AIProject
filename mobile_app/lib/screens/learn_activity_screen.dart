@@ -291,7 +291,12 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Hata: $e"), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.learnGenericError(e.toString()),
+            ),
+            backgroundColor: Colors.red,
+          ),
         );
         _startHintTimer();
       }
@@ -510,6 +515,23 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
     int minutes = _remainingSeconds ~/ 60;
     int seconds = _remainingSeconds % 60;
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  String _localizedLanguageName(String language, AppLocalizations loc) {
+    switch (language.toLowerCase()) {
+      case "english":
+        return loc.langEnglish;
+      case "spanish":
+        return loc.langSpanish;
+      case "german":
+        return loc.langGerman;
+      case "french":
+        return loc.langFrench;
+      case "turkish":
+        return loc.langTurkish;
+      default:
+        return language;
+    }
   }
 
   Widget _buildProgressBar(int current, int total) {
@@ -781,7 +803,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Doğru Cevap: $_correctAnswer"),
+        content: Text(
+          AppLocalizations.of(context)!.learnCorrectAnswer(_correctAnswer),
+        ),
         backgroundColor: Colors.blueGrey.shade800,
         duration: const Duration(seconds: 3),
       ),
@@ -829,7 +853,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Doğru Cevap: $_correctSentence"),
+        content: Text(
+          AppLocalizations.of(context)!.learnCorrectAnswer(_correctSentence),
+        ),
         backgroundColor: Colors.blueGrey.shade800,
         duration: const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
@@ -877,6 +903,8 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
   }
 
   Widget _buildBlankActivity() {
+    final loc = AppLocalizations.of(context)!;
+
     if (_isLoadingBlank) {
       return Center(child: CircularProgressIndicator(color: widget.themeColor));
     }
@@ -928,20 +956,20 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    "Bu derste henüz boşluk doldurma sorusu yok.",
+                  Text(
+                    loc.learnNoBlankQuestions,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    "Yeni sorular eklendiğinde burada görünecek.",
+                  Text(
+                    loc.learnNewQuestionsComing,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
+                    style: const TextStyle(fontSize: 14, color: Colors.black54),
                   ),
                 ],
               ),
@@ -987,19 +1015,19 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                 children: [
                   const Text("💔", style: TextStyle(fontSize: 78)),
                   const SizedBox(height: 16),
-                  const Text(
-                    "Hakların Doldu!",
-                    style: TextStyle(
+                  Text(
+                    loc.learnGameOverTitle,
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
                       color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    "Biraz dinlen, canların yenilenince boşluk doldurmaya tekrar devam edebilirsin.",
+                  Text(
+                    loc.learnGameOverBlankMessage,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                       color: Colors.black54,
                       height: 1.4,
@@ -1024,7 +1052,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          "Yeni can: $_formattedTime",
+                          loc.learnNewLife(_formattedTime),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -1051,8 +1079,8 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                         Icons.bolt_rounded,
                         color: Colors.black87,
                       ),
-                      label: const Text(
-                        "300 XP ile Canları Fulle",
+                      label: Text(
+                        loc.learnRefillLives,
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 17,
@@ -1069,9 +1097,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: const Text(
-                                  "Canlar Fullendi! Maceraya Devam 🚀",
-                                ),
+                                content: Text(loc.learnLivesRefilled),
                                 backgroundColor: Colors.green.shade600,
                               ),
                             );
@@ -1166,8 +1192,8 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    "Mükemmel!",
+                  Text(
+                    loc.learnPerfectTitle,
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w900,
@@ -1175,10 +1201,10 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    "Tüm boşluk doldurma sorularını tamamladın.",
+                  Text(
+                    loc.learnBlankCompleted,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                       color: Colors.black54,
                       height: 1.4,
@@ -1198,9 +1224,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                         ),
                       ),
                       onPressed: _completeModuleAndExit,
-                      child: const Text(
-                        "Haritaya Dön",
-                        style: TextStyle(
+                      child: Text(
+                        loc.learnBackToMap,
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -1277,9 +1303,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Boşluk Doldurma",
-                                  style: TextStyle(
+                                Text(
+                                  loc.learnBlankTitle,
+                                  style: const TextStyle(
                                     fontSize: 19,
                                     fontWeight: FontWeight.w900,
                                     color: Colors.black87,
@@ -1287,7 +1313,10 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  "$questionNumber / $totalQuestions soru",
+                                  loc.learnQuestionCounter(
+                                    questionNumber,
+                                    totalQuestions,
+                                  ),
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w700,
@@ -1383,7 +1412,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           borderRadius: BorderRadius.circular(18),
                         ),
                         child: Text(
-                          "Eksik kelimeyi tamamla",
+                          loc.learnCompleteMissingWord,
                           style: TextStyle(
                             color: widget.themeColor,
                             fontSize: 14,
@@ -1469,7 +1498,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           color: Colors.black87,
                         ),
                         decoration: InputDecoration(
-                          hintText: "Cevabını buraya yaz...",
+                          hintText: loc.learnAnswerInputHint,
                           hintStyle: TextStyle(
                             color: Colors.grey.shade500,
                             fontWeight: FontWeight.w700,
@@ -1502,7 +1531,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                             ),
                           ),
                           errorText: _showError
-                              ? "Yanlış kelime, bir can gitti. Tekrar dene."
+                              ? loc.learnWrongWordError
                               : null,
                           errorStyle: const TextStyle(
                             fontWeight: FontWeight.w700,
@@ -1533,7 +1562,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              "Takılırsan ipucu alabilirsin.",
+                              loc.learnStuckHintText,
                               style: TextStyle(
                                 color: Colors.grey.shade600,
                                 fontSize: 13,
@@ -1550,9 +1579,11 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                                 vertical: 6,
                               ),
                             ),
-                            child: const Text(
-                              "İpucu al",
-                              style: TextStyle(fontWeight: FontWeight.w900),
+                            child: Text(
+                              loc.learnGetHint,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w900,
+                              ),
                             ),
                           ),
                         ],
@@ -1587,7 +1618,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                             ),
                           )
                         : Text(
-                            "Kontrol Et ✨",
+                            loc.learnCheckAnswer,
                             style: TextStyle(
                               fontSize: 18,
                               color: canCheck
@@ -1607,7 +1638,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                     size: 20,
                   ),
                   label: Text(
-                    "Boşluğu dolduramadım, pas geç",
+                    loc.learnSkipBlank,
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontSize: 15,
@@ -1646,9 +1677,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                       ),
                     ],
                   ),
-                  child: const Text(
-                    "İpucu?",
-                    style: TextStyle(
+                  child: Text(
+                    loc.learnHintBubble,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 15,
                       color: Colors.brown,
@@ -1685,6 +1716,12 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
   }
 
   Widget _buildOrderActivity() {
+    final loc = AppLocalizations.of(context)!;
+    final nativeLanguageName = _localizedLanguageName(
+      widget.nativeLanguage,
+      loc,
+    );
+
     if (_isLoadingPuzzle) {
       return Center(child: CircularProgressIndicator(color: widget.themeColor));
     }
@@ -1710,20 +1747,20 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                "Bu derste henüz cümle kurma sorusu yok.",
+              Text(
+                loc.learnNoSentenceQuestions,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                "Yeni sorular eklendiğinde burada görünecek.",
+              Text(
+                loc.learnNewQuestionsComing,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.black54),
+                style: const TextStyle(fontSize: 14, color: Colors.black54),
               ),
             ],
           ),
@@ -1767,19 +1804,19 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                 children: [
                   const Text("💔", style: TextStyle(fontSize: 78)),
                   const SizedBox(height: 16),
-                  const Text(
-                    "Hakların Doldu!",
-                    style: TextStyle(
+                  Text(
+                    loc.learnGameOverTitle,
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
                       color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    "Biraz dinlen, canların yenilenince tekrar devam edebilirsin.",
+                  Text(
+                    loc.learnGameOverOrderMessage,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                       color: Colors.black54,
                       height: 1.4,
@@ -1804,7 +1841,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          "Yeni can: $_formattedTime",
+                          loc.learnNewLife(_formattedTime),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -1832,9 +1869,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                         Icons.bolt_rounded,
                         color: Colors.black87,
                       ),
-                      label: const Text(
-                        "300 XP ile Canları Fulle",
-                        style: TextStyle(
+                      label: Text(
+                        loc.learnRefillLives,
+                        style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 17,
                           fontWeight: FontWeight.w900,
@@ -1850,9 +1887,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: const Text(
-                                  "Canlar Fullendi! Maceraya Devam 🚀",
-                                ),
+                                content: Text(loc.learnLivesRefilled),
                                 backgroundColor: Colors.green.shade600,
                               ),
                             );
@@ -1882,9 +1917,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: const Text(
-                        "Haritaya Dön",
-                        style: TextStyle(
+                      child: Text(
+                        loc.learnBackToMap,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
@@ -1947,19 +1982,19 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    "Mükemmel!",
-                    style: TextStyle(
+                  Text(
+                    loc.learnPerfectTitle,
+                    style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w900,
                       color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    "Cümle kurma görevini başarıyla tamamladın.",
+                  Text(
+                    loc.learnOrderCompleted,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                       color: Colors.black54,
                       height: 1.4,
@@ -1979,9 +2014,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                         ),
                       ),
                       onPressed: _completeModuleAndExit,
-                      child: const Text(
-                        "Haritaya Dön",
-                        style: TextStyle(
+                      child: Text(
+                        loc.learnBackToMap,
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -2058,9 +2093,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Cümle Kurma",
-                                  style: TextStyle(
+                                Text(
+                                  loc.learnSentenceOrderTitle,
+                                  style: const TextStyle(
                                     fontSize: 19,
                                     fontWeight: FontWeight.w900,
                                     color: Colors.black87,
@@ -2068,7 +2103,10 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  "$questionNumber / $totalQuestions soru",
+                                  loc.learnQuestionCounter(
+                                    questionNumber,
+                                    totalQuestions,
+                                  ),
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w700,
@@ -2149,7 +2187,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            "Türkçeden çevir",
+                            loc.learnTranslateFromNative(nativeLanguageName),
                             style: TextStyle(
                               color: Colors.grey.shade700,
                               fontSize: 14,
@@ -2214,7 +2252,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              "Cümleni oluştur",
+                              loc.learnBuildSentence,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w800,
@@ -2264,7 +2302,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                "Kelimelere dokunarak cümleyi kur",
+                                loc.learnTapWordsToBuildSentence,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.grey.shade500,
@@ -2337,9 +2375,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                       size: 20,
                     ),
                     const SizedBox(width: 8),
-                    const Text(
-                      "Kelimeler",
-                      style: TextStyle(
+                    Text(
+                      loc.learnWords,
+                      style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
@@ -2347,7 +2385,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                     ),
                     const Spacer(),
                     Text(
-                      "Dokun ve sırala",
+                      loc.learnTapAndOrder,
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontSize: 13,
@@ -2425,7 +2463,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                             ),
                           )
                         : Text(
-                            "Kontrol Et ✨",
+                            loc.learnCheckAnswer,
                             style: TextStyle(
                               fontSize: 18,
                               color: canCheck
@@ -2445,7 +2483,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                     size: 20,
                   ),
                   label: Text(
-                    "Cümleyi kuramadım, pas geç",
+                    loc.learnSkipOrder,
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontSize: 15,
@@ -2484,9 +2522,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                       ),
                     ],
                   ),
-                  child: const Text(
-                    "İpucu?",
-                    style: TextStyle(
+                  child: Text(
+                    loc.learnHintBubble,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 15,
                       color: Colors.brown,
