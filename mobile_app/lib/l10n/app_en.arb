@@ -140,5 +140,32 @@
         "type": "String"
       }
     }
-  }
+  },
+  "placementLoading": "Preparing your AI placement test...",
+  "placementQuestion": "Question {current}/{total}",
+  "@placementQuestion": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "placementNext": "Next Question",
+  "placementFinishedTitle": "Test Completed!",
+  "placementFinishedBody": "Great job.\n\nDetermined Level: {level}",
+  "@placementFinishedBody": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "placementBackToMenu": "Return to Main Menu",
+  "placementListenButton": "Listen",
+  "placementStopButton": "Stop",
+  "placementListenInstruction": "Press the button to listen to the text",
+  "placementNoQuestion": "No questions found."
 }

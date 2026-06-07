@@ -140,5 +140,32 @@
         "type": "String"
       }
     }
-  }
+  },
+  "placementLoading": "Preparando tu prueba de nivel con IA...",
+  "placementQuestion": "Pregunta {current}/{total}",
+  "@placementQuestion": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "placementNext": "Siguiente pregunta",
+  "placementFinishedTitle": "¡Prueba completada!",
+  "placementFinishedBody": "Buen trabajo\n\nNivel determinado: {level}",
+  "@placementFinishedBody": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "placementBackToMenu": "Volver al menú principal",
+  "placementListenButton": "Escuchar",
+  "placementStopButton": "Detener",
+  "placementListenInstruction": "Pulsa el botón para escuchar el texto",
+  "placementNoQuestion": "No se encontraron preguntas."
 }
