@@ -603,6 +603,90 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Soru bulunamadı.'**
   String get placementNoQuestion;
+
+  /// No description provided for @learnHintTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sana Bir İpucu!'**
+  String get learnHintTitle;
+
+  /// No description provided for @learnHintContent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cevap \'{firstLetter}\' harfi ile başlıyor...\nVe tam {length} karakter uzunluğunda!'**
+  String learnHintContent(String firstLetter, int length);
+
+  /// No description provided for @learnHintThanks.
+  ///
+  /// In tr, this message translates to:
+  /// **'Teşekkürler!'**
+  String get learnHintThanks;
+
+  /// No description provided for @learnHintBubble.
+  ///
+  /// In tr, this message translates to:
+  /// **'İpucu?'**
+  String get learnHintBubble;
+
+  /// No description provided for @learnCorrectAnswer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğru Cevap: {answer}'**
+  String learnCorrectAnswer(String answer);
+
+  /// No description provided for @learnGenericError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hata: {error}'**
+  String learnGenericError(String error);
+
+  /// No description provided for @learnNoCards.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu derste henüz kart bulunmuyor.'**
+  String get learnNoCards;
+
+  /// No description provided for @learnGreatJob.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika İş!'**
+  String get learnGreatJob;
+
+  /// No description provided for @learnDeckCompleted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime destesini tamamladın.'**
+  String get learnDeckCompleted;
+
+  /// No description provided for @learnWordsAddedToVocabulary.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} kelime \'Kelime Defteri\'ne eklendi. 📚'**
+  String learnWordsAddedToVocabulary(int count);
+
+  /// No description provided for @learnBackToMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritaya Dön'**
+  String get learnBackToMap;
+
+  /// No description provided for @learnSwipeInstruction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öğrendiysen Sağa 👉  |  👈 Tekrar için Sola'**
+  String get learnSwipeInstruction;
+
+  /// No description provided for @learnTapToSeeTranslation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çeviriyi görmek için dokun'**
+  String get learnTapToSeeTranslation;
+
+  /// No description provided for @learnQuestionsCouldNotLoad.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sorular yüklenemedi. İnternetinizi kontrol edin.'**
+  String get learnQuestionsCouldNotLoad;
 }
 
 class _AppLocalizationsDelegate

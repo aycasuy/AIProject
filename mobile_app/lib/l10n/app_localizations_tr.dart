@@ -287,4 +287,56 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get placementNoQuestion => 'Soru bulunamadı.';
+
+  @override
+  String get learnHintTitle => 'Sana Bir İpucu!';
+
+  @override
+  String learnHintContent(String firstLetter, int length) {
+    return 'Cevap \'$firstLetter\' harfi ile başlıyor...\nVe tam $length karakter uzunluğunda!';
+  }
+
+  @override
+  String get learnHintThanks => 'Teşekkürler!';
+
+  @override
+  String get learnHintBubble => 'İpucu?';
+
+  @override
+  String learnCorrectAnswer(String answer) {
+    return 'Doğru Cevap: $answer';
+  }
+
+  @override
+  String learnGenericError(String error) {
+    return 'Hata: $error';
+  }
+
+  @override
+  String get learnNoCards => 'Bu derste henüz kart bulunmuyor.';
+
+  @override
+  String get learnGreatJob => 'Harika İş!';
+
+  @override
+  String get learnDeckCompleted => 'Kelime destesini tamamladın.';
+
+  @override
+  String learnWordsAddedToVocabulary(int count) {
+    return '$count kelime \'Kelime Defteri\'ne eklendi. 📚';
+  }
+
+  @override
+  String get learnBackToMap => 'Haritaya Dön';
+
+  @override
+  String get learnSwipeInstruction =>
+      'Öğrendiysen Sağa 👉  |  👈 Tekrar için Sola';
+
+  @override
+  String get learnTapToSeeTranslation => 'Çeviriyi görmek için dokun';
+
+  @override
+  String get learnQuestionsCouldNotLoad =>
+      'Sorular yüklenemedi. İnternetinizi kontrol edin.';
 }
