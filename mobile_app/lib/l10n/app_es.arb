@@ -167,5 +167,50 @@
   "placementListenButton": "Escuchar",
   "placementStopButton": "Detener",
   "placementListenInstruction": "Pulsa el botón para escuchar el texto",
-  "placementNoQuestion": "No se encontraron preguntas."
+  "placementNoQuestion": "No se encontraron preguntas.",
+  "learnHintTitle": "Sana Bir İpucu!",
+  "learnHintContent": "Cevap '{firstLetter}' harfi ile başlıyor...\nVe tam {length} karakter uzunluğunda!",
+  "@learnHintContent": {
+    "placeholders": {
+      "firstLetter": {
+        "type": "String"
+      },
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "learnHintThanks": "Teşekkürler!",
+  "learnHintBubble": "İpucu?",
+  "learnCorrectAnswer": "Doğru Cevap: {answer}",
+  "@learnCorrectAnswer": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "learnGenericError": "Hata: {error}",
+  "@learnGenericError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "learnNoCards": "Bu derste henüz kart bulunmuyor.",
+  "learnGreatJob": "Harika İş!",
+  "learnDeckCompleted": "Kelime destesini tamamladın.",
+  "learnWordsAddedToVocabulary": "{count} kelime 'Kelime Defteri'ne eklendi. 📚",
+  "@learnWordsAddedToVocabulary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "learnBackToMap": "Haritaya Dön",
+  "learnSwipeInstruction": "Öğrendiysen Sağa 👉  |  👈 Tekrar için Sola",
+  "learnTapToSeeTranslation": "Çeviriyi görmek için dokun",
+  "learnQuestionsCouldNotLoad": "Sorular yüklenemedi. İnternetinizi kontrol edin."
 }
