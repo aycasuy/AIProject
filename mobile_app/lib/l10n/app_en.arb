@@ -265,8 +265,8 @@
   "learnTapWordsToBuildSentence": "Tap the words to build the sentence",
   "learnWords": "Words",
   "learnTapAndOrder": "Tap and order",
-  "learnWeakPointHunterTitle": "Zayıf Nokta Avcısı",
-  "learnWeakPointHunterDescription": "Yapay zeka, geçmişte hata yaptığın kelimeleri analiz ederek sana özel, zamana karşı bir okuma testi hazırlayacak. Meydan okumaya hazır mısın?",
-  "learnChallengeButton": "Meydan Oku!",
-  "learnModuleNotFound": "Modül bulunamadı."
+  "learnWeakPointHunterTitle": "Weak Point Hunter",
+  "learnWeakPointHunterDescription": "AI will analyze the words you previously struggled with and prepare a personalized timed reading quiz for you. Are you ready for the challenge?",
+  "learnChallengeButton": "Start Challenge!",
+  "learnModuleNotFound": "Module not found."
 }
