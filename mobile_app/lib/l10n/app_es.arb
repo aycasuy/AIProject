@@ -213,13 +213,13 @@
   "learnSwipeInstruction": "Desliza a la derecha si lo aprendiste 👉 | 👈 Desliza a la izquierda para repasar",
   "learnTapToSeeTranslation": "Toca para ver la traducción",
   "learnQuestionsCouldNotLoad": "No se pudieron cargar las preguntas. Revisa tu conexión a internet.",
-  "learnNoBlankQuestions": "Bu derste henüz boşluk doldurma sorusu yok.",
-  "learnNoSentenceQuestions": "Bu derste henüz cümle kurma sorusu yok.",
-  "learnNewQuestionsComing": "Yeni sorular eklendiğinde burada görünecek.",
-  "learnGameOverTitle": "Hakların Doldu!",
-  "learnGameOverBlankMessage": "Biraz dinlen, canların yenilenince boşluk doldurmaya tekrar devam edebilirsin.",
-  "learnGameOverOrderMessage": "Biraz dinlen, canların yenilenince tekrar devam edebilirsin.",
-  "learnNewLife": "Yeni can: {time}",
+  "learnNoBlankQuestions": "Aún no hay preguntas de completar espacios en esta lección.",
+  "learnNoSentenceQuestions": "Aún no hay preguntas de formar oraciones en esta lección.",
+  "learnNewQuestionsComing": "Las nuevas preguntas aparecerán aquí cuando se agreguen.",
+  "learnGameOverTitle": "¡Sin vidas!",
+  "learnGameOverBlankMessage": "Descansa un poco, puedes seguir completando los espacios cuando se recarguen tus vidas.",
+  "learnGameOverOrderMessage": "Descansa un poco, puedes continuar de nuevo cuando se recarguen tus vidas.",
+  "learnNewLife": "Nueva vida en: {time}",
   "@learnNewLife": {
     "placeholders": {
       "time": {
@@ -227,14 +227,14 @@
       }
     }
   },
-  "learnRefillLives": "300 XP ile Canları Fulle",
-  "learnLivesRefilled": "Canlar Fullendi! Maceraya Devam 🚀",
-  "learnPerfectTitle": "Mükemmel!",
-  "learnBlankCompleted": "Tüm boşluk doldurma sorularını tamamladın.",
-  "learnOrderCompleted": "Cümle kurma görevini başarıyla tamamladın.",
-  "learnBlankTitle": "Boşluk Doldurma",
-  "learnSentenceOrderTitle": "Cümle Kurma",
-  "learnQuestionCounter": "{current} / {total} soru",
+  "learnRefillLives": "Recargar vidas por 300 XP",
+  "learnLivesRefilled": "¡Vidas recargadas! La aventura continúa 🚀",
+  "learnPerfectTitle": "¡Perfecto!",
+  "learnBlankCompleted": "Completaste todas las preguntas de rellenar espacios.",
+  "learnOrderCompleted": "Completaste con éxito la tarea de formar oraciones.",
+  "learnBlankTitle": "Completar espacios",
+  "learnSentenceOrderTitle": "Formar oraciones",
+  "learnQuestionCounter": "{current} / {total} preguntas",
   "@learnQuestionCounter": {
     "placeholders": {
       "current": {
@@ -245,15 +245,15 @@
       }
     }
   },
-  "learnCompleteMissingWord": "Eksik kelimeyi tamamla",
-  "learnAnswerInputHint": "Cevabını buraya yaz...",
-  "learnWrongWordError": "Yanlış kelime, bir can gitti. Tekrar dene.",
-  "learnStuckHintText": "Takılırsan ipucu alabilirsin.",
-  "learnGetHint": "İpucu al",
-  "learnCheckAnswer": "Kontrol Et ✨",
-  "learnSkipBlank": "Boşluğu dolduramadım, pas geç",
-  "learnSkipOrder": "Cümleyi kuramadım, pas geç",
-  "learnTranslateFromNative": "{language} dilinden çevir",
+  "learnCompleteMissingWord": "Completa la palabra que falta",
+  "learnAnswerInputHint": "Escribe tu respuesta aquí...",
+  "learnWrongWordError": "Palabra incorrecta, perdiste una vida. Inténtalo de nuevo.",
+  "learnStuckHintText": "Puedes pedir una pista si te atascas.",
+  "learnGetHint": "Obtener una pista",
+  "learnCheckAnswer": "Comprobar ✨",
+  "learnSkipBlank": "No pude completar el espacio, saltar",
+  "learnSkipOrder": "No pude formar la oración, saltar",
+  "learnTranslateFromNative": "Traducir del {language}",
   "@learnTranslateFromNative": {
     "placeholders": {
       "language": {
@@ -261,8 +261,8 @@
       }
     }
   },
-  "learnBuildSentence": "Cümleni oluştur",
-  "learnTapWordsToBuildSentence": "Kelimelere dokunarak cümleyi kur",
-  "learnWords": "Kelimeler",
-  "learnTapAndOrder": "Dokun ve sırala"
+  "learnBuildSentence": "Forma tu oración",
+  "learnTapWordsToBuildSentence": "Toca las palabras para formar la oración",
+  "learnWords": "Palabras",
+  "learnTapAndOrder": "Tocar y ordenar"
 }
