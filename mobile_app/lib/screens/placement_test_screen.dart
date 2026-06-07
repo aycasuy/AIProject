@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
-//import 'home_screen.dart';
-//import 'path_screen.dart';
 import 'main_navigation.dart';
+import '../l10n/app_localizations.dart'; // 👈 ekle
 
 class PlacementTestScreen extends StatefulWidget {
   final String username;
@@ -28,7 +27,6 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
   int _currentIndex = 0;
   String _selectedAnswer = '';
 
-  // Hangi seviyeden kaç doğru yaptığını tutacağımız karne
   final Map<String, int> _levelScores = {
     'A1': 0,
     'A2': 0,
@@ -37,7 +35,6 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
     'C1': 0,
   };
 
-  // Seslendirme (TTS) motoru
   late FlutterTts flutterTts;
   bool _isPlaying = false;
 
@@ -67,22 +64,16 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
     }
   }
 
-  // --- 1. SES MOTORU KURULUMU ---
   void _initTts() {
     flutterTts = FlutterTts();
     flutterTts.setLanguage(_getTtsLanguageCode(widget.targetLanguage));
-    flutterTts.setSpeechRate(
-      0.45,
-    ); // Öğrenciler için ideal, hafif yavaş okuma hızı
+    flutterTts.setSpeechRate(0.45);
     flutterTts.setPitch(1.0);
-
-    // Okuma bitince butonun tekrar oynatılabilir hale gelmesi için
     flutterTts.setCompletionHandler(() {
       if (mounted) setState(() => _isPlaying = false);
     });
   }
 
-  // --- 2. PYTHON'DAN SINAVI ÇEKME (GET İŞLEMİ) ---
   Future<void> _fetchQuestions() async {
     try {
       final url = Uri.parse('http://10.0.2.2:8000/generate_placement_test')
@@ -116,7 +107,6 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
     setState(() => _isLoading = false);
   }
 
-  // --- 3. DİNLEME (LISTENING) FONKSİYONLARI ---
   Future<void> _speak(String text) async {
     setState(() => _isPlaying = true);
     await flutterTts.speak(text);
@@ -133,13 +123,11 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
     super.dispose();
   }
 
-  // --- 4. SONRAKİ SORUYA GEÇİŞ VE PUANLAMA ---
   void _nextQuestion() {
     if (_selectedAnswer.isEmpty) return;
 
     final currentQ = _questions[_currentIndex];
 
-    // Eğer cevap doğruysa, o sorunun seviyesine 1 puan ekle
     if (_selectedAnswer == currentQ['answer']) {
       String level = currentQ['level'];
       if (_levelScores.containsKey(level)) {
@@ -147,7 +135,6 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
       }
     }
 
-    // Okuma/Dinleme varsa durdur ki diğer soruya ses sarkmasın
     _stopSpeaking();
 
     if (_currentIndex < _questions.length - 1) {
@@ -167,36 +154,20 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
     final int b2 = _levelScores['B2'] ?? 0;
     final int c1 = _levelScores['C1'] ?? 0;
 
-    /*
-    Her seviyede 3 soru var.
-    Bir seviyeyi geçmiş saymak için en az 2 doğru gerekiyor.
-
-    Mantık:
-    - A1 geçilemezse A1
-    - A1 geçilir ama A2 geçilemezse A1
-    - A1 + A2 geçilirse A2
-    - B1 de geçilirse B1
-    - B2 de geçilirse B2
-    - C1 de geçilirse C1
-  */
-
     if (a1 < 2) return "A1";
     if (a2 < 2) return "A1";
     if (b1 < 2) return "A2";
     if (b2 < 2) return "B1";
     if (c1 < 2) return "B2";
-
     return "C1";
   }
 
-  // --- 5. SINAV BİTİŞİ, SEVİYE HESAPLAMA VE VERİTABANINA KAYIT ---
   Future<void> _finishTest() async {
     setState(() => _isLoading = true);
 
     String finalLevel = _calculateFinalLevel();
 
     try {
-      // PYTHON'A SEVİYEYİ GÖNDERİYORUZ!
       final url = Uri.parse('http://10.0.2.2:8000/save_progress');
       final response = await http.post(
         url,
@@ -212,6 +183,8 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
         if (!mounted) return;
         setState(() => _isLoading = false);
 
+        final l10n = AppLocalizations.of(context)!;
+
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -219,9 +192,9 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            title: const Text("Sınav Tamamlandı!"),
+            title: Text(l10n.placementFinishedTitle),
             content: Text(
-              "Harika iş çıkardın.\n\nBelirlenen Seviyen: $finalLevel\nÖdül: +50 XP",
+              l10n.placementFinishedBody(finalLevel),
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             actions: [
@@ -231,29 +204,22 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => MainNavigationScreen(
-                        // 🌟 ARTIK İSKELETE GİDİYOR
                         username: widget.username,
                         targetLanguage: widget.targetLanguage,
                         minLevel: finalLevel,
                         nativeLanguage: widget.nativeLanguage,
-
-                        // 🌟 Sınavdan çıkan yeni seviyeyi verdik!
                       ),
                     ),
                     (Route<dynamic> route) => false,
                   );
                 },
-                child: const Text("Ana Menüye Dön"),
+                child: Text(l10n.placementBackToMenu),
               ),
             ],
           ),
         );
       } else {
-        print("🚨 SAVE PROGRESS ERROR: ${response.statusCode}");
-        print("🚨 BODY: ${response.body}");
-
         if (!mounted) return;
-
         setState(() => _isLoading = false);
         _showError("Seviye kaydedilemedi!");
       }
@@ -264,21 +230,22 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
     }
   }
 
-  // --- 6. ARAYÜZ (UI) ---
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (_isLoading) {
       return Scaffold(
         backgroundColor: const Color(0xFFF8F9FF),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              CircularProgressIndicator(color: Color(0xFF118AB2)),
-              SizedBox(height: 20),
+            children: [
+              const CircularProgressIndicator(color: Color(0xFF118AB2)),
+              const SizedBox(height: 20),
               Text(
-                "Yapay Zeka Sınavını Hazırlıyor...",
-                style: TextStyle(
+                l10n.placementLoading,
+                style: const TextStyle(
                   color: Color(0xFF073B4C),
                   fontWeight: FontWeight.bold,
                 ),
@@ -290,7 +257,7 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
     }
 
     if (_questions.isEmpty) {
-      return const Scaffold(body: Center(child: Text("Soru bulunamadı.")));
+      return Scaffold(body: Center(child: Text(l10n.placementNoQuestion)));
     }
 
     final currentQ = _questions[_currentIndex];
@@ -310,7 +277,7 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Soru ${_currentIndex + 1}/${_questions.length}",
+              l10n.placementQuestion(_currentIndex + 1, _questions.length),
               style: const TextStyle(
                 color: Color(0xFF073B4C),
                 fontSize: 16,
@@ -340,9 +307,7 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // --- DİNAMİK ALAN: SORU TİPİNE GÖRE EKRAN DEĞİŞİR ---
               if (type == 'reading' && contextText != null) ...[
-                // OKUMA KARTI
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -361,7 +326,6 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
                 ),
                 const SizedBox(height: 20),
               ] else if (type == 'listening' && contextText != null) ...[
-                // DİNLEME BUTONU (METİN GİZLİ!)
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
@@ -376,9 +340,9 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
                         color: Color(0xFF118AB2),
                       ),
                       const SizedBox(height: 12),
-                      const Text(
-                        "Metni dinlemek için butona bas",
-                        style: TextStyle(
+                      Text(
+                        l10n.placementListenInstruction,
+                        style: const TextStyle(
                           color: Color(0xFF073B4C),
                           fontWeight: FontWeight.w600,
                         ),
@@ -393,7 +357,11 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
                               ? Icons.stop_rounded
                               : Icons.play_arrow_rounded,
                         ),
-                        label: Text(_isPlaying ? "Durdur" : "Dinle"),
+                        label: Text(
+                          _isPlaying
+                              ? l10n.placementStopButton
+                              : l10n.placementListenButton,
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _isPlaying
                               ? Colors.redAccent
@@ -410,7 +378,6 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
                 const SizedBox(height: 20),
               ],
 
-              // --- ASIL SORU METNİ ---
               Text(
                 questionText,
                 style: const TextStyle(
@@ -421,7 +388,6 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
               ),
               const SizedBox(height: 30),
 
-              // --- ŞIKLAR ---
               Expanded(
                 child: ListView.builder(
                   itemCount: options.length,
@@ -480,7 +446,6 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
                 ),
               ),
 
-              // --- SONRAKİ SORU BUTONU ---
               ElevatedButton(
                 onPressed: _selectedAnswer.isEmpty ? null : _nextQuestion,
                 style: ElevatedButton.styleFrom(
@@ -491,9 +456,9 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: const Text(
-                  "Sonraki Soru",
-                  style: TextStyle(
+                child: Text(
+                  l10n.placementNext,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,

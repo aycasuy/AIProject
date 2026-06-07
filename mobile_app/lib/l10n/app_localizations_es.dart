@@ -258,36 +258,37 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get placementLoading => 'Yapay Zeka Sınavını Hazırlıyor...';
+  String get placementLoading => 'Preparando tu prueba de nivel con IA...';
 
   @override
   String placementQuestion(int current, int total) {
-    return 'Soru $current/$total';
+    return 'Pregunta $current/$total';
   }
 
   @override
-  String get placementNext => 'Sonraki Soru';
+  String get placementNext => 'Siguiente pregunta';
 
   @override
-  String get placementFinishedTitle => 'Sınav Tamamlandı!';
+  String get placementFinishedTitle => '¡Prueba completada!';
 
   @override
   String placementFinishedBody(String level) {
-    return 'Harika iş çıkardın.\n\nBelirlenen Seviyen: $level';
+    return 'Buen trabajo\n\nNivel determinado: $level';
   }
 
   @override
-  String get placementBackToMenu => 'Ana Menüye Dön';
+  String get placementBackToMenu => 'Volver al menú principal';
 
   @override
-  String get placementListenButton => 'Dinle';
+  String get placementListenButton => 'Escuchar';
 
   @override
-  String get placementStopButton => 'Durdur';
+  String get placementStopButton => 'Detener';
 
   @override
-  String get placementListenInstruction => 'Metni dinlemek için butona bas';
+  String get placementListenInstruction =>
+      'Pulsa el botón para escuchar el texto';
 
   @override
-  String get placementNoQuestion => 'Soru bulunamadı.';
+  String get placementNoQuestion => 'No se encontraron preguntas.';
 }

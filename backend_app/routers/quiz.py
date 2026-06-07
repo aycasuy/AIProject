@@ -39,10 +39,12 @@ TEST YAPISI:
 - Her seviyeden tam 3 soru olmalı.
 
 DİL KURALLARI:
-1. "question" alanı öğrencinin ana dili olan {native_language} dilinde olmalı.
-2. "context_text", "options" ve "answer" kesinlikle {target_language} dilinde olmalı.
-3. "answer" alanı options içindeki değerlerden biriyle birebir aynı olmalı.
-4. Sadece geçerli JSON döndür. Markdown, açıklama, ```json kullanma.
+1. "question" alanındaki TÜM metinler (prefix dahil) kesinlikle {native_language} dilinde olmalı.
+2. Hangi dil olursa olsun, question alanını tamamen {native_language} dilinde yaz.
+3. "Cümleyi tamamla:", "Metne göre:", "Diyaloğu tamamla:" gibi prefix'ler de {native_language} dilinde olmalı.
+4. "context_text", "options" ve "answer" kesinlikle {target_language} dilinde olmalı.
+5. "answer" alanı options içindeki değerlerden biriyle birebir aynı olmalı.
+6. Sadece geçerli JSON döndür. Markdown, açıklama, ```json kullanma.
 
 ÇOK KRİTİK SORU KALİTESİ KURALLARI:
 - Görsel, resim veya ekranda gösterilmeyen nesne gerektiren soru üretme.
@@ -50,9 +52,7 @@ DİL KURALLARI:
 - "Boşluğu dolduran uygun kelimeyi seç." gibi eksik soru yazma.
 - Her question tek başına okununca anlaşılır olmalı.
 - Vocabulary sorularında çevirilecek kelime mutlaka question içinde yer almalı.
-  Örnek: "'istasyon' kelimesinin {target_language} karşılığını seç."
 - Grammar sorularında boşluklu cümle mutlaka question içinde yer almalı.
-  Örnek: "Cümleyi tamamla: She ___ to school every day."
 - A1 ve A2 sorularında context_text kullanma; tüm gerekli bilgi question içinde olmalı.
 - B1 dialogue sorularında kısa diyalog gerekiyorsa diyalogu question içine yaz.
 - B2 reading sorularında context_text zorunlu olmalı.
@@ -67,13 +67,11 @@ A1:
 - be, have, simple present, temel nesneler, temel günlük ifadeler.
 - Kolay olmalı ama tamamen tahmin edilebilir olmamalı.
 - Yanlış seçenekler aynı türden olmalı.
-- Örnek yapı: "Cümleyi tamamla: She ___ a teacher."
 
 A2:
 - Günlük durumlar, geçmiş zaman, karşılaştırmalar, miktar ifadeleri, ulaşım, alışveriş, yönler.
 - A2 soruları A1 kadar kolay olmamalı.
 - Collocation ve günlük kullanım ölçülebilir.
-- Örnek yapı: "Cümleyi tamamla: I was late, so I had to ___ a taxi."
 - Kötü örnek üretme: "The elephant is very ___." gibi çok bariz sorular sorma.
 
 B1:
@@ -89,7 +87,6 @@ B2:
 
 C1:
 - Akademik, soyut veya nüanslı anlam farkı içermeli.
-- Basit kelime anlamı sorma.
 - Yazarın amacı, ima edilen anlam, ton, varsayım veya karmaşık çıkarım sorulmalı.
 - Listening sorusunda context_text bir anons, kısa akademik konuşma veya resmi açıklama olabilir.
 
@@ -110,7 +107,7 @@ JSON formatı tam olarak şöyle olmalı:
       "level": "A1",
       "type": "grammar",
       "context_text": null,
-      "question": "Cümleyi tamamla: She ___ a student.",
+      "question": "[{native_language} dilinde soru - örn: 'Cümleyi tamamla: She ___ a student.']",
       "options": ["is", "are", "am", "be"],
       "answer": "is"
     }},
@@ -119,7 +116,7 @@ JSON formatı tam olarak şöyle olmalı:
       "level": "A2",
       "type": "grammar",
       "context_text": null,
-      "question": "Cümleyi tamamla: I was late, so I had to ___ a taxi.",
+      "question": "[{native_language} dilinde soru]",
       "options": ["take", "make", "do", "have"],
       "answer": "take"
     }},
@@ -128,7 +125,7 @@ JSON formatı tam olarak şöyle olmalı:
       "level": "B1",
       "type": "dialogue",
       "context_text": null,
-      "question": "Diyaloğu tamamla: A: I missed the bus. B: You should have ___ earlier.",
+      "question": "[{native_language} dilinde soru]",
       "options": ["left", "arrived", "travelled", "caught"],
       "answer": "left"
     }},
@@ -136,8 +133,8 @@ JSON formatı tam olarak şöyle olmalı:
       "id": 10,
       "level": "B2",
       "type": "reading",
-      "context_text": "Many people choose public transport not only because it is cheaper, but also because it reduces traffic and pollution. However, delays and crowded vehicles can make daily travel stressful.",
-      "question": "Metne göre toplu taşıma hakkında en doğru çıkarım hangisidir?",
+      "context_text": "Many people choose public transport not only because it is cheaper, but also because it reduces traffic and pollution.",
+      "question": "[{native_language} dilinde soru]",
       "options": [
         "It has both advantages and disadvantages",
         "It is always faster than driving",
@@ -150,8 +147,8 @@ JSON formatı tam olarak şöyle olmalı:
       "id": 14,
       "level": "C1",
       "type": "listening",
-      "context_text": "The speaker argues that remote work has improved flexibility, yet warns that long-term productivity depends on clearer communication and stronger boundaries between work and private life.",
-      "question": "Dinlediğin metne göre konuşmacının temel tutumu nedir?",
+      "context_text": "The speaker argues that remote work has improved flexibility, yet warns that long-term productivity depends on clearer communication.",
+      "question": "[{native_language} dilinde soru]",
       "options": [
         "Cautiously optimistic",
         "Completely negative",
@@ -173,6 +170,7 @@ SON KONTROL:
 - options içinde 4 seçenek olmalı.
 - answer options içindeki seçeneklerden biriyle birebir aynı olmalı.
 - Sorular özellikle A2 ve üstünde çok kolay olmamalı.
+- TÜM question alanları {native_language} dilinde olmalı!
 """
 
         models_to_try = [
