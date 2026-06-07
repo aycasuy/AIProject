@@ -264,5 +264,9 @@
   "learnBuildSentence": "Build your sentence",
   "learnTapWordsToBuildSentence": "Tap the words to build the sentence",
   "learnWords": "Words",
-  "learnTapAndOrder": "Tap and order"
+  "learnTapAndOrder": "Tap and order",
+  "learnWeakPointHunterTitle": "Zayıf Nokta Avcısı",
+  "learnWeakPointHunterDescription": "Yapay zeka, geçmişte hata yaptığın kelimeleri analiz ederek sana özel, zamana karşı bir okuma testi hazırlayacak. Meydan okumaya hazır mısın?",
+  "learnChallengeButton": "Meydan Oku!",
+  "learnModuleNotFound": "Modül bulunamadı."
 }
