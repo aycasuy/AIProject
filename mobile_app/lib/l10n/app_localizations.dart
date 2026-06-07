@@ -687,6 +687,174 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Sorular yüklenemedi. İnternetinizi kontrol edin.'**
   String get learnQuestionsCouldNotLoad;
+
+  /// No description provided for @learnNoBlankQuestions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu derste henüz boşluk doldurma sorusu yok.'**
+  String get learnNoBlankQuestions;
+
+  /// No description provided for @learnNoSentenceQuestions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu derste henüz cümle kurma sorusu yok.'**
+  String get learnNoSentenceQuestions;
+
+  /// No description provided for @learnNewQuestionsComing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni sorular eklendiğinde burada görünecek.'**
+  String get learnNewQuestionsComing;
+
+  /// No description provided for @learnGameOverTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hakların Doldu!'**
+  String get learnGameOverTitle;
+
+  /// No description provided for @learnGameOverBlankMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Biraz dinlen, canların yenilenince boşluk doldurmaya tekrar devam edebilirsin.'**
+  String get learnGameOverBlankMessage;
+
+  /// No description provided for @learnGameOverOrderMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Biraz dinlen, canların yenilenince tekrar devam edebilirsin.'**
+  String get learnGameOverOrderMessage;
+
+  /// No description provided for @learnNewLife.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni can: {time}'**
+  String learnNewLife(String time);
+
+  /// No description provided for @learnRefillLives.
+  ///
+  /// In tr, this message translates to:
+  /// **'300 XP ile Canları Fulle'**
+  String get learnRefillLives;
+
+  /// No description provided for @learnLivesRefilled.
+  ///
+  /// In tr, this message translates to:
+  /// **'Canlar Fullendi! Maceraya Devam 🚀'**
+  String get learnLivesRefilled;
+
+  /// No description provided for @learnPerfectTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mükemmel!'**
+  String get learnPerfectTitle;
+
+  /// No description provided for @learnBlankCompleted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm boşluk doldurma sorularını tamamladın.'**
+  String get learnBlankCompleted;
+
+  /// No description provided for @learnOrderCompleted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cümle kurma görevini başarıyla tamamladın.'**
+  String get learnOrderCompleted;
+
+  /// No description provided for @learnBlankTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boşluk Doldurma'**
+  String get learnBlankTitle;
+
+  /// No description provided for @learnSentenceOrderTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cümle Kurma'**
+  String get learnSentenceOrderTitle;
+
+  /// No description provided for @learnQuestionCounter.
+  ///
+  /// In tr, this message translates to:
+  /// **'{current} / {total} soru'**
+  String learnQuestionCounter(int current, int total);
+
+  /// No description provided for @learnCompleteMissingWord.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eksik kelimeyi tamamla'**
+  String get learnCompleteMissingWord;
+
+  /// No description provided for @learnAnswerInputHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cevabını buraya yaz...'**
+  String get learnAnswerInputHint;
+
+  /// No description provided for @learnWrongWordError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yanlış kelime, bir can gitti. Tekrar dene.'**
+  String get learnWrongWordError;
+
+  /// No description provided for @learnStuckHintText.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takılırsan ipucu alabilirsin.'**
+  String get learnStuckHintText;
+
+  /// No description provided for @learnGetHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'İpucu al'**
+  String get learnGetHint;
+
+  /// No description provided for @learnCheckAnswer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kontrol Et ✨'**
+  String get learnCheckAnswer;
+
+  /// No description provided for @learnSkipBlank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boşluğu dolduramadım, pas geç'**
+  String get learnSkipBlank;
+
+  /// No description provided for @learnSkipOrder.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cümleyi kuramadım, pas geç'**
+  String get learnSkipOrder;
+
+  /// No description provided for @learnTranslateFromNative.
+  ///
+  /// In tr, this message translates to:
+  /// **'{language} dilinden çevir'**
+  String learnTranslateFromNative(String language);
+
+  /// No description provided for @learnBuildSentence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cümleni oluştur'**
+  String get learnBuildSentence;
+
+  /// No description provided for @learnTapWordsToBuildSentence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelimelere dokunarak cümleyi kur'**
+  String get learnTapWordsToBuildSentence;
+
+  /// No description provided for @learnWords.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelimeler'**
+  String get learnWords;
+
+  /// No description provided for @learnTapAndOrder.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dokun ve sırala'**
+  String get learnTapAndOrder;
 }
 
 class _AppLocalizationsDelegate

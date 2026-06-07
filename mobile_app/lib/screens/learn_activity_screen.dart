@@ -1,5 +1,6 @@
 // lib/screens/learn_activity_screen.dart
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 import '../services/api_service.dart';
 import 'dart:async'; // 🌟 Timer kullanmak için şart!
 import '/widgets/ai_result_bottom_sheet.dart';
@@ -106,6 +107,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
   }
 
   void _showHintDialog(String correctAnswer) {
+    final loc = AppLocalizations.of(context)!;
     String cleanAnswer = correctAnswer.trim();
     String firstLetter = cleanAnswer.isNotEmpty
         ? cleanAnswer[0].toUpperCase()
@@ -117,12 +119,12 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: Colors.amber.shade50,
-        title: const Row(
+        title: Row(
           children: [
             Icon(Icons.lightbulb_circle, color: Colors.amber, size: 30),
             SizedBox(width: 10),
             Text(
-              "Sana Bir İpucu!",
+              loc.learnHintTitle,
               style: TextStyle(
                 color: Colors.brown,
                 fontWeight: FontWeight.bold,
@@ -131,7 +133,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
           ],
         ),
         content: Text(
-          "Cevap '$firstLetter' harfi ile başlıyor...\nVe tam $wordLength karakter uzunluğunda!",
+          loc.learnHintContent(firstLetter, wordLength),
           style: const TextStyle(fontSize: 18, color: Colors.black87),
         ),
         actions: [
@@ -140,8 +142,8 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
               setState(() => _showHintRobot = false);
               Navigator.pop(context);
             },
-            child: const Text(
-              "Teşekkürler!",
+            child: Text(
+              loc.learnHintThanks,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
@@ -226,7 +228,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
       final data = await ApiService.evaluateSentence(
         username: widget.username,
         targetLanguage: widget.targetLanguage,
-        nativeLanguage: "Turkish",
+        nativeLanguage: widget.nativeLanguage,
         originalSentence: _originalSentence,
         correctSentence: _correctSentence,
         submittedWords: _selectedWords,

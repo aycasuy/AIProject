@@ -188,7 +188,57 @@
   "learnBackToMap": "Haritaya Dön",
   "learnSwipeInstruction": "Öğrendiysen Sağa 👉  |  👈 Tekrar için Sola",
   "learnTapToSeeTranslation": "Çeviriyi görmek için dokun",
-  "learnQuestionsCouldNotLoad": "Sorular yüklenemedi. İnternetinizi kontrol edin."
+  "learnQuestionsCouldNotLoad": "Sorular yüklenemedi. İnternetinizi kontrol edin.",
+
+  "learnNoBlankQuestions": "Bu derste henüz boşluk doldurma sorusu yok.",
+  "learnNoSentenceQuestions": "Bu derste henüz cümle kurma sorusu yok.",
+  "learnNewQuestionsComing": "Yeni sorular eklendiğinde burada görünecek.",
+
+  "learnGameOverTitle": "Hakların Doldu!",
+  "learnGameOverBlankMessage": "Biraz dinlen, canların yenilenince boşluk doldurmaya tekrar devam edebilirsin.",
+  "learnGameOverOrderMessage": "Biraz dinlen, canların yenilenince tekrar devam edebilirsin.",
+  "learnNewLife": "Yeni can: {time}",
+  "@learnNewLife": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "learnRefillLives": "300 XP ile Canları Fulle",
+  "learnLivesRefilled": "Canlar Fullendi! Maceraya Devam 🚀",
+
+  "learnPerfectTitle": "Mükemmel!",
+  "learnBlankCompleted": "Tüm boşluk doldurma sorularını tamamladın.",
+  "learnOrderCompleted": "Cümle kurma görevini başarıyla tamamladın.",
+
+  "learnBlankTitle": "Boşluk Doldurma",
+  "learnSentenceOrderTitle": "Cümle Kurma",
+  "learnQuestionCounter": "{current} / {total} soru",
+  "@learnQuestionCounter": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "learnCompleteMissingWord": "Eksik kelimeyi tamamla",
+  "learnAnswerInputHint": "Cevabını buraya yaz...",
+  "learnWrongWordError": "Yanlış kelime, bir can gitti. Tekrar dene.",
+  "learnStuckHintText": "Takılırsan ipucu alabilirsin.",
+  "learnGetHint": "İpucu al",
+  "learnCheckAnswer": "Kontrol Et ✨",
+  "learnSkipBlank": "Boşluğu dolduramadım, pas geç",
+  "learnSkipOrder": "Cümleyi kuramadım, pas geç",
+
+  "learnTranslateFromNative": "{language} dilinden çevir",
+  "@learnTranslateFromNative": {
+    "placeholders": {
+      "language": { "type": "String" }
+    }
+  },
+  "learnBuildSentence": "Cümleni oluştur",
+  "learnTapWordsToBuildSentence": "Kelimelere dokunarak cümleyi kur",
+  "learnWords": "Kelimeler",
+  "learnTapAndOrder": "Dokun ve sırala"
 
 
 }
