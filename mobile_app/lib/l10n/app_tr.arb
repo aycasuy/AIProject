@@ -130,7 +130,29 @@
     "placeholders": {
       "error": { "type": "String" }
     }
-  }
+  },
+
+  "placementLoading": "Yapay Zeka Sınavını Hazırlıyor...",
+  "placementQuestion": "Soru {current}/{total}",
+  "@placementQuestion": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "placementNext": "Sonraki Soru",
+  "placementFinishedTitle": "Sınav Tamamlandı!",
+  "placementFinishedBody": "Harika iş çıkardın.\n\nBelirlenen Seviyen: {level}",
+  "@placementFinishedBody": {
+    "placeholders": {
+      "level": { "type": "String" }
+    }
+  },
+  "placementBackToMenu": "Ana Menüye Dön",
+  "placementListenButton": "Dinle",
+  "placementStopButton": "Durdur",
+  "placementListenInstruction": "Metni dinlemek için butona bas",
+  "placementNoQuestion": "Soru bulunamadı."
 
 
 }

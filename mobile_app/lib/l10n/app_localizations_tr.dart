@@ -253,4 +253,38 @@ class AppLocalizationsTr extends AppLocalizations {
   String connectionErrorWithDetail(String error) {
     return 'Bağlantı hatası: $error';
   }
+
+  @override
+  String get placementLoading => 'Yapay Zeka Sınavını Hazırlıyor...';
+
+  @override
+  String placementQuestion(int current, int total) {
+    return 'Soru $current/$total';
+  }
+
+  @override
+  String get placementNext => 'Sonraki Soru';
+
+  @override
+  String get placementFinishedTitle => 'Sınav Tamamlandı!';
+
+  @override
+  String placementFinishedBody(String level) {
+    return 'Harika iş çıkardın.\n\nBelirlenen Seviyen: $level';
+  }
+
+  @override
+  String get placementBackToMenu => 'Ana Menüye Dön';
+
+  @override
+  String get placementListenButton => 'Dinle';
+
+  @override
+  String get placementStopButton => 'Durdur';
+
+  @override
+  String get placementListenInstruction => 'Metni dinlemek için butona bas';
+
+  @override
+  String get placementNoQuestion => 'Soru bulunamadı.';
 }

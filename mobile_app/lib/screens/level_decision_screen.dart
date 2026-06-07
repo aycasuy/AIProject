@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'placement_test_screen.dart';
 import 'main_navigation.dart';
+import '../l10n/app_localizations.dart';
 
 class LevelDecisionScreen extends StatefulWidget {
   final String username;
@@ -25,6 +26,8 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
   bool _isLoading = false;
 
   Future<void> _startFromScratch() async {
+    final loc = AppLocalizations.of(context)!;
+
     setState(() => _isLoading = true);
 
     try {
@@ -62,13 +65,13 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text("Seviye kaydedilemedi!")));
+        ).showSnackBar(SnackBar(content: Text(loc.levelSaveFailed)));
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Bağlantı hatası: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(loc.connectionErrorWithDetail(e.toString()))),
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -126,6 +129,8 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
   }
 
   Widget _buildHeader() {
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         Container(
@@ -153,10 +158,10 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
           ),
         ),
         const SizedBox(height: 24),
-        const Text(
-          "Yolculuğun Başlıyor!",
+        Text(
+          loc.levelJourneyTitle,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFF1F2937),
             fontSize: 30,
             fontWeight: FontWeight.w900,
@@ -165,7 +170,7 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
         ),
         const SizedBox(height: 10),
         Text(
-          "${widget.selectedLanguage} öğrenirken sana en uygun başlangıcı seçelim.",
+          loc.levelJourneySubtitle(widget.selectedLanguage),
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: Color(0xFF6B7280),
@@ -179,6 +184,8 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
   }
 
   Widget _buildInfoCard() {
+    final loc = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -193,20 +200,20 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
           ),
         ],
       ),
-      child: const Column(
+      child: Column(
         children: [
           _InfoRow(
             icon: Icons.flag_rounded,
-            iconColor: Color(0xFF06D6A0),
-            title: "A1’den başlayabilirsin",
-            subtitle: "Temelden ilerleyip tüm modülleri sırayla açarsın.",
+            iconColor: const Color(0xFF06D6A0),
+            title: loc.startFromA1Title,
+            subtitle: loc.startFromA1Subtitle,
           ),
-          SizedBox(height: 14),
+          const SizedBox(height: 14),
           _InfoRow(
             icon: Icons.quiz_rounded,
-            iconColor: Color(0xFF118AB2),
-            title: "Seviye testi çözebilirsin",
-            subtitle: "Sana uygun seviyeyi kısa bir test ile belirleriz.",
+            iconColor: const Color(0xFF118AB2),
+            title: loc.placementInfoTitle,
+            subtitle: loc.placementInfoSubtitle,
           ),
         ],
       ),
@@ -214,6 +221,8 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
   }
 
   Widget _buildStartButton() {
+    final loc = AppLocalizations.of(context)!;
+
     if (_isLoading) {
       return Container(
         height: 64,
@@ -237,9 +246,9 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
     return ElevatedButton.icon(
       onPressed: _startFromScratch,
       icon: const Icon(Icons.play_arrow_rounded, color: Colors.white),
-      label: const Text(
-        "Sıfırdan Başlayalım (A1)",
-        style: TextStyle(
+      label: Text(
+        loc.startFromScratchA1,
+        style: const TextStyle(
           fontSize: 17,
           color: Colors.white,
           fontWeight: FontWeight.w900,
@@ -256,12 +265,14 @@ class _LevelDecisionScreenState extends State<LevelDecisionScreen> {
   }
 
   Widget _buildTestButton() {
+    final loc = AppLocalizations.of(context)!;
+
     return OutlinedButton.icon(
       onPressed: _isLoading ? null : _goToPlacementTest,
       icon: const Icon(Icons.psychology_alt_rounded),
-      label: const Text(
-        "Seviyemi Biliyorum / Test Et",
-        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
+      label: Text(
+        loc.knowMyLevelTest,
+        style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
       ),
       style: OutlinedButton.styleFrom(
         foregroundColor: const Color(0xFF118AB2),

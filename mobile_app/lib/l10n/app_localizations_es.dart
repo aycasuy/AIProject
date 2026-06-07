@@ -222,38 +222,72 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get levelJourneyTitle => 'Yolculuğun Başlıyor!';
+  String get levelJourneyTitle => '¡Tu viaje comienza!';
 
   @override
   String levelJourneySubtitle(String language) {
-    return '$language öğrenirken sana en uygun başlangıcı seçelim.';
+    return 'Elijamos el mejor punto de inicio para ti mientras aprendes $language.';
   }
 
   @override
-  String get startFromA1Title => 'A1’den başlayabilirsin';
+  String get startFromA1Title => 'Puedes empezar desde A1';
 
   @override
   String get startFromA1Subtitle =>
-      'Temelden ilerleyip tüm modülleri sırayla açarsın.';
+      'Avanza desde lo básico y desbloquea todos los módulos paso a paso.';
 
   @override
-  String get placementInfoTitle => 'Seviye testi çözebilirsin';
+  String get placementInfoTitle => 'Puedes hacer una prueba de nivel';
 
   @override
   String get placementInfoSubtitle =>
-      'Sana uygun seviyeyi kısa bir test ile belirleriz.';
+      'Determinaremos tu nivel adecuado con una prueba corta.';
 
   @override
-  String get startFromScratchA1 => 'Sıfırdan Başlayalım (A1)';
+  String get startFromScratchA1 => 'Empecemos desde cero (A1)';
 
   @override
-  String get knowMyLevelTest => 'Seviyemi Biliyorum / Test Et';
+  String get knowMyLevelTest => 'Sé mi nivel / Hacer prueba';
 
   @override
-  String get levelSaveFailed => 'Seviye kaydedilemedi!';
+  String get levelSaveFailed => '¡No se pudo guardar el nivel!';
 
   @override
   String connectionErrorWithDetail(String error) {
-    return 'Bağlantı hatası: $error';
+    return 'Error de conexión: $error';
   }
+
+  @override
+  String get placementLoading => 'Yapay Zeka Sınavını Hazırlıyor...';
+
+  @override
+  String placementQuestion(int current, int total) {
+    return 'Soru $current/$total';
+  }
+
+  @override
+  String get placementNext => 'Sonraki Soru';
+
+  @override
+  String get placementFinishedTitle => 'Sınav Tamamlandı!';
+
+  @override
+  String placementFinishedBody(String level) {
+    return 'Harika iş çıkardın.\n\nBelirlenen Seviyen: $level';
+  }
+
+  @override
+  String get placementBackToMenu => 'Ana Menüye Dön';
+
+  @override
+  String get placementListenButton => 'Dinle';
+
+  @override
+  String get placementStopButton => 'Durdur';
+
+  @override
+  String get placementListenInstruction => 'Metni dinlemek için butona bas';
+
+  @override
+  String get placementNoQuestion => 'Soru bulunamadı.';
 }

@@ -543,6 +543,66 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bağlantı hatası: {error}'**
   String connectionErrorWithDetail(String error);
+
+  /// No description provided for @placementLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yapay Zeka Sınavını Hazırlıyor...'**
+  String get placementLoading;
+
+  /// No description provided for @placementQuestion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soru {current}/{total}'**
+  String placementQuestion(int current, int total);
+
+  /// No description provided for @placementNext.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonraki Soru'**
+  String get placementNext;
+
+  /// No description provided for @placementFinishedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınav Tamamlandı!'**
+  String get placementFinishedTitle;
+
+  /// No description provided for @placementFinishedBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika iş çıkardın.\n\nBelirlenen Seviyen: {level}'**
+  String placementFinishedBody(String level);
+
+  /// No description provided for @placementBackToMenu.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana Menüye Dön'**
+  String get placementBackToMenu;
+
+  /// No description provided for @placementListenButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dinle'**
+  String get placementListenButton;
+
+  /// No description provided for @placementStopButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Durdur'**
+  String get placementStopButton;
+
+  /// No description provided for @placementListenInstruction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Metni dinlemek için butona bas'**
+  String get placementListenInstruction;
+
+  /// No description provided for @placementNoQuestion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soru bulunamadı.'**
+  String get placementNoQuestion;
 }
 
 class _AppLocalizationsDelegate
