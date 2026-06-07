@@ -168,8 +168,8 @@
   "placementStopButton": "Stop",
   "placementListenInstruction": "Press the button to listen to the text",
   "placementNoQuestion": "No questions found.",
-  "learnHintTitle": "Sana Bir İpucu!",
-  "learnHintContent": "Cevap '{firstLetter}' harfi ile başlıyor...\nVe tam {length} karakter uzunluğunda!",
+  "learnHintTitle": "Here's a Hint!",
+  "learnHintContent": "The answer starts with the letter '{firstLetter}'...\\nAnd it is exactly {length} characters long!",
   "@learnHintContent": {
     "placeholders": {
       "firstLetter": {
@@ -180,9 +180,9 @@
       }
     }
   },
-  "learnHintThanks": "Teşekkürler!",
-  "learnHintBubble": "İpucu?",
-  "learnCorrectAnswer": "Doğru Cevap: {answer}",
+  "learnHintThanks": "Thanks!",
+  "learnHintBubble": "Hint?",
+  "learnCorrectAnswer": "Correct Answer: {answer}",
   "@learnCorrectAnswer": {
     "placeholders": {
       "answer": {
@@ -190,7 +190,7 @@
       }
     }
   },
-  "learnGenericError": "Hata: {error}",
+  "learnGenericError": "Error: {error}",
   "@learnGenericError": {
     "placeholders": {
       "error": {
@@ -198,10 +198,10 @@
       }
     }
   },
-  "learnNoCards": "Bu derste henüz kart bulunmuyor.",
-  "learnGreatJob": "Harika İş!",
-  "learnDeckCompleted": "Kelime destesini tamamladın.",
-  "learnWordsAddedToVocabulary": "{count} kelime 'Kelime Defteri'ne eklendi. 📚",
+  "learnNoCards": "There are no cards in this lesson yet.",
+  "learnGreatJob": "Great Job!",
+  "learnDeckCompleted": "You completed the word deck.",
+  "learnWordsAddedToVocabulary": "{count} words were added to your Vocabulary Notebook. 📚",
   "@learnWordsAddedToVocabulary": {
     "placeholders": {
       "count": {
@@ -209,8 +209,8 @@
       }
     }
   },
-  "learnBackToMap": "Haritaya Dön",
-  "learnSwipeInstruction": "Öğrendiysen Sağa 👉  |  👈 Tekrar için Sola",
-  "learnTapToSeeTranslation": "Çeviriyi görmek için dokun",
-  "learnQuestionsCouldNotLoad": "Sorular yüklenemedi. İnternetinizi kontrol edin."
+  "learnBackToMap": "Back to Map",
+  "learnSwipeInstruction": "Swipe right if you learned it 👉 | 👈 Swipe left to review",
+  "learnTapToSeeTranslation": "Tap to see the translation",
+  "learnQuestionsCouldNotLoad": "Questions could not be loaded. Please check your internet connection."
 }
