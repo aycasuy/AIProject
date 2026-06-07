@@ -141,8 +141,8 @@
       }
     }
   },
-  "placementLoading": "Yapay Zeka Sınavını Hazırlıyor...",
-  "placementQuestion": "Soru {current}/{total}",
+  "placementLoading": "Preparando tu prueba de nivel con IA...",
+  "placementQuestion": "Pregunta {current}/{total}",
   "@placementQuestion": {
     "placeholders": {
       "current": {
@@ -153,9 +153,9 @@
       }
     }
   },
-  "placementNext": "Sonraki Soru",
-  "placementFinishedTitle": "Sınav Tamamlandı!",
-  "placementFinishedBody": "Harika iş çıkardın.\n\nBelirlenen Seviyen: {level}",
+  "placementNext": "Siguiente pregunta",
+  "placementFinishedTitle": "¡Prueba completada!",
+  "placementFinishedBody": "Buen trabajo\n\nNivel determinado: {level}",
   "@placementFinishedBody": {
     "placeholders": {
       "level": {
@@ -163,9 +163,9 @@
       }
     }
   },
-  "placementBackToMenu": "Ana Menüye Dön",
-  "placementListenButton": "Dinle",
-  "placementStopButton": "Durdur",
-  "placementListenInstruction": "Metni dinlemek için butona bas",
-  "placementNoQuestion": "Soru bulunamadı."
+  "placementBackToMenu": "Volver al menú principal",
+  "placementListenButton": "Escuchar",
+  "placementStopButton": "Detener",
+  "placementListenInstruction": "Pulsa el botón para escuchar el texto",
+  "placementNoQuestion": "No se encontraron preguntas."
 }
