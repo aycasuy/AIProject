@@ -437,4 +437,17 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get learnTapAndOrder => 'Dokun ve sırala';
+
+  @override
+  String get learnWeakPointHunterTitle => 'Zayıf Nokta Avcısı';
+
+  @override
+  String get learnWeakPointHunterDescription =>
+      'Yapay zeka, geçmişte hata yaptığın kelimeleri analiz ederek sana özel, zamana karşı bir okuma testi hazırlayacak. Meydan okumaya hazır mısın?';
+
+  @override
+  String get learnChallengeButton => 'Meydan Oku!';
+
+  @override
+  String get learnModuleNotFound => 'Modül bulunamadı.';
 }

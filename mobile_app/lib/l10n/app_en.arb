@@ -264,5 +264,10 @@
   "learnBuildSentence": "Build your sentence",
   "learnTapWordsToBuildSentence": "Tap the words to build the sentence",
   "learnWords": "Words",
-  "learnTapAndOrder": "Tap and order"
+  "learnTapAndOrder": "Tap and order",
+
+  "learnWeakPointHunterTitle": "Weak Point Hunter",
+  "learnWeakPointHunterDescription": "AI will analyze the words you previously struggled with and prepare a personalized timed reading quiz for you. Are you ready for the challenge?",
+  "learnChallengeButton": "Start Challenge!",
+  "learnModuleNotFound": "Module not found."
 }

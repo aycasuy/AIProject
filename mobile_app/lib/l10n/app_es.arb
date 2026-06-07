@@ -264,5 +264,10 @@
   "learnBuildSentence": "Forma tu oración",
   "learnTapWordsToBuildSentence": "Toca las palabras para formar la oración",
   "learnWords": "Palabras",
-  "learnTapAndOrder": "Tocar y ordenar"
+  "learnTapAndOrder": "Tocar y ordenar",
+
+  "learnWeakPointHunterTitle": "Cazador de puntos débiles",
+  "learnWeakPointHunterDescription": "La IA analizará las palabras en las que cometiste errores antes y preparará una prueba de lectura cronometrada personalizada para ti. ¿Aceptas el desafío?",
+  "learnChallengeButton": "¡Aceptar el desafío!",
+  "learnModuleNotFound": "Módulo no encontrado."
 }

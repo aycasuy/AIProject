@@ -292,152 +292,165 @@ class AppLocalizationsEn extends AppLocalizations {
   String get placementNoQuestion => 'No questions found.';
 
   @override
-  String get learnHintTitle => 'Sana Bir İpucu!';
+  String get learnHintTitle => 'Here\'s a Hint!';
 
   @override
   String learnHintContent(String firstLetter, int length) {
-    return 'Cevap \'$firstLetter\' harfi ile başlıyor...\nVe tam $length karakter uzunluğunda!';
+    return 'The answer starts with the letter \'$firstLetter\'...\\nAnd it is exactly $length characters long!';
   }
 
   @override
-  String get learnHintThanks => 'Teşekkürler!';
+  String get learnHintThanks => 'Thanks!';
 
   @override
-  String get learnHintBubble => 'İpucu?';
+  String get learnHintBubble => 'Hint?';
 
   @override
   String learnCorrectAnswer(String answer) {
-    return 'Doğru Cevap: $answer';
+    return 'Correct Answer: $answer';
   }
 
   @override
   String learnGenericError(String error) {
-    return 'Hata: $error';
+    return 'Error: $error';
   }
 
   @override
-  String get learnNoCards => 'Bu derste henüz kart bulunmuyor.';
+  String get learnNoCards => 'There are no cards in this lesson yet.';
 
   @override
-  String get learnGreatJob => 'Harika İş!';
+  String get learnGreatJob => 'Great Job!';
 
   @override
-  String get learnDeckCompleted => 'Kelime destesini tamamladın.';
+  String get learnDeckCompleted => 'You completed the word deck.';
 
   @override
   String learnWordsAddedToVocabulary(int count) {
-    return '$count kelime \'Kelime Defteri\'ne eklendi. 📚';
+    return '$count words were added to your Vocabulary Notebook. 📚';
   }
 
   @override
-  String get learnBackToMap => 'Haritaya Dön';
+  String get learnBackToMap => 'Back to Map';
 
   @override
   String get learnSwipeInstruction =>
-      'Öğrendiysen Sağa 👉  |  👈 Tekrar için Sola';
+      'Swipe right if you learned it 👉 | 👈 Swipe left to review';
 
   @override
-  String get learnTapToSeeTranslation => 'Çeviriyi görmek için dokun';
+  String get learnTapToSeeTranslation => 'Tap to see the translation';
 
   @override
   String get learnQuestionsCouldNotLoad =>
-      'Sorular yüklenemedi. İnternetinizi kontrol edin.';
+      'Questions could not be loaded. Please check your internet connection.';
 
   @override
   String get learnNoBlankQuestions =>
-      'Bu derste henüz boşluk doldurma sorusu yok.';
+      'There are no fill-in-the-blank questions in this lesson yet.';
 
   @override
   String get learnNoSentenceQuestions =>
-      'Bu derste henüz cümle kurma sorusu yok.';
+      'There are no sentence building questions in this lesson yet.';
 
   @override
   String get learnNewQuestionsComing =>
-      'Yeni sorular eklendiğinde burada görünecek.';
+      'New questions will appear here when added.';
 
   @override
-  String get learnGameOverTitle => 'Hakların Doldu!';
+  String get learnGameOverTitle => 'Out of Lives!';
 
   @override
   String get learnGameOverBlankMessage =>
-      'Biraz dinlen, canların yenilenince boşluk doldurmaya tekrar devam edebilirsin.';
+      'Rest a bit, you can continue filling in the blanks when your lives refill.';
 
   @override
   String get learnGameOverOrderMessage =>
-      'Biraz dinlen, canların yenilenince tekrar devam edebilirsin.';
+      'Rest a bit, you can continue again when your lives refill.';
 
   @override
   String learnNewLife(String time) {
-    return 'Yeni can: $time';
+    return 'New life in: $time';
   }
 
   @override
-  String get learnRefillLives => '300 XP ile Canları Fulle';
+  String get learnRefillLives => 'Refill Lives for 300 XP';
 
   @override
-  String get learnLivesRefilled => 'Canlar Fullendi! Maceraya Devam 🚀';
+  String get learnLivesRefilled => 'Lives Refilled! Adventure Continues 🚀';
 
   @override
-  String get learnPerfectTitle => 'Mükemmel!';
+  String get learnPerfectTitle => 'Perfect!';
 
   @override
   String get learnBlankCompleted =>
-      'Tüm boşluk doldurma sorularını tamamladın.';
+      'You completed all fill-in-the-blank questions.';
 
   @override
   String get learnOrderCompleted =>
-      'Cümle kurma görevini başarıyla tamamladın.';
+      'You successfully completed the sentence building task.';
 
   @override
-  String get learnBlankTitle => 'Boşluk Doldurma';
+  String get learnBlankTitle => 'Fill in the Blanks';
 
   @override
-  String get learnSentenceOrderTitle => 'Cümle Kurma';
+  String get learnSentenceOrderTitle => 'Sentence Building';
 
   @override
   String learnQuestionCounter(int current, int total) {
-    return '$current / $total soru';
+    return '$current / $total questions';
   }
 
   @override
-  String get learnCompleteMissingWord => 'Eksik kelimeyi tamamla';
+  String get learnCompleteMissingWord => 'Complete the missing word';
 
   @override
-  String get learnAnswerInputHint => 'Cevabını buraya yaz...';
+  String get learnAnswerInputHint => 'Type your answer here...';
 
   @override
-  String get learnWrongWordError =>
-      'Yanlış kelime, bir can gitti. Tekrar dene.';
+  String get learnWrongWordError => 'Wrong word, you lost a life. Try again.';
 
   @override
-  String get learnStuckHintText => 'Takılırsan ipucu alabilirsin.';
+  String get learnStuckHintText => 'You can get a hint if you\'re stuck.';
 
   @override
-  String get learnGetHint => 'İpucu al';
+  String get learnGetHint => 'Get a hint';
 
   @override
-  String get learnCheckAnswer => 'Kontrol Et ✨';
+  String get learnCheckAnswer => 'Check ✨';
 
   @override
-  String get learnSkipBlank => 'Boşluğu dolduramadım, pas geç';
+  String get learnSkipBlank => 'I couldn\'t fill the blank, skip it';
 
   @override
-  String get learnSkipOrder => 'Cümleyi kuramadım, pas geç';
+  String get learnSkipOrder => 'I couldn\'t build the sentence, skip it';
 
   @override
   String learnTranslateFromNative(String language) {
-    return '$language dilinden çevir';
+    return 'Translate from $language';
   }
 
   @override
-  String get learnBuildSentence => 'Cümleni oluştur';
+  String get learnBuildSentence => 'Build your sentence';
 
   @override
-  String get learnTapWordsToBuildSentence => 'Kelimelere dokunarak cümleyi kur';
+  String get learnTapWordsToBuildSentence =>
+      'Tap the words to build the sentence';
 
   @override
-  String get learnWords => 'Kelimeler';
+  String get learnWords => 'Words';
 
   @override
-  String get learnTapAndOrder => 'Dokun ve sırala';
+  String get learnTapAndOrder => 'Tap and order';
+
+  @override
+  String get learnWeakPointHunterTitle => 'Weak Point Hunter';
+
+  @override
+  String get learnWeakPointHunterDescription =>
+      'AI will analyze the words you previously struggled with and prepare a personalized timed reading quiz for you. Are you ready for the challenge?';
+
+  @override
+  String get learnChallengeButton => 'Start Challenge!';
+
+  @override
+  String get learnModuleNotFound => 'Module not found.';
 }
