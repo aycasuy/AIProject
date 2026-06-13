@@ -338,5 +338,49 @@
   "pronunciationWordsToWatch": "Words you should pay attention to:",
   "pronunciationNextText": "Next Text 🚀",
   "pronunciationAmazing": "Amazing! 🚀",
-  "pronunciationRetry": "Try Again 🔄"
+  "pronunciationRetry": "Try Again 🔄",
+  "listeningCoachTitle": "Dinleme Koçu 🎧",
+  "listeningRound": "Metin {current} / {total}",
+  "@listeningRound": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "listeningWriteAndCheck": "Duyduğunu yaz ve kontrol et",
+  "listeningListenFirst": "Önce sesi dinle",
+  "listeningInstruction": "Robotu dinle ve duyduğunu yaz",
+  "listeningPlaying": "Dinleniyor...",
+  "listeningPlayAudio": "Sesi Çal",
+  "listeningInputLockedInfo": "Sesi çaldıktan sonra yazma alanı açılacak.",
+  "listeningWriteWhatYouHear": "Duyduklarını yaz",
+  "listeningReplay": "Tekrar dinle",
+  "listeningInputHint": "Duyduğun cümleyi buraya yaz...",
+  "listeningCheck": "Kontrol Et 🎯",
+  "listeningTextLoadFailed": "Dinleme metni yüklenemedi.",
+  "listeningCheckConnection": "Bağlantını kontrol edip tekrar deneyebilirsin.",
+  "listeningRetryLoad": "Tekrar Dene",
+  "listeningGameOverMessage": "Biraz dinlen, canların yenilenince dinleme görevine tekrar devam edebilirsin.",
+  "listeningSuccessTitle": "Kulağın Çok İyi!",
+  "listeningSuccessMessage": "Tüm dinleme görevlerini başarıyla tamamladın.",
+  "listeningEvaluationCompleted": "Değerlendirme tamamlandı.",
+  "listeningSuccessResult": "Harika dinledin!",
+  "listeningTryAgainResult": "Bir kez daha deneyelim",
+  "listeningXpEarned": "+{xp} XP Kazandın!",
+  "@listeningXpEarned": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "listeningLifeLost": "1 Can Gitti",
+  "listeningMissedWords": "Kaçırdığın veya yanlış yazdığın kelimeler:",
+  "listeningNextText": "Sıradaki Metin 🚀",
+  "listeningAmazing": "Muhteşem! 🚀",
+  "listeningTryAgainButton": "Tekrar Dene 🔄"
 }
