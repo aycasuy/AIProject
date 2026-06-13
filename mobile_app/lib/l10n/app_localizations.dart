@@ -879,6 +879,102 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Modül bulunamadı.'**
   String get learnModuleNotFound;
+
+  /// No description provided for @minimalPairsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telaffuz & Ses Çiftleri'**
+  String get minimalPairsTitle;
+
+  /// No description provided for @minimalPairsNoPairs.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu ders için ses çifti bulunamadı.'**
+  String get minimalPairsNoPairs;
+
+  /// No description provided for @minimalPairsStep.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adım {current} / {total}'**
+  String minimalPairsStep(int current, int total);
+
+  /// No description provided for @minimalPairsListenDifference.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aralarındaki farkı dinle'**
+  String get minimalPairsListenDifference;
+
+  /// No description provided for @minimalPairsSayNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi sen söyle:'**
+  String get minimalPairsSayNow;
+
+  /// No description provided for @minimalPairsAnalyzing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Analiz ediliyor... 🤖'**
+  String get minimalPairsAnalyzing;
+
+  /// No description provided for @minimalPairsConnectionRetry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı hatası, tekrar dener misin?'**
+  String get minimalPairsConnectionRetry;
+
+  /// No description provided for @minimalPairsNoVoice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sesini alamadım.'**
+  String get minimalPairsNoVoice;
+
+  /// No description provided for @minimalPairsGreatPronunciation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika telaffuz! 🎯'**
+  String get minimalPairsGreatPronunciation;
+
+  /// No description provided for @minimalPairsPerfectPronunciation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika! Kusursuz telaffuz.'**
+  String get minimalPairsPerfectPronunciation;
+
+  /// No description provided for @minimalPairsCoachNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Koçun Notu:'**
+  String get minimalPairsCoachNote;
+
+  /// No description provided for @minimalPairsHoldToSpeak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konuşmak için basılı tut'**
+  String get minimalPairsHoldToSpeak;
+
+  /// No description provided for @minimalPairsSkip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Söyleyemedim, pas geç 🤔'**
+  String get minimalPairsSkip;
+
+  /// No description provided for @minimalPairsContinue.
+  ///
+  /// In tr, this message translates to:
+  /// **'DEVAM ET'**
+  String get minimalPairsContinue;
+
+  /// No description provided for @minimalPairsAddedPractice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime pratik listene eklendi! 📚 (1 Can gitti)'**
+  String get minimalPairsAddedPractice;
+
+  /// No description provided for @minimalPairsGameOverMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Üzgünüm, telaffuz pratiğinde çok hata yaptın. 300 XP harcayarak canlarını fulleyebilir veya haritaya dönebilirsin.'**
+  String get minimalPairsGameOverMessage;
 }
 
 class _AppLocalizationsDelegate

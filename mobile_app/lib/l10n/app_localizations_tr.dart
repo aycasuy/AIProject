@@ -450,4 +450,57 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get learnModuleNotFound => 'Modül bulunamadı.';
+
+  @override
+  String get minimalPairsTitle => 'Telaffuz & Ses Çiftleri';
+
+  @override
+  String get minimalPairsNoPairs => 'Bu ders için ses çifti bulunamadı.';
+
+  @override
+  String minimalPairsStep(int current, int total) {
+    return 'Adım $current / $total';
+  }
+
+  @override
+  String get minimalPairsListenDifference => 'Aralarındaki farkı dinle';
+
+  @override
+  String get minimalPairsSayNow => 'Şimdi sen söyle:';
+
+  @override
+  String get minimalPairsAnalyzing => 'Analiz ediliyor... 🤖';
+
+  @override
+  String get minimalPairsConnectionRetry =>
+      'Bağlantı hatası, tekrar dener misin?';
+
+  @override
+  String get minimalPairsNoVoice => 'Sesini alamadım.';
+
+  @override
+  String get minimalPairsGreatPronunciation => 'Harika telaffuz! 🎯';
+
+  @override
+  String get minimalPairsPerfectPronunciation => 'Harika! Kusursuz telaffuz.';
+
+  @override
+  String get minimalPairsCoachNote => 'Koçun Notu:';
+
+  @override
+  String get minimalPairsHoldToSpeak => 'Konuşmak için basılı tut';
+
+  @override
+  String get minimalPairsSkip => 'Söyleyemedim, pas geç 🤔';
+
+  @override
+  String get minimalPairsContinue => 'DEVAM ET';
+
+  @override
+  String get minimalPairsAddedPractice =>
+      'Kelime pratik listene eklendi! 📚 (1 Can gitti)';
+
+  @override
+  String get minimalPairsGameOverMessage =>
+      'Üzgünüm, telaffuz pratiğinde çok hata yaptın. 300 XP harcayarak canlarını fulleyebilir veya haritaya dönebilirsin.';
 }

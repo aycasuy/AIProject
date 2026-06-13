@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/services/api_service.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:http/http.dart' as http;
@@ -89,12 +90,43 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
     }
   }
 
+  String _getTtsLanguageCode(String language) {
+    switch (language.toLowerCase()) {
+      case "english":
+        return "en-US";
+      case "spanish":
+        return "es-ES";
+      case "french":
+        return "fr-FR";
+      case "german":
+        return "de-DE";
+      case "turkish":
+        return "tr-TR";
+      default:
+        return "en-US";
+    }
+  }
+
+  String _getSpeechLocaleId(String language) {
+    switch (language.toLowerCase()) {
+      case "english":
+        return "en_US";
+      case "spanish":
+        return "es_ES";
+      case "french":
+        return "fr_FR";
+      case "german":
+        return "de_DE";
+      case "turkish":
+        return "tr_TR";
+      default:
+        return "en_US";
+    }
+  }
+
   // Okuma motorunu İngilizceye ayarla
   Future<void> _initTts() async {
-    final String ttsLanguage = widget.targetLanguage == "Spanish"
-        ? "es-ES"
-        : "en-US";
-    await _flutterTts.setLanguage(ttsLanguage);
+    await _flutterTts.setLanguage(_getTtsLanguageCode(widget.targetLanguage));
     await _flutterTts.setSpeechRate(0.4);
     await _flutterTts.setPitch(1.0);
   }
@@ -142,9 +174,7 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
       );
       if (available) {
         setState(() => _isListening = true);
-        final String localeId = widget.targetLanguage == "Spanish"
-            ? "es_ES"
-            : "en_US";
+        final String localeId = _getSpeechLocaleId(widget.targetLanguage);
         _speech.listen(
           listenOptions: stt.SpeechListenOptions(
             localeId: localeId, // 👈 yeni yol
@@ -165,64 +195,95 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
 
   // 🌟 Telaffuzu Kontrol Et ve Koça Sor (YENİLENMİŞ AKILLI YAPI)
   Future<void> _checkAnswer() async {
-    final currentPair = _pairsList[_currentIndex];
-    final targetWord = _targetWordIndex == 0
-        ? currentPair['word_1']
-        : currentPair['word_2'];
+    final loc = AppLocalizations.of(context)!;
 
-    // 1. Flutter'ın Kendi Kontrolü
-    bool isMatch = _recognizedText.toLowerCase().contains(
-      targetWord.toLowerCase(),
-    );
+    if (_pairsList.isEmpty || _currentIndex >= _pairsList.length) {
+      return;
+    }
+
+    final currentPair = _pairsList[_currentIndex];
+
+    final String targetWord =
+        (_targetWordIndex == 0 ? currentPair['word_1'] : currentPair['word_2'])
+            .toString();
+
+    final String recognizedText = _recognizedText.trim();
+
+    // Flutter tarafında doğrudan eşleşme kontrolü
+    final bool isMatch = recognizedText
+        .toLowerCase()
+        .split(RegExp(r'\s+'))
+        .contains(targetWord.trim().toLowerCase());
 
     setState(() {
       _isListening = false;
-      _speech.stop();
       _isAnswerChecked = true;
-      _aiFeedback = "Analiz ediliyor... 🤖";
+      _aiFeedback = loc.minimalPairsAnalyzing;
     });
 
+    await _speech.stop();
+
     if (isMatch) {
-      // Birebir eşleşti, Python'a sormaya gerek yok!
+      // Doğrudan eşleştiyse backend çağrısı yapmaya gerek yok.
       await _processCorrectAnswer(currentPair);
-    } else if (_recognizedText.isNotEmpty) {
-      // 🌟 EŞLEŞMEDİYSE HEMEN CAN DÜŞÜRME! Önce Python'daki hilemize (Fuzzy Match) sor:
-      try {
-        final url = Uri.parse(
-          'http://10.0.2.2:8000/get_pronunciation_feedback',
-        );
-        final response = await http.post(
-          url,
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode({
-            "target_word": targetWord,
-            "spoken_word": _recognizedText,
-            "native_language": widget.nativeLanguage,
-            "target_language": widget.targetLanguage,
-          }),
-        );
+      return;
+    }
 
-        if (response.statusCode == 200) {
-          final data = jsonDecode(utf8.decode(response.bodyBytes));
-          String feedback = data['feedback'] ?? "";
+    if (recognizedText.isEmpty) {
+      if (!mounted) return;
 
-          // 🌟 PYTHON HİLESİ DEVREYE GİRDİYSE (Kabul edilebilir bir hata ise)
-          if (feedback.contains("Mükemmel telaffuz")) {
-            await _processCorrectAnswer(currentPair);
-          } else {
-            // GERÇEKTEN YANLIŞ OKUNMUŞ. ŞİMDİ CAN DÜŞÜREBİLİRİZ!
-            await _processWrongAnswer(feedback, currentPair);
-          }
-        } else {
-          setState(() => _aiFeedback = "Bağlantı hatası, tekrar dener misin?");
-        }
-      } catch (e) {
-        setState(() => _aiFeedback = "Bağlantı hatası, tekrar dener misin?");
-      }
-    } else {
       setState(() {
         _isCorrect = false;
-        _aiFeedback = "Sesini alamadım.";
+        _aiFeedback = loc.minimalPairsNoVoice;
+      });
+
+      return;
+    }
+
+    try {
+      final url = Uri.parse('http://10.0.2.2:8000/get_pronunciation_feedback');
+
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "target_word": targetWord,
+          "spoken_word": recognizedText,
+          "native_language": widget.nativeLanguage,
+          "target_language": widget.targetLanguage,
+        }),
+      );
+
+      if (!mounted) return;
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(
+          utf8.decode(response.bodyBytes),
+        );
+
+        final bool isCorrect = data['is_correct'] == true;
+        final String feedback = (data['feedback'] ?? '').toString().trim();
+
+        if (isCorrect) {
+          await _processCorrectAnswer(currentPair);
+        } else {
+          await _processWrongAnswer(
+            feedback.isNotEmpty ? feedback : loc.minimalPairsConnectionRetry,
+            currentPair,
+          );
+        }
+      } else {
+        setState(() {
+          _isCorrect = false;
+          _aiFeedback = loc.minimalPairsConnectionRetry;
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _isCorrect = false;
+        _aiFeedback = loc.minimalPairsConnectionRetry;
       });
     }
   }
@@ -231,7 +292,9 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
   Future<void> _processCorrectAnswer(dynamic currentPair) async {
     setState(() {
       _isCorrect = true;
-      _aiFeedback = "Harika telaffuz! 🎯";
+      _aiFeedback = AppLocalizations.of(
+        context,
+      )!.minimalPairsGreatPronunciation;
     });
 
     if (widget.isPracticeMode) {
@@ -311,8 +374,8 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-              "Kelime pratik listene eklendi! 📚 (1 Can gitti)",
+            content: Text(
+              AppLocalizations.of(context)!.minimalPairsAddedPractice,
             ),
             backgroundColor: Colors.orange.shade700,
             duration: const Duration(seconds: 2),
@@ -348,6 +411,7 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     if (_isLoading || _isLoadingLives) {
       return Scaffold(
         backgroundColor: const Color(0xFFF4F7FE),
@@ -369,15 +433,18 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
               children: [
                 const Text("💔", style: TextStyle(fontSize: 80)),
                 const SizedBox(height: 20),
-                const Text(
-                  "Hakların Doldu!",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                Text(
+                  loc.learnGameOverTitle,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  "Üzgünüm, telaffuz pratiğinde çok hata yaptın. 300 XP harcayarak canlarını fulleyebilir veya haritaya dönebilirsin.",
+                Text(
+                  loc.minimalPairsGameOverMessage,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15,
                     color: Colors.black54,
                     height: 1.4,
@@ -399,9 +466,9 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
                       ),
                     ),
                     icon: const Icon(Icons.bolt_rounded, color: Colors.black87),
-                    label: const Text(
-                      "300 XP ile Canları Fulle",
-                      style: TextStyle(
+                    label: Text(
+                      loc.learnRefillLives,
+                      style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
@@ -417,9 +484,7 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text(
-                                "Canlar Fullendi! Maceraya Devam 🚀",
-                              ),
+                              content: Text(loc.learnLivesRefilled),
                               backgroundColor: Colors.green.shade600,
                             ),
                           );
@@ -451,9 +516,9 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    child: const Text(
-                      "Haritaya Dön",
-                      style: TextStyle(
+                    child: Text(
+                      loc.learnBackToMap,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -469,9 +534,9 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
     }
 
     if (_pairsList.isEmpty) {
-      return const Scaffold(
-        backgroundColor: Color(0xFFF4F7FE),
-        body: Center(child: Text("Bu ders için ses çifti bulunamadı.")),
+      return Scaffold(
+        backgroundColor: const Color(0xFFF4F7FE),
+        body: Center(child: Text(loc.minimalPairsNoPairs)),
       );
     }
 
@@ -490,9 +555,9 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black87),
         centerTitle: true,
-        title: const Text(
-          "Telaffuz & Ses Çiftleri",
-          style: TextStyle(
+        title: Text(
+          loc.minimalPairsTitle,
+          style: const TextStyle(
             color: Colors.black87,
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -517,7 +582,10 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Adım ${_currentIndex + 1} / ${_pairsList.length}",
+                          loc.minimalPairsStep(
+                            _currentIndex + 1,
+                            _pairsList.length,
+                          ),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey,
@@ -550,10 +618,10 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
                     ),
                     const SizedBox(height: 40),
 
-                    const Text(
-                      "Aralarındaki farkı dinle",
+                    Text(
+                      loc.minimalPairsListenDifference,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
                         fontWeight: FontWeight.w600,
@@ -616,9 +684,9 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
                       ),
                       child: Column(
                         children: [
-                          const Text(
-                            "Şimdi sen söyle:",
-                            style: TextStyle(
+                          Text(
+                            loc.minimalPairsSayNow,
+                            style: const TextStyle(
                               color: Colors.grey,
                               fontWeight: FontWeight.bold,
                             ),
@@ -680,8 +748,8 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
                                 children: [
                                   Text(
                                     _isCorrect
-                                        ? "Harika! Kusursuz telaffuz."
-                                        : "Koçun Notu:",
+                                        ? loc.minimalPairsPerfectPronunciation
+                                        : loc.minimalPairsCoachNote,
                                     style: TextStyle(
                                       color: _isCorrect
                                           ? Colors.green.shade800
@@ -740,18 +808,18 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text(
-                            "Konuşmak için basılı tut",
+                          Text(
+                            loc.minimalPairsHoldToSpeak,
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey),
+                            style: const TextStyle(color: Colors.grey),
                           ),
                           const SizedBox(height: 15),
 
                           TextButton(
                             onPressed: _isListening ? null : _handleBilemedim,
-                            child: const Text(
-                              "Söyleyemedim, pas geç 🤔",
-                              style: TextStyle(
+                            child: Text(
+                              loc.minimalPairsSkip,
+                              style: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
@@ -771,9 +839,9 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                        child: const Text(
-                          "DEVAM ET",
-                          style: TextStyle(
+                        child: Text(
+                          loc.minimalPairsContinue,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,

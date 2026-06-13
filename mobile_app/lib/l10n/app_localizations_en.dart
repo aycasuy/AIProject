@@ -453,4 +453,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get learnModuleNotFound => 'Module not found.';
+
+  @override
+  String get minimalPairsTitle => 'Pronunciation & Minimal Pairs';
+
+  @override
+  String get minimalPairsNoPairs =>
+      'No sound pairs were found for this lesson.';
+
+  @override
+  String minimalPairsStep(int current, int total) {
+    return 'Step $current / $total';
+  }
+
+  @override
+  String get minimalPairsListenDifference => 'Listen to the difference';
+
+  @override
+  String get minimalPairsSayNow => 'Now you say:';
+
+  @override
+  String get minimalPairsAnalyzing => 'Analyzing... 🤖';
+
+  @override
+  String get minimalPairsConnectionRetry =>
+      'Connection error, can you try again?';
+
+  @override
+  String get minimalPairsNoVoice => 'I could not hear your voice.';
+
+  @override
+  String get minimalPairsGreatPronunciation => 'Great pronunciation! 🎯';
+
+  @override
+  String get minimalPairsPerfectPronunciation =>
+      'Great! Perfect pronunciation.';
+
+  @override
+  String get minimalPairsCoachNote => 'Coach\'s Note:';
+
+  @override
+  String get minimalPairsHoldToSpeak => 'Hold to speak';
+
+  @override
+  String get minimalPairsSkip => 'I couldn\'t say it, skip 🤔';
+
+  @override
+  String get minimalPairsContinue => 'CONTINUE';
+
+  @override
+  String get minimalPairsAddedPractice =>
+      'The word was added to your practice list! 📚 (1 life lost)';
+
+  @override
+  String get minimalPairsGameOverMessage =>
+      'Sorry, you made too many mistakes in pronunciation practice. You can refill your lives by spending 300 XP or return to the map.';
 }

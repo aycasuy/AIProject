@@ -455,4 +455,59 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get learnModuleNotFound => 'Módulo no encontrado.';
+
+  @override
+  String get minimalPairsTitle => 'Pronunciación y pares mínimos';
+
+  @override
+  String get minimalPairsNoPairs =>
+      'No se encontraron pares de sonidos para esta lección.';
+
+  @override
+  String minimalPairsStep(int current, int total) {
+    return 'Paso $current / $total';
+  }
+
+  @override
+  String get minimalPairsListenDifference => 'Escucha la diferencia';
+
+  @override
+  String get minimalPairsSayNow => 'Ahora dilo tú:';
+
+  @override
+  String get minimalPairsAnalyzing => 'Analizando... 🤖';
+
+  @override
+  String get minimalPairsConnectionRetry =>
+      'Error de conexión, ¿puedes intentarlo de nuevo?';
+
+  @override
+  String get minimalPairsNoVoice => 'No pude escuchar tu voz.';
+
+  @override
+  String get minimalPairsGreatPronunciation => '¡Muy buena pronunciación! 🎯';
+
+  @override
+  String get minimalPairsPerfectPronunciation =>
+      '¡Genial! Pronunciación perfecta.';
+
+  @override
+  String get minimalPairsCoachNote => 'Nota del entrenador:';
+
+  @override
+  String get minimalPairsHoldToSpeak => 'Mantén pulsado para hablar';
+
+  @override
+  String get minimalPairsSkip => 'No pude decirlo, omitir 🤔';
+
+  @override
+  String get minimalPairsContinue => 'CONTINUAR';
+
+  @override
+  String get minimalPairsAddedPractice =>
+      'La palabra fue añadida a tu lista de práctica. 📚 (perdiste 1 vida)';
+
+  @override
+  String get minimalPairsGameOverMessage =>
+      'Lo siento, cometiste demasiados errores en la práctica de pronunciación. Puedes rellenar tus vidas gastando 300 XP o volver al mapa.';
 }

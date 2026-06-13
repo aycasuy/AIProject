@@ -328,8 +328,6 @@ class ApiService {
     }
   }
 
-  // 🌟 1. DEĞİŞİKLİK: Future<void> kelimesini Future<bool> yaptık.
-  // Çünkü artık geriye "Evet başardı (true)" veya "Hayır başaramadı (false)" diyeceğiz.
   static Future<bool> startFastQuiz(
     BuildContext context,
     String username,
@@ -337,14 +335,23 @@ class ApiService {
     int userWpm,
     String level,
     int lessonId,
-    String nativeLanguage, // 🌟 İŞTE TERTEMİZ PARAMETRE
+    String nativeLanguage,
   ) async {
+    bool isLoadingDialogOpen = true;
+
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) =>
+      builder: (_) =>
           const Center(child: CircularProgressIndicator(color: Colors.amber)),
     );
+
+    void closeLoadingDialog() {
+      if (isLoadingDialogOpen && context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+        isLoadingDialogOpen = false;
+      }
+    }
 
     try {
       final url = Uri.parse('http://10.0.2.2:8000/generate_speed_reading')
@@ -352,7 +359,7 @@ class ApiService {
             queryParameters: {
               "username": username,
               "target_language": targetLanguage,
-              "native_language": nativeLanguage, // 🌟 BURAYA EKLENDİ
+              "native_language": nativeLanguage,
               "level": level,
               "lesson_id": lessonId.toString(),
             },
@@ -360,46 +367,107 @@ class ApiService {
 
       final response = await http.post(url);
 
-      if (context.mounted) Navigator.pop(context);
+      closeLoadingDialog();
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        if (context.mounted) {
+          _showErrorSnackBar(context, "Sunucu Hatası: ${response.statusCode}");
+        }
+        return false;
+      }
 
-        List<String> incomingTargetWords = List<String>.from(
-          data['target_words'] ?? [],
+      final dynamic decoded = jsonDecode(utf8.decode(response.bodyBytes));
+
+      if (decoded is! Map) {
+        if (context.mounted) {
+          _showErrorSnackBar(context, "Sunucudan geçersiz veri geldi.");
+        }
+        return false;
+      }
+
+      final Map<String, dynamic> responseData = Map<String, dynamic>.from(
+        decoded,
+      );
+
+      // Backend cevabı {"data": {...}} şeklindeyse içteki veriyi kullanır.
+      final Map<String, dynamic> payload = responseData["data"] is Map
+          ? Map<String, dynamic>.from(responseData["data"])
+          : responseData;
+
+      debugPrint("SPEED READING RESPONSE: $responseData");
+      debugPrint("SPEED READING PAYLOAD: $payload");
+      debugPrint("PAYLOAD KEYS: ${payload.keys.toList()}");
+
+      // Backend farklı bir ad kullanıyorsa geçici olarak onları da kontrol eder.
+      final String storyText =
+          (payload["story_text"] ?? payload["story"] ?? payload["text"] ?? "")
+              .toString()
+              .trim();
+
+      if (storyText.isEmpty) {
+        debugPrint(
+          "HATA: story_text bulunamadı. Gelen anahtarlar: "
+          "${payload.keys.toList()}",
         );
 
         if (context.mounted) {
-          final result = await Navigator.push(
+          _showErrorSnackBar(
             context,
-            MaterialPageRoute(
-              builder: (context) => SpeedReadingScreen(
-                storyText: data['story_text'],
-                userWpm: userWpm,
-                targetWords: incomingTargetWords,
-                comprehensionQuestions: data['comprehension_questions'],
-                vocabularyQuestions: data['vocabulary_questions'],
-                level: level,
-                username: username,
-                targetLanguage: targetLanguage,
-                lessonId: lessonId,
-              ),
-            ),
+            "Okuma metni oluşturulamadı. Lütfen tekrar deneyin.",
           );
-
-          return result == true;
         }
-      } else {
-        _showErrorSnackBar(context, "Sunucu Hatası: ${response.statusCode}");
+
         return false;
       }
-    } catch (e) {
-      if (context.mounted) Navigator.pop(context);
-      _showErrorSnackBar(context, "Bağlantı hatası oluştu!");
+
+      final List<String> incomingTargetWords = payload["target_words"] is List
+          ? List<String>.from(
+              payload["target_words"].map((item) => item.toString()),
+            )
+          : <String>[];
+
+      final List<dynamic> comprehensionQuestions =
+          payload["comprehension_questions"] is List
+          ? List<dynamic>.from(payload["comprehension_questions"])
+          : <dynamic>[];
+
+      final List<dynamic> vocabularyQuestions =
+          payload["vocabulary_questions"] is List
+          ? List<dynamic>.from(payload["vocabulary_questions"])
+          : <dynamic>[];
+
+      if (!context.mounted) return false;
+
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => SpeedReadingScreen(
+            storyText: storyText,
+            userWpm: userWpm,
+            targetWords: incomingTargetWords,
+            comprehensionQuestions: comprehensionQuestions,
+            vocabularyQuestions: vocabularyQuestions,
+            level: level,
+            username: username,
+            targetLanguage: targetLanguage,
+            lessonId: lessonId,
+          ),
+        ),
+      );
+
+      return result == true;
+    } catch (e, stackTrace) {
+      closeLoadingDialog();
+
+      debugPrint("SPEED READING ERROR: $e");
+      debugPrintStack(stackTrace: stackTrace);
+
+      if (context.mounted) {
+        _showErrorSnackBar(context, "Bağlantı hatası oluştu!");
+      }
+
       return false;
     }
-
-    return false;
   }
 
   // Hataları göstermek için küçük bir yardımcı metod

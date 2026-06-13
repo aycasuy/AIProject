@@ -467,7 +467,7 @@ async def get_pronunciation_feedback(
     # 🌟 SÜPER GENİŞLETİLMİŞ YAZILIMSAL TOLERANS SÖZLÜĞÜ (MVP KATİLİ) 🌟
     # =================================================================
     stt_corrections = {
-        "a": ["i", "ah", "uh", "hey", "eight", "ay", "ei", "an", "e", "I", "a."],
+        "a": ["i", "ah", "uh", "hey", "eight", "ay", "ei", "an", "e", "a."],
         "the": ["da", "de", "di", "zee", "v", "they"],
         "an": ["and", "in", "un", "on", "a"],
         "it": ["eat", "at"],
@@ -597,7 +597,7 @@ async def get_pronunciation_feedback(
     # 🌟 2. BİREBİR EŞLEŞME (YAPAY ZEKAYI BYPASS ET) 🌟
     # =================================================================
     if target == spoken:
-        return {"status": "success", "feedback": "Mükemmel telaffuz! 🎯"}
+        return {"status": "success","is_correct": True, "feedback": "Mükemmel telaffuz! 🎯"}
 
     # =================================================================
     # 3. CACHE KONTROLÜ
@@ -613,6 +613,7 @@ async def get_pronunciation_feedback(
         print(f"⚡ [CACHE HIT] '{cache_input_key}' anahtarı için veri veritabanından çekildi.")
         return {
             "status": "success", 
+            "is_correct": False,
             "feedback": cached_result.ai_response 
         }
 
@@ -661,11 +662,11 @@ async def get_pronunciation_feedback(
         db.add(new_cache_entry)
         db.commit()
         print(f"🤖 [LOG] Koçun analizi hafızaya eklendi! (Key: {cache_input_key})")
-        return {"status": "success", "feedback": final_feedback}
+        return {"status": "success","is_correct": False, "feedback": final_feedback}
 
     except Exception as e:
         print("Telaffuz Analizi Hatası:", str(e))
-        return {"status": "error", "feedback": "Şu an sesini tam alamadım, tekrar dener misin?"}
+        return {"status": "error","is_correct": False, "feedback": "Şu an sesini tam alamadım, tekrar dener misin?"}
     
 
 

@@ -38,9 +38,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   bool _isTtsPlaying = false;
   // ignore: unused_field
   bool _speechEnabled = false;
-  String _recognizedText = "Mikrofona bas ve okumaya başla...";
+  String _recognizedText = "";
 
-  String _targetText = "Yapay zeka senin için uygun bir metin hazırlıyor... ⏳";
+  String _targetText = "";
   final List<String> _usedPronunciationTexts = [];
   bool _isLoadingText = true;
 
@@ -57,7 +57,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
 
   bool get _canAnalyze {
     return _recognizedText.trim().length > 5 &&
-        _recognizedText != "Mikrofona bas ve okumaya başla..." &&
+        _recognizedText != "" &&
         !_isLoadingText &&
         !_isListening &&
         !_isTtsPlaying &&
