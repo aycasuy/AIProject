@@ -243,7 +243,30 @@
   "learnWeakPointHunterTitle": "Zayıf Nokta Avcısı",
   "learnWeakPointHunterDescription": "Yapay zeka, geçmişte hata yaptığın kelimeleri analiz ederek sana özel, zamana karşı bir okuma testi hazırlayacak. Meydan okumaya hazır mısın?",
   "learnChallengeButton": "Meydan Oku!",
-  "learnModuleNotFound": "Modül bulunamadı."
+  "learnModuleNotFound": "Modül bulunamadı.",
+
+  "minimalPairsTitle": "Telaffuz & Ses Çiftleri",
+  "minimalPairsNoPairs": "Bu ders için ses çifti bulunamadı.",
+  "minimalPairsStep": "Adım {current} / {total}",
+  "@minimalPairsStep": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "minimalPairsListenDifference": "Aralarındaki farkı dinle",
+  "minimalPairsSayNow": "Şimdi sen söyle:",
+  "minimalPairsAnalyzing": "Analiz ediliyor... 🤖",
+  "minimalPairsConnectionRetry": "Bağlantı hatası, tekrar dener misin?",
+  "minimalPairsNoVoice": "Sesini alamadım.",
+  "minimalPairsGreatPronunciation": "Harika telaffuz! 🎯",
+  "minimalPairsPerfectPronunciation": "Harika! Kusursuz telaffuz.",
+  "minimalPairsCoachNote": "Koçun Notu:",
+  "minimalPairsHoldToSpeak": "Konuşmak için basılı tut",
+  "minimalPairsSkip": "Söyleyemedim, pas geç 🤔",
+  "minimalPairsContinue": "DEVAM ET",
+  "minimalPairsAddedPractice": "Kelime pratik listene eklendi! 📚 (1 Can gitti)",
+  "minimalPairsGameOverMessage": "Üzgünüm, telaffuz pratiğinde çok hata yaptın. 300 XP harcayarak canlarını fulleyebilir veya haritaya dönebilirsin."
 
 
-}
+  }
