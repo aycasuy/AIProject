@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_app/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'dart:async';
 import '../services/api_service.dart';
@@ -212,7 +213,7 @@ class _ListeningScreenState extends State<ListeningScreen>
 
         if (mounted) {
           setState(() {
-            _targetText = data['text'];
+            _targetText = (data['text'] ?? '').toString().trim();
             _isLoadingText = false;
           });
         }
@@ -247,6 +248,8 @@ class _ListeningScreenState extends State<ListeningScreen>
   }
 
   Future<void> _checkAnswer() async {
+    final loc = AppLocalizations.of(context)!;
+
     setState(() => _isAnalyzing = true);
 
     try {
@@ -269,7 +272,10 @@ class _ListeningScreenState extends State<ListeningScreen>
 
         final int score = analysis['score'] ?? 0;
         final String feedback =
-            analysis['feedback'] ?? "Değerlendirme tamamlandı.";
+            analysis['feedback']?.toString().trim().isNotEmpty == true
+            ? analysis['feedback'].toString()
+            : loc.listeningEvaluationCompleted;
+
         final List<String> missedWords = List<String>.from(
           analysis['missed_words'] ?? [],
         );
@@ -306,6 +312,9 @@ class _ListeningScreenState extends State<ListeningScreen>
           if (_currentRound == _totalRounds) {
             // ApiService.updateProgress zaten Backend'e bağlı, xp'yi ve replay durumunu oradan çekeceğiz!
             // 50 yazsak bile Backend "Aaa bu replay, 0 XP vereyim" diyebilir.
+            xpToGive = data['added_xp'] is num
+                ? (data['added_xp'] as num).toInt()
+                : 50;
           } else {
             // Son tur değilse (Örn 1/3) XP'yi 15 falan ayarlayabilirsin ama güvenliği Backend yapacak.
             xpToGive = 15; // 🌟 Sembolik görsel XP, istersen 0 yapabilirsin
@@ -315,12 +324,25 @@ class _ListeningScreenState extends State<ListeningScreen>
         if (mounted) {
           _showResultDialog(score, feedback, missedWords, xpToGive, isSuccess);
         }
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(loc.connectionErrorServer),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Bağlantı hatası: $e"),
+            content: Text(
+              AppLocalizations.of(
+                context,
+              )!.connectionErrorWithDetail(e.toString()),
+            ),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -376,6 +398,8 @@ class _ListeningScreenState extends State<ListeningScreen>
   }
 
   Widget _buildTopProgressCard(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -411,7 +435,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Metin $_currentRound / $_totalRounds",
+                      loc.listeningRound(_currentRound, _totalRounds),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
@@ -421,8 +445,8 @@ class _ListeningScreenState extends State<ListeningScreen>
                     const SizedBox(height: 2),
                     Text(
                       _showInput
-                          ? "Duyduğunu yaz ve kontrol et"
-                          : "Önce sesi dinle",
+                          ? loc.listeningWriteAndCheck
+                          : loc.listeningListenFirst,
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -443,6 +467,8 @@ class _ListeningScreenState extends State<ListeningScreen>
   }
 
   Widget _buildListeningCard(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(22, 24, 22, 24),
@@ -467,7 +493,7 @@ class _ListeningScreenState extends State<ListeningScreen>
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              "Robotu dinle ve duyduğunu yaz",
+              loc.listeningInstruction,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: themeColor,
@@ -547,7 +573,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                 size: 24,
               ),
               label: Text(
-                _isSpeaking ? "Dinleniyor..." : "Sesi Çal",
+                _isSpeaking ? loc.listeningPlaying : loc.listeningPlayAudio,
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white,
@@ -572,6 +598,8 @@ class _ListeningScreenState extends State<ListeningScreen>
   }
 
   Widget _buildInputArea(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     final bool canCheck =
         _textController.text.trim().length > 3 && !_isAnalyzing && !_isSpeaking;
 
@@ -593,7 +621,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      "Sesi çaldıktan sonra yazma alanı açılacak.",
+                      loc.listeningInputLockedInfo,
                       style: TextStyle(
                         color: Colors.grey.shade700,
                         fontSize: 14,
@@ -631,10 +659,10 @@ class _ListeningScreenState extends State<ListeningScreen>
                         size: 25,
                       ),
                       const SizedBox(width: 8),
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          "Duyduklarını yaz",
-                          style: TextStyle(
+                          loc.listeningWriteWhatYouHear,
+                          style: const TextStyle(
                             color: Colors.black87,
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
@@ -649,7 +677,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                           size: 19,
                         ),
                         label: Text(
-                          "Tekrar dinle",
+                          loc.listeningReplay,
                           style: TextStyle(
                             color: themeColor,
                             fontWeight: FontWeight.w800,
@@ -671,7 +699,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                     maxLines: 4,
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                      hintText: "Duyduğun cümleyi buraya yaz...",
+                      hintText: loc.listeningInputHint,
                       hintStyle: TextStyle(
                         color: Colors.grey.shade500,
                         fontWeight: FontWeight.w600,
@@ -718,7 +746,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                               ),
                             )
                           : Text(
-                              "Kontrol Et 🎯",
+                              loc.listeningCheck,
                               style: TextStyle(
                                 fontSize: 18,
                                 color: canCheck
@@ -736,6 +764,8 @@ class _ListeningScreenState extends State<ListeningScreen>
   }
 
   Widget _buildEmptyTextState(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(28.0),
@@ -762,20 +792,20 @@ class _ListeningScreenState extends State<ListeningScreen>
                 color: Colors.grey.shade500,
               ),
               const SizedBox(height: 18),
-              const Text(
-                "Dinleme metni yüklenemedi.",
+              Text(
+                loc.listeningTextLoadFailed,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 21,
                   fontWeight: FontWeight.w900,
                   color: Colors.black87,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                "Bağlantını kontrol edip tekrar deneyebilirsin.",
+              Text(
+                loc.listeningCheckConnection,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                   color: Colors.black54,
                   height: 1.35,
@@ -793,9 +823,9 @@ class _ListeningScreenState extends State<ListeningScreen>
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text(
-                    "Tekrar Dene",
-                    style: TextStyle(
+                  child: Text(
+                    loc.listeningRetryLoad,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
@@ -820,6 +850,8 @@ class _ListeningScreenState extends State<ListeningScreen>
     bool isDanger = false,
   }) {
     final Color stateColor = isDanger ? Colors.redAccent : themeColor;
+
+    final loc = AppLocalizations.of(context)!;
 
     return Container(
       width: double.infinity,
@@ -895,7 +927,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          "Yeni can: $_formattedTime",
+                          loc.learnNewLife(_formattedTime),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -940,6 +972,8 @@ class _ListeningScreenState extends State<ListeningScreen>
 
   // 🌟 YENİ: XP HARCAMA BUTONLU OYUN BİTTİ EKRANI 🌟
   Widget _buildGameOverScreen(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -975,20 +1009,20 @@ class _ListeningScreenState extends State<ListeningScreen>
               children: [
                 const Text("💔", style: TextStyle(fontSize: 78)),
                 const SizedBox(height: 16),
-                const Text(
-                  "Hakların Doldu!",
+                Text(
+                  loc.learnGameOverTitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 29,
                     fontWeight: FontWeight.w900,
                     color: Colors.black87,
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  "Biraz dinlen, canların yenilenince dinleme görevine tekrar devam edebilirsin.",
+                Text(
+                  loc.listeningGameOverMessage,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15,
                     color: Colors.black54,
                     height: 1.4,
@@ -1010,7 +1044,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                       const Icon(Icons.timer_rounded, color: Colors.redAccent),
                       const SizedBox(width: 10),
                       Text(
-                        "Yeni can: $_formattedTime",
+                        loc.learnNewLife(_formattedTime),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -1036,9 +1070,9 @@ class _ListeningScreenState extends State<ListeningScreen>
                       ),
                     ),
                     icon: const Icon(Icons.bolt_rounded, color: Colors.black87),
-                    label: const Text(
-                      "300 XP ile Canları Fulle",
-                      style: TextStyle(
+                    label: Text(
+                      loc.learnRefillLives,
+                      style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 15,
                         fontWeight: FontWeight.w900,
@@ -1054,9 +1088,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text(
-                                "Canlar Fullendi! Maceraya Devam 🚀",
-                              ),
+                              content: Text(loc.learnLivesRefilled),
                               backgroundColor: Colors.green.shade600,
                             ),
                           );
@@ -1065,7 +1097,10 @@ class _ListeningScreenState extends State<ListeningScreen>
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(result['message']),
+                              content: Text(
+                                result['message']?.toString() ??
+                                    loc.connectionErrorServer,
+                              ),
                               backgroundColor: Colors.redAccent,
                             ),
                           );
@@ -1090,9 +1125,9 @@ class _ListeningScreenState extends State<ListeningScreen>
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    child: const Text(
-                      "Haritaya Dön",
-                      style: TextStyle(
+                    child: Text(
+                      loc.learnBackToMap,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
@@ -1111,6 +1146,7 @@ class _ListeningScreenState extends State<ListeningScreen>
   @override
   Widget build(BuildContext context) {
     final themeColor = getThemeColor(widget.userLevel);
+    final loc = AppLocalizations.of(context)!;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -1130,9 +1166,9 @@ class _ListeningScreenState extends State<ListeningScreen>
             icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text(
-            "Dinleme Koçu 🎧",
-            style: TextStyle(
+          title: Text(
+            loc.listeningCoachTitle,
+            style: const TextStyle(
               fontWeight: FontWeight.w900,
               color: Colors.black87,
               fontSize: 22,
@@ -1147,6 +1183,8 @@ class _ListeningScreenState extends State<ListeningScreen>
   }
 
   Widget _buildBody(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     if (_isGameOver) {
       return _buildGameOverScreen(themeColor);
     }
@@ -1155,9 +1193,9 @@ class _ListeningScreenState extends State<ListeningScreen>
       return _buildCenteredState(
         themeColor: themeColor,
         emoji: "🎧🎯",
-        title: "Kulağın Çok İyi!",
-        subtitle: "Tüm dinleme görevlerini başarıyla tamamladın.",
-        buttonText: "Haritaya Dön",
+        title: loc.listeningSuccessTitle,
+        subtitle: loc.listeningSuccessMessage,
+        buttonText: loc.learnBackToMap,
         onPressed: () => Navigator.pop(context, true),
       );
     }
@@ -1213,11 +1251,12 @@ class _ListeningScreenState extends State<ListeningScreen>
     bool isSuccess,
   ) {
     final themeColor = getThemeColor(widget.userLevel);
+    final loc = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
+      builder: (dialogContext) {
         return Dialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
@@ -1265,7 +1304,9 @@ class _ListeningScreenState extends State<ListeningScreen>
                 const SizedBox(height: 18),
 
                 Text(
-                  isSuccess ? "Harika dinledin!" : "Bir kez daha deneyelim",
+                  isSuccess
+                      ? loc.listeningSuccessResult
+                      : loc.listeningTryAgainResult,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.black87,
@@ -1287,7 +1328,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      "+$xp XP Kazandın!",
+                      loc.listeningXpEarned(xp),
                       style: const TextStyle(
                         color: Color(0xFFFFB703),
                         fontWeight: FontWeight.w900,
@@ -1304,9 +1345,9 @@ class _ListeningScreenState extends State<ListeningScreen>
                       color: Colors.redAccent.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Text(
-                      "1 Can Gitti",
-                      style: TextStyle(
+                    child: Text(
+                      loc.listeningLifeLost,
+                      style: const TextStyle(
                         color: Colors.redAccent,
                         fontWeight: FontWeight.w900,
                       ),
@@ -1331,7 +1372,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Kaçırdığın veya yanlış yazdığın kelimeler:",
+                      loc.listeningMissedWords,
                       style: TextStyle(
                         color: Colors.grey.shade700,
                         fontSize: 13,
@@ -1377,7 +1418,7 @@ class _ListeningScreenState extends State<ListeningScreen>
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(dialogContext);
 
                       if (isSuccess) {
                         if (_currentRound < _totalRounds) {
@@ -1411,9 +1452,9 @@ class _ListeningScreenState extends State<ListeningScreen>
                     child: Text(
                       isSuccess
                           ? (_currentRound < _totalRounds
-                                ? "Sıradaki Metin 🚀"
-                                : "Muhteşem! 🚀")
-                          : "Tekrar Dene 🔄",
+                                ? loc.listeningNextText
+                                : loc.listeningAmazing)
+                          : loc.listeningTryAgainButton,
                       style: const TextStyle(
                         fontSize: 16.5,
                         color: Colors.white,

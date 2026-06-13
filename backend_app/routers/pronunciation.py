@@ -453,55 +453,188 @@ async def analyze_pronunciation(request: schemas.PronunciationRequest, db: Sessi
 
 
 
+import json
+import re
+
+from fastapi import HTTPException
+
+
 @router.post("/analyze_listening")
 async def analyze_listening(request: DictationRequest):
-    print(f"🔍 native_language: {request.native_language}")  # 👈 ekle
-    print(f"🔍 target_language: {request.target_language}")  # 👈 ekle
+    native_language_key = request.native_language.strip().lower()
+
+    native_language_map = {
+        "english": "English",
+        "ingilizce": "English",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+        "german": "German",
+        "almanca": "German",
+        "french": "French",
+        "fransızca": "French",
+        "italian": "Italian",
+        "italyanca": "Italian",
+    }
+
+    feedback_language = native_language_map.get(
+        native_language_key,
+        request.native_language.strip(),
+    )
+
+    print(
+        "🎧 LISTENING ANALYSIS REQUEST:",
+        {
+            "target_language": request.target_language,
+            "native_language": request.native_language,
+            "feedback_language": feedback_language,
+        },
+    )
+
+    def normalize_text(value: str) -> str:
+        value = value.casefold().strip()
+        value = re.sub(r"[^\w\s']", " ", value, flags=re.UNICODE)
+        value = re.sub(r"\s+", " ", value)
+        return value.strip()
+
+    original_clean = normalize_text(request.original_text)
+    user_clean = normalize_text(request.user_text)
+
+    # Birebir eşleşmede Gemini'ye gitmeye gerek yok.
+    if original_clean == user_clean:
+        perfect_feedbacks = {
+            "English": "Perfect! You heard and wrote the sentence correctly. 🎯",
+            "Spanish": "¡Perfecto! Escuchaste y escribiste la frase correctamente. 🎯",
+            "Turkish": "Mükemmel! Cümleyi doğru dinledin ve yazdın. 🎯",
+            "German": "Perfekt! Du hast den Satz richtig gehört und geschrieben. 🎯",
+            "French": "Parfait ! Tu as correctement entendu et écrit la phrase. 🎯",
+            "Italian": "Perfetto! Hai ascoltato e scritto correttamente la frase. 🎯",
+        }
+
+        return {
+            "status": "success",
+            "analysis": {
+                "score": 100,
+                "feedback": perfect_feedbacks.get(
+                    feedback_language,
+                    "Perfect! You heard and wrote the sentence correctly. 🎯",
+                ),
+                "missed_words": [],
+            },
+            "added_xp": 50,
+        }
+
     try:
-     prompt = f"""
-        Sen uzman bir {request.target_language} dil öğretmenisin.
-        Öğrencinin ana dili: {request.native_language}.
+        prompt = f"""
+        You are an expert {request.target_language} language teacher
+        specialized in listening and dictation assessment.
 
-        Orijinal Metin (Robotun Söylediği): "{request.original_text}"
-        Öğrencinin Yazdığı Metin: "{request.user_text}"
+        Target language:
+        {request.target_language}
 
-        Görevlerin:
-        1. İki metni karşılaştır. Büyük/küçük harf ve ufak noktalama hatalarını GÖRMEZDEN GEL.
-        2. Ufak harf hatalarını (typo) az cezalandır, eksik veya tamamen yanlış kelimeleri tespit et.
-        3. 0 ile 100 arasında puan (score) ver.
-        4. Öğrenciye '{request.native_language}' dilinde motive edici, kısa geri bildirim (feedback) yaz.
-        5. Yanlış yazılan veya duyulamayan kelimeleri tespit et (missed_words).
+        Student's native language:
+        {feedback_language}
 
-        ÇIKTI FORMATI:
+        Original sentence spoken by the application:
+        "{request.original_text}"
+
+        Sentence written by the student:
+        "{request.user_text}"
+
+        Tasks:
+        1. Compare the two sentences.
+        2. Ignore capitalization and minor punctuation differences.
+        3. Penalize small spelling mistakes only slightly.
+        4. Give a score from 0 to 100.
+        5. Identify missing or incorrectly written target-language words.
+        6. Write a short, supportive feedback message.
+
+        STRICT LANGUAGE RULES:
+        - The "feedback" field must be written entirely in {feedback_language}.
+        - Do not use Turkish unless the feedback language is Turkish.
+        - Do not mix languages.
+        - The words in "missed_words" must remain in {request.target_language}.
+        - Return only valid JSON.
+        - Do not add Markdown or explanations outside the JSON.
+
+        Return exactly this structure:
         {{
-            "score": 90,
-            "feedback": "Harika dinleme becerisi! Sadece 'buenos' kelimesinde ufak bir yazım hatası var.",
-            "missed_words": ["buenos"]
+        "score": 85,
+        "feedback": "Feedback written entirely in {feedback_language}.",
+        "missed_words": ["word1", "word2"]
         }}
         """
-        
-     response = client.models.generate_content(
-            model='gemini-2.5-flash-lite',
+
+        response = client.models.generate_content(
+            model="gemini-2.5-flash-lite",
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
+                temperature=0.1,
             ),
         )
-        
-     analysis_data = json.loads(response.text)
-        
-        # Ödül: 70 ve üstü alırsa 50 XP kazanır!
-     added_xp = 50 if analysis_data.get("score", 0) >= 70 else 10
-        
-     return {
+
+        analysis_data = json.loads(response.text or "{}")
+
+        raw_score = analysis_data.get("score", 0)
+
+        try:
+            score = int(raw_score)
+        except (TypeError, ValueError):
+            score = 0
+
+        score = max(0, min(100, score))
+
+        missed_words = analysis_data.get("missed_words", [])
+        if not isinstance(missed_words, list):
+            missed_words = []
+
+        feedback = str(
+            analysis_data.get("feedback", "")
+        ).strip()
+
+        fallback_feedbacks = {
+            "English": "The evaluation is complete. Review the missed words and try again.",
+            "Spanish": "La evaluación ha terminado. Revisa las palabras omitidas e inténtalo de nuevo.",
+            "Turkish": "Değerlendirme tamamlandı. Kaçırdığın kelimeleri inceleyip tekrar dene.",
+            "German": "Die Auswertung ist abgeschlossen. Überprüfe die fehlenden Wörter und versuche es erneut.",
+            "French": "L'évaluation est terminée. Vérifie les mots manqués et réessaie.",
+            "Italian": "La valutazione è completata. Controlla le parole mancanti e riprova.",
+        }
+
+        if not feedback:
+            feedback = fallback_feedbacks.get(
+                feedback_language,
+                "The evaluation is complete. Please try again.",
+            )
+
+        analysis_data = {
+            "score": score,
+            "feedback": feedback,
+            "missed_words": [
+                str(word) for word in missed_words
+            ],
+        }
+
+        # Flutter tarafındaki başarı eşiği 60 olduğu için burada da 60 kullandım.
+        added_xp = 50 if score >= 60 else 10
+
+        return {
             "status": "success",
             "analysis": analysis_data,
-            "added_xp": added_xp
+            "added_xp": added_xp,
         }
 
     except Exception as e:
         print("Dinleme Analizi Hatası:", str(e))
-        raise HTTPException(status_code=500, detail="Analiz yapılamadı.")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Listening analysis could not be completed.",
+        )
+
+
 
 
 from sqlalchemy.sql.expression import func # 🌟 Eğer sayfanın en üstünde yoksa bu kütüphaneyi eklemeyi unutma!
