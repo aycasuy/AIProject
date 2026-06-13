@@ -556,13 +556,15 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
   }
 
   Widget _buildImageActivity() {
+    final loc = AppLocalizations.of(context)!;
+
     // (Flashcard modülünde ipucu robotu kullanmaya gerek yok, o yüzden aynen bırakıyoruz)
     if (_isLoadingCards || isLoading) {
       return Center(child: CircularProgressIndicator(color: widget.themeColor));
     }
 
     if (_flashcards.isEmpty) {
-      return const Center(child: Text("Bu derste henüz kart bulunmuyor."));
+      return Center(child: Text(loc.learnNoCards));
     }
 
     if (_isActivityFinished) {
@@ -572,20 +574,20 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
           children: [
             const Text("🎉", style: TextStyle(fontSize: 80)),
             const SizedBox(height: 20),
-            const Text(
-              "Harika İş!",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            Text(
+              loc.learnGreatJob,
+              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            const Text(
-              "Kelime destesini tamamladın.",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+            Text(
+              loc.learnDeckCompleted,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             if (_failedCards.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  "${_failedCards.length} kelime 'Kelime Defteri'ne eklendi. 📚",
+                  loc.learnWordsAddedToVocabulary(_failedCards.length),
                   style: TextStyle(
                     color: widget.themeColor,
                     fontWeight: FontWeight.bold,
@@ -605,9 +607,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                 ),
               ),
               onPressed: _completeModuleAndExit,
-              child: const Text(
-                "Haritaya Dön",
-                style: TextStyle(
+              child: Text(
+                loc.learnBackToMap,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -638,9 +640,12 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Text(
-          "Öğrendiysen Sağa 👉  |  👈 Tekrar için Sola",
-          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+        Text(
+          loc.learnSwipeInstruction,
+          style: const TextStyle(
+            color: Colors.grey,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 20),
         Expanded(
@@ -700,11 +705,11 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           ),
                         ),
                         if (!_showTranslation)
-                          const Padding(
-                            padding: EdgeInsets.only(top: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20),
                             child: Text(
-                              "Çeviriyi görmek için dokun",
-                              style: TextStyle(
+                              loc.learnTapToSeeTranslation,
+                              style: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 14,
                               ),
@@ -1127,9 +1132,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: const Text(
-                        "Haritaya Dön",
-                        style: TextStyle(
+                      child: Text(
+                        loc.learnBackToMap,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
@@ -2561,6 +2566,8 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
   }
 
   Widget _buildQuizActivity() {
+    final loc = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -2576,19 +2583,23 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
               child: const Icon(Icons.bolt, size: 80, color: Colors.amber),
             ),
             const SizedBox(height: 24),
-            const Text(
-              "Zayıf Nokta Avcısı",
-              style: TextStyle(
+            Text(
+              loc.learnWeakPointHunterTitle,
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
-              "Yapay zeka, geçmişte hata yaptığın kelimeleri analiz ederek sana özel, zamana karşı bir okuma testi hazırlayacak. Meydan okumaya hazır mısın?",
+            Text(
+              loc.learnWeakPointHunterDescription,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey, height: 1.5),
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+                height: 1.5,
+              ),
             ),
             const SizedBox(height: 40),
             ElevatedButton.icon(
@@ -2619,9 +2630,12 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
                 }
               },
               icon: const Icon(Icons.rocket_launch, size: 24),
-              label: const Text(
-                "Meydan Oku!",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              label: Text(
+                loc.learnChallengeButton,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -2631,6 +2645,8 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
   }
 
   Widget _getActiveModule() {
+    final loc = AppLocalizations.of(context)!;
+
     switch (widget.activityType) {
       case "learn_image":
         return _buildImageActivity();
@@ -2641,7 +2657,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
       case "learn_quiz":
         return _buildQuizActivity();
       default:
-        return const Center(child: Text("Modül bulunamadı."));
+        return Center(child: Text(loc.learnModuleNotFound));
     }
   }
 
