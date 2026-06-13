@@ -294,5 +294,49 @@
   "minimalPairsSkip": "No pude decirlo, omitir 🤔",
   "minimalPairsContinue": "CONTINUAR",
   "minimalPairsAddedPractice": "La palabra fue añadida a tu lista de práctica. 📚 (perdiste 1 vida)",
-  "minimalPairsGameOverMessage": "Lo siento, cometiste demasiados errores en la práctica de pronunciación. Puedes rellenar tus vidas gastando 300 XP o volver al mapa."
+  "minimalPairsGameOverMessage": "Lo siento, cometiste demasiados errores en la práctica de pronunciación. Puedes rellenar tus vidas gastando 300 XP o volver al mapa.",
+  "pronunciationCoachTitle": "Entrenador de pronunciación 🎙️",
+  "pronunciationInitialPrompt": "Pulsa el micrófono y empieza a leer...",
+  "pronunciationPreparingText": "La IA está preparando un texto adecuado para ti... ⏳",
+  "pronunciationNoText": "No se encontró un texto de pronunciación adecuado para esta lección.",
+  "pronunciationConnectionError": "¡Error de conexión! Revisa tu conexión a internet.",
+  "pronunciationRound": "Texto {current} / {total}",
+  "@pronunciationRound": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "pronunciationReadClearly": "Lee la frase de forma clara y tranquila",
+  "pronunciationReadSentence": "Lee la siguiente frase",
+  "pronunciationStop": "Detener",
+  "pronunciationListenFirst": "Escuchar primero",
+  "pronunciationListening": "Escuchando...",
+  "pronunciationTranscriptHint": "Lo que digas aparecerá aquí cuando pulses el micrófono.",
+  "pronunciationWaitingForSpeech": "Esperando tu voz",
+  "pronunciationAnalyze": "Analizar",
+  "pronunciationTaskPreparing": "Preparando tu tarea de pronunciación...",
+  "pronunciationGameOverMessage": "Espera un poco. Podrás continuar cuando recibas una nueva vida.",
+  "pronunciationSuccessTitle": "¡Hablaste muy bien!",
+  "pronunciationSuccessMessage": "\"Completaste todas las tareas de pronunciación.",
+  "pronunciationSuccessful": "Pronunciación correcta",
+  "pronunciationTryAgain": "Intentémoslo de nuevo",
+  "pronunciationScoreUnit": "puntos",
+  "pronunciationXpEarned": "¡Ganaste +{xp} XP!",
+  "@pronunciationXpEarned": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "pronunciationLifeLost": "¡Perdiste 1 vida! Inténtalo de nuevo.",
+  "pronunciationWordsToWatch": "Palabras a las que debes prestar atención:",
+  "pronunciationNextText": "Siguiente texto 🚀",
+  "pronunciationAmazing": "¡Excelente! 🚀",
+  "pronunciationRetry": "Intentar de nuevo 🔄"
 }
