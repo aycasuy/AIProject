@@ -294,5 +294,49 @@
   "minimalPairsSkip": "I couldn't say it, skip 🤔",
   "minimalPairsContinue": "CONTINUE",
   "minimalPairsAddedPractice": "The word was added to your practice list! 📚 (1 life lost)",
-  "minimalPairsGameOverMessage": "Sorry, you made too many mistakes in pronunciation practice. You can refill your lives by spending 300 XP or return to the map."
+  "minimalPairsGameOverMessage": "Sorry, you made too many mistakes in pronunciation practice. You can refill your lives by spending 300 XP or return to the map.",
+  "pronunciationCoachTitle": "Pronunciation Coach 🎙️",
+  "pronunciationInitialPrompt": "Tap the microphone and start reading...",
+  "pronunciationPreparingText": "AI is preparing a suitable text for you... ⏳",
+  "pronunciationNoText": "No suitable pronunciation text was found for this lesson.",
+  "pronunciationConnectionError": "Connection error! Please check your internet connection.",
+  "pronunciationRound": "Text {current} / {total}",
+  "@pronunciationRound": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "pronunciationReadClearly": "Read the sentence clearly and calmly",
+  "pronunciationReadSentence": "Read the sentence below",
+  "pronunciationStop": "Stop",
+  "pronunciationListenFirst": "Listen First",
+  "pronunciationListening": "Listening...",
+  "pronunciationTranscriptHint": "What you say will appear here after you tap the microphone.",
+  "pronunciationWaitingForSpeech": "Waiting for Your Speech",
+  "pronunciationAnalyze": "Analyze",
+  "pronunciationTaskPreparing": "Preparing your pronunciation task...",
+  "pronunciationGameOverMessage": "Wait a little. You can continue when you receive a new life.",
+  "pronunciationSuccessTitle": "Great Speaking!",
+  "pronunciationSuccessMessage": "You completed all pronunciation tasks.",
+  "pronunciationSuccessful": "Successful Pronunciation",
+  "pronunciationTryAgain": "Let's Try Again",
+  "pronunciationScoreUnit": "points",
+  "pronunciationXpEarned": "You Earned +{xp} XP!",
+  "@pronunciationXpEarned": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "pronunciationLifeLost": "1 Life Lost! Try Again.",
+  "pronunciationWordsToWatch": "Words you should pay attention to:",
+  "pronunciationNextText": "Next Text 🚀",
+  "pronunciationAmazing": "Amazing! 🚀",
+  "pronunciationRetry": "Try Again 🔄"
 }
