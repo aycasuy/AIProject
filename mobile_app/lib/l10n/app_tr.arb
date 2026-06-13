@@ -266,7 +266,49 @@
   "minimalPairsSkip": "Söyleyemedim, pas geç 🤔",
   "minimalPairsContinue": "DEVAM ET",
   "minimalPairsAddedPractice": "Kelime pratik listene eklendi! 📚 (1 Can gitti)",
-  "minimalPairsGameOverMessage": "Üzgünüm, telaffuz pratiğinde çok hata yaptın. 300 XP harcayarak canlarını fulleyebilir veya haritaya dönebilirsin."
+  "minimalPairsGameOverMessage": "Üzgünüm, telaffuz pratiğinde çok hata yaptın. 300 XP harcayarak canlarını fulleyebilir veya haritaya dönebilirsin.",
+
+  "pronunciationCoachTitle": "Telaffuz Koçu 🎙️",
+  "pronunciationInitialPrompt": "Mikrofona bas ve okumaya başla...",
+  "pronunciationPreparingText": "Yapay zeka senin için uygun bir metin hazırlıyor... ⏳",
+  "pronunciationNoText": "Bu ders için uygun telaffuz metni bulunamadı.",
+  "pronunciationConnectionError": "Bağlantı hatası! Lütfen internetini kontrol et.",
+
+  "pronunciationRound": "Metin {current} / {total}",
+  "@pronunciationRound": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "pronunciationReadClearly": "Cümleyi net ve sakin oku",
+  "pronunciationReadSentence": "Aşağıdaki cümleyi oku",
+  "pronunciationStop": "Durdur",
+  "pronunciationListenFirst": "Önce Dinle",
+  "pronunciationListening": "Dinliyorum...",
+  "pronunciationTranscriptHint": "Mikrofona basınca söylediklerin burada görünecek.",
+  "pronunciationWaitingForSpeech": "Konuşman Bekleniyor",
+  "pronunciationAnalyze": "Analiz Et",
+  "pronunciationTaskPreparing": "Telaffuz görevin hazırlanıyor...",
+
+  "pronunciationGameOverMessage": "Biraz bekle, yeni can geldiğinde devam edebilirsin.",
+  "pronunciationSuccessTitle": "Harika Konuştun!",
+  "pronunciationSuccessMessage": "Tüm telaffuz görevlerini tamamladın.",
+
+  "pronunciationSuccessful": "Başarılı Telaffuz",
+  "pronunciationTryAgain": "Tekrar Deneyelim",
+  "pronunciationScoreUnit": "puan",
+  "pronunciationXpEarned": "+{xp} XP Kazandın!",
+  "@pronunciationXpEarned": {
+    "placeholders": {
+      "xp": { "type": "int" }
+    }
+  },
+  "pronunciationLifeLost": "1 Can Gitti! Tekrar Dene.",
+  "pronunciationWordsToWatch": "Dikkat etmen gereken kelimeler:",
+  "pronunciationNextText": "Sıradaki Metin 🚀",
+  "pronunciationAmazing": "Muhteşem! 🚀",
+  "pronunciationRetry": "Tekrar Dene 🔄"
 
 
   }
