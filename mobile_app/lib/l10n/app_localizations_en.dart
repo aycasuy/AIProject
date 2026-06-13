@@ -601,4 +601,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pronunciationRetry => 'Try Again 🔄';
+
+  @override
+  String get listeningCoachTitle => 'Dinleme Koçu 🎧';
+
+  @override
+  String listeningRound(int current, int total) {
+    return 'Metin $current / $total';
+  }
+
+  @override
+  String get listeningWriteAndCheck => 'Duyduğunu yaz ve kontrol et';
+
+  @override
+  String get listeningListenFirst => 'Önce sesi dinle';
+
+  @override
+  String get listeningInstruction => 'Robotu dinle ve duyduğunu yaz';
+
+  @override
+  String get listeningPlaying => 'Dinleniyor...';
+
+  @override
+  String get listeningPlayAudio => 'Sesi Çal';
+
+  @override
+  String get listeningInputLockedInfo =>
+      'Sesi çaldıktan sonra yazma alanı açılacak.';
+
+  @override
+  String get listeningWriteWhatYouHear => 'Duyduklarını yaz';
+
+  @override
+  String get listeningReplay => 'Tekrar dinle';
+
+  @override
+  String get listeningInputHint => 'Duyduğun cümleyi buraya yaz...';
+
+  @override
+  String get listeningCheck => 'Kontrol Et 🎯';
+
+  @override
+  String get listeningTextLoadFailed => 'Dinleme metni yüklenemedi.';
+
+  @override
+  String get listeningCheckConnection =>
+      'Bağlantını kontrol edip tekrar deneyebilirsin.';
+
+  @override
+  String get listeningRetryLoad => 'Tekrar Dene';
+
+  @override
+  String get listeningGameOverMessage =>
+      'Biraz dinlen, canların yenilenince dinleme görevine tekrar devam edebilirsin.';
+
+  @override
+  String get listeningSuccessTitle => 'Kulağın Çok İyi!';
+
+  @override
+  String get listeningSuccessMessage =>
+      'Tüm dinleme görevlerini başarıyla tamamladın.';
+
+  @override
+  String get listeningEvaluationCompleted => 'Değerlendirme tamamlandı.';
+
+  @override
+  String get listeningSuccessResult => 'Harika dinledin!';
+
+  @override
+  String get listeningTryAgainResult => 'Bir kez daha deneyelim';
+
+  @override
+  String listeningXpEarned(int xp) {
+    return '+$xp XP Kazandın!';
+  }
+
+  @override
+  String get listeningLifeLost => '1 Can Gitti';
+
+  @override
+  String get listeningMissedWords =>
+      'Kaçırdığın veya yanlış yazdığın kelimeler:';
+
+  @override
+  String get listeningNextText => 'Sıradaki Metin 🚀';
+
+  @override
+  String get listeningAmazing => 'Muhteşem! 🚀';
+
+  @override
+  String get listeningTryAgainButton => 'Tekrar Dene 🔄';
 }

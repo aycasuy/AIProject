@@ -1137,6 +1137,168 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Tekrar Dene 🔄'**
   String get pronunciationRetry;
+
+  /// No description provided for @listeningCoachTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dinleme Koçu 🎧'**
+  String get listeningCoachTitle;
+
+  /// No description provided for @listeningRound.
+  ///
+  /// In tr, this message translates to:
+  /// **'Metin {current} / {total}'**
+  String listeningRound(int current, int total);
+
+  /// No description provided for @listeningWriteAndCheck.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duyduğunu yaz ve kontrol et'**
+  String get listeningWriteAndCheck;
+
+  /// No description provided for @listeningListenFirst.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce sesi dinle'**
+  String get listeningListenFirst;
+
+  /// No description provided for @listeningInstruction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robotu dinle ve duyduğunu yaz'**
+  String get listeningInstruction;
+
+  /// No description provided for @listeningPlaying.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dinleniyor...'**
+  String get listeningPlaying;
+
+  /// No description provided for @listeningPlayAudio.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sesi Çal'**
+  String get listeningPlayAudio;
+
+  /// No description provided for @listeningInputLockedInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sesi çaldıktan sonra yazma alanı açılacak.'**
+  String get listeningInputLockedInfo;
+
+  /// No description provided for @listeningWriteWhatYouHear.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duyduklarını yaz'**
+  String get listeningWriteWhatYouHear;
+
+  /// No description provided for @listeningReplay.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar dinle'**
+  String get listeningReplay;
+
+  /// No description provided for @listeningInputHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duyduğun cümleyi buraya yaz...'**
+  String get listeningInputHint;
+
+  /// No description provided for @listeningCheck.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kontrol Et 🎯'**
+  String get listeningCheck;
+
+  /// No description provided for @listeningTextLoadFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dinleme metni yüklenemedi.'**
+  String get listeningTextLoadFailed;
+
+  /// No description provided for @listeningCheckConnection.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantını kontrol edip tekrar deneyebilirsin.'**
+  String get listeningCheckConnection;
+
+  /// No description provided for @listeningRetryLoad.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Dene'**
+  String get listeningRetryLoad;
+
+  /// No description provided for @listeningGameOverMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Biraz dinlen, canların yenilenince dinleme görevine tekrar devam edebilirsin.'**
+  String get listeningGameOverMessage;
+
+  /// No description provided for @listeningSuccessTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kulağın Çok İyi!'**
+  String get listeningSuccessTitle;
+
+  /// No description provided for @listeningSuccessMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm dinleme görevlerini başarıyla tamamladın.'**
+  String get listeningSuccessMessage;
+
+  /// No description provided for @listeningEvaluationCompleted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değerlendirme tamamlandı.'**
+  String get listeningEvaluationCompleted;
+
+  /// No description provided for @listeningSuccessResult.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika dinledin!'**
+  String get listeningSuccessResult;
+
+  /// No description provided for @listeningTryAgainResult.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir kez daha deneyelim'**
+  String get listeningTryAgainResult;
+
+  /// No description provided for @listeningXpEarned.
+  ///
+  /// In tr, this message translates to:
+  /// **'+{xp} XP Kazandın!'**
+  String listeningXpEarned(int xp);
+
+  /// No description provided for @listeningLifeLost.
+  ///
+  /// In tr, this message translates to:
+  /// **'1 Can Gitti'**
+  String get listeningLifeLost;
+
+  /// No description provided for @listeningMissedWords.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaçırdığın veya yanlış yazdığın kelimeler:'**
+  String get listeningMissedWords;
+
+  /// No description provided for @listeningNextText.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıradaki Metin 🚀'**
+  String get listeningNextText;
+
+  /// No description provided for @listeningAmazing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Muhteşem! 🚀'**
+  String get listeningAmazing;
+
+  /// No description provided for @listeningTryAgainButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Dene 🔄'**
+  String get listeningTryAgainButton;
 }
 
 class _AppLocalizationsDelegate
