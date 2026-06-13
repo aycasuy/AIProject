@@ -338,5 +338,49 @@
   "pronunciationWordsToWatch": "Words you should pay attention to:",
   "pronunciationNextText": "Next Text 🚀",
   "pronunciationAmazing": "Amazing! 🚀",
-  "pronunciationRetry": "Try Again 🔄"
+  "pronunciationRetry": "Try Again 🔄",
+  "listeningCoachTitle": "Listening Coach 🎧",
+  "listeningRound": "Text {current} / {total}",
+  "@listeningRound": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "listeningWriteAndCheck": "Write what you heard and check it",
+  "listeningListenFirst": "Listen to the audio first",
+  "listeningInstruction": "Listen to the robot and write what you hear",
+  "listeningPlaying": "Playing...",
+  "listeningPlayAudio": "Play Audio",
+  "listeningInputLockedInfo": "The writing area will open after the audio finishes.",
+  "listeningWriteWhatYouHear": "Write what you hear",
+  "listeningReplay": "Listen again",
+  "listeningInputHint": "Write the sentence you heard here...",
+  "listeningCheck": "Check Answer 🎯",
+  "listeningTextLoadFailed": "The listening text could not be loaded.",
+  "listeningCheckConnection": "Check your connection and try again.",
+  "listeningRetryLoad": "Try Again",
+  "listeningGameOverMessage": "Take a short break. You can continue the listening task when your lives are restored.",
+  "listeningSuccessTitle": "Great Listening!",
+  "listeningSuccessMessage": "You successfully completed all listening tasks.",
+  "listeningEvaluationCompleted": "Evaluation completed.",
+  "listeningSuccessResult": "Great listening!",
+  "listeningTryAgainResult": "Let's try one more time",
+  "listeningXpEarned": "You Earned +{xp} XP!",
+  "@listeningXpEarned": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "listeningLifeLost": "1 Life Lost",
+  "listeningMissedWords": "Words you missed or wrote incorrectly:",
+  "listeningNextText": "Next Text 🚀",
+  "listeningAmazing": "Amazing! 🚀",
+  "listeningTryAgainButton": "Try Again 🔄"
 }
