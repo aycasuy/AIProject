@@ -265,9 +265,34 @@
   "learnTapWordsToBuildSentence": "Toca las palabras para formar la oración",
   "learnWords": "Palabras",
   "learnTapAndOrder": "Tocar y ordenar",
-
   "learnWeakPointHunterTitle": "Cazador de puntos débiles",
   "learnWeakPointHunterDescription": "La IA analizará las palabras en las que cometiste errores antes y preparará una prueba de lectura cronometrada personalizada para ti. ¿Aceptas el desafío?",
   "learnChallengeButton": "¡Aceptar el desafío!",
-  "learnModuleNotFound": "Módulo no encontrado."
+  "learnModuleNotFound": "Módulo no encontrado.",
+  "minimalPairsTitle": "Pronunciación y pares mínimos",
+  "minimalPairsNoPairs": "No se encontraron pares de sonidos para esta lección.",
+  "minimalPairsStep": "Paso {current} / {total}",
+  "@minimalPairsStep": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "minimalPairsListenDifference": "Escucha la diferencia",
+  "minimalPairsSayNow": "Ahora dilo tú:",
+  "minimalPairsAnalyzing": "Analizando... 🤖",
+  "minimalPairsConnectionRetry": "Error de conexión, ¿puedes intentarlo de nuevo?",
+  "minimalPairsNoVoice": "No pude escuchar tu voz.",
+  "minimalPairsGreatPronunciation": "¡Muy buena pronunciación! 🎯",
+  "minimalPairsPerfectPronunciation": "¡Genial! Pronunciación perfecta.",
+  "minimalPairsCoachNote": "Nota del entrenador:",
+  "minimalPairsHoldToSpeak": "Mantén pulsado para hablar",
+  "minimalPairsSkip": "No pude decirlo, omitir 🤔",
+  "minimalPairsContinue": "CONTINUAR",
+  "minimalPairsAddedPractice": "La palabra fue añadida a tu lista de práctica. 📚 (perdiste 1 vida)",
+  "minimalPairsGameOverMessage": "Lo siento, cometiste demasiados errores en la práctica de pronunciación. Puedes rellenar tus vidas gastando 300 XP o volver al mapa."
 }

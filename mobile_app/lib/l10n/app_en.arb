@@ -265,9 +265,34 @@
   "learnTapWordsToBuildSentence": "Tap the words to build the sentence",
   "learnWords": "Words",
   "learnTapAndOrder": "Tap and order",
-
   "learnWeakPointHunterTitle": "Weak Point Hunter",
   "learnWeakPointHunterDescription": "AI will analyze the words you previously struggled with and prepare a personalized timed reading quiz for you. Are you ready for the challenge?",
   "learnChallengeButton": "Start Challenge!",
-  "learnModuleNotFound": "Module not found."
+  "learnModuleNotFound": "Module not found.",
+  "minimalPairsTitle": "Pronunciation & Minimal Pairs",
+  "minimalPairsNoPairs": "No sound pairs were found for this lesson.",
+  "minimalPairsStep": "Step {current} / {total}",
+  "@minimalPairsStep": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "minimalPairsListenDifference": "Listen to the difference",
+  "minimalPairsSayNow": "Now you say:",
+  "minimalPairsAnalyzing": "Analyzing... 🤖",
+  "minimalPairsConnectionRetry": "Connection error, can you try again?",
+  "minimalPairsNoVoice": "I could not hear your voice.",
+  "minimalPairsGreatPronunciation": "Great pronunciation! 🎯",
+  "minimalPairsPerfectPronunciation": "Great! Perfect pronunciation.",
+  "minimalPairsCoachNote": "Coach's Note:",
+  "minimalPairsHoldToSpeak": "Hold to speak",
+  "minimalPairsSkip": "I couldn't say it, skip 🤔",
+  "minimalPairsContinue": "CONTINUE",
+  "minimalPairsAddedPractice": "The word was added to your practice list! 📚 (1 life lost)",
+  "minimalPairsGameOverMessage": "Sorry, you made too many mistakes in pronunciation practice. You can refill your lives by spending 300 XP or return to the map."
 }
