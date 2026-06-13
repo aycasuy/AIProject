@@ -269,9 +269,9 @@
   "learnWeakPointHunterDescription": "La IA analizará las palabras en las que cometiste errores antes y preparará una prueba de lectura cronometrada personalizada para ti. ¿Aceptas el desafío?",
   "learnChallengeButton": "¡Aceptar el desafío!",
   "learnModuleNotFound": "Módulo no encontrado.",
-  "minimalPairsTitle": "Telaffuz & Ses Çiftleri",
-  "minimalPairsNoPairs": "Bu ders için ses çifti bulunamadı.",
-  "minimalPairsStep": "Adım {current} / {total}",
+  "minimalPairsTitle": "Pronunciación y pares mínimos",
+  "minimalPairsNoPairs": "No se encontraron pares de sonidos para esta lección.",
+  "minimalPairsStep": "Paso {current} / {total}",
   "@minimalPairsStep": {
     "placeholders": {
       "current": {
@@ -282,17 +282,17 @@
       }
     }
   },
-  "minimalPairsListenDifference": "Aralarındaki farkı dinle",
-  "minimalPairsSayNow": "Şimdi sen söyle:",
-  "minimalPairsAnalyzing": "Analiz ediliyor... 🤖",
-  "minimalPairsConnectionRetry": "Bağlantı hatası, tekrar dener misin?",
-  "minimalPairsNoVoice": "Sesini alamadım.",
-  "minimalPairsGreatPronunciation": "Harika telaffuz! 🎯",
-  "minimalPairsPerfectPronunciation": "Harika! Kusursuz telaffuz.",
-  "minimalPairsCoachNote": "Koçun Notu:",
-  "minimalPairsHoldToSpeak": "Konuşmak için basılı tut",
-  "minimalPairsSkip": "Söyleyemedim, pas geç 🤔",
-  "minimalPairsContinue": "DEVAM ET",
-  "minimalPairsAddedPractice": "Kelime pratik listene eklendi! 📚 (1 Can gitti)",
-  "minimalPairsGameOverMessage": "Üzgünüm, telaffuz pratiğinde çok hata yaptın. 300 XP harcayarak canlarını fulleyebilir veya haritaya dönebilirsin."
+  "minimalPairsListenDifference": "Escucha la diferencia",
+  "minimalPairsSayNow": "Ahora dilo tú:",
+  "minimalPairsAnalyzing": "Analizando... 🤖",
+  "minimalPairsConnectionRetry": "Error de conexión, ¿puedes intentarlo de nuevo?",
+  "minimalPairsNoVoice": "No pude escuchar tu voz.",
+  "minimalPairsGreatPronunciation": "¡Muy buena pronunciación! 🎯",
+  "minimalPairsPerfectPronunciation": "¡Genial! Pronunciación perfecta.",
+  "minimalPairsCoachNote": "Nota del entrenador:",
+  "minimalPairsHoldToSpeak": "Mantén pulsado para hablar",
+  "minimalPairsSkip": "No pude decirlo, omitir 🤔",
+  "minimalPairsContinue": "CONTINUAR",
+  "minimalPairsAddedPractice": "La palabra fue añadida a tu lista de práctica. 📚 (perdiste 1 vida)",
+  "minimalPairsGameOverMessage": "Lo siento, cometiste demasiados errores en la práctica de pronunciación. Puedes rellenar tus vidas gastando 300 XP o volver al mapa."
 }
