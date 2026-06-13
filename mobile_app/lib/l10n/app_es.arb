@@ -322,7 +322,7 @@
   "pronunciationTaskPreparing": "Preparando tu tarea de pronunciación...",
   "pronunciationGameOverMessage": "Espera un poco. Podrás continuar cuando recibas una nueva vida.",
   "pronunciationSuccessTitle": "¡Hablaste muy bien!",
-  "pronunciationSuccessMessage": "\"Completaste todas las tareas de pronunciación.",
+  "pronunciationSuccessMessage": "Completaste todas las tareas de pronunciación.",
   "pronunciationSuccessful": "Pronunciación correcta",
   "pronunciationTryAgain": "Intentémoslo de nuevo",
   "pronunciationScoreUnit": "puntos",
@@ -339,8 +339,8 @@
   "pronunciationNextText": "Siguiente texto 🚀",
   "pronunciationAmazing": "¡Excelente! 🚀",
   "pronunciationRetry": "Intentar de nuevo 🔄",
-  "listeningCoachTitle": "Dinleme Koçu 🎧",
-  "listeningRound": "Metin {current} / {total}",
+  "listeningCoachTitle": "Entrenador de comprensión auditiva 🎧",
+  "listeningRound": "Texto {current} / {total}",
   "@listeningRound": {
     "placeholders": {
       "current": {
@@ -351,26 +351,26 @@
       }
     }
   },
-  "listeningWriteAndCheck": "Duyduğunu yaz ve kontrol et",
-  "listeningListenFirst": "Önce sesi dinle",
-  "listeningInstruction": "Robotu dinle ve duyduğunu yaz",
-  "listeningPlaying": "Dinleniyor...",
-  "listeningPlayAudio": "Sesi Çal",
-  "listeningInputLockedInfo": "Sesi çaldıktan sonra yazma alanı açılacak.",
-  "listeningWriteWhatYouHear": "Duyduklarını yaz",
-  "listeningReplay": "Tekrar dinle",
-  "listeningInputHint": "Duyduğun cümleyi buraya yaz...",
-  "listeningCheck": "Kontrol Et 🎯",
-  "listeningTextLoadFailed": "Dinleme metni yüklenemedi.",
-  "listeningCheckConnection": "Bağlantını kontrol edip tekrar deneyebilirsin.",
-  "listeningRetryLoad": "Tekrar Dene",
-  "listeningGameOverMessage": "Biraz dinlen, canların yenilenince dinleme görevine tekrar devam edebilirsin.",
-  "listeningSuccessTitle": "Kulağın Çok İyi!",
-  "listeningSuccessMessage": "Tüm dinleme görevlerini başarıyla tamamladın.",
-  "listeningEvaluationCompleted": "Değerlendirme tamamlandı.",
-  "listeningSuccessResult": "Harika dinledin!",
-  "listeningTryAgainResult": "Bir kez daha deneyelim",
-  "listeningXpEarned": "+{xp} XP Kazandın!",
+  "listeningWriteAndCheck": "Escribe lo que escuchaste y compruébalo",
+  "listeningListenFirst": "Escucha primero el audio",
+  "listeningInstruction": "Escucha al robot y escribe lo que oyes",
+  "listeningPlaying": "Reproduciendo...",
+  "listeningPlayAudio": "Reproducir audio",
+  "listeningInputLockedInfo": "El área de escritura se abrirá cuando termine el audio.",
+  "listeningWriteWhatYouHear": "Escribe lo que escuchas",
+  "listeningReplay": "Escuchar de nuevo",
+  "listeningInputHint": "Escribe aquí la frase que escuchaste...",
+  "listeningCheck": "Comprobar 🎯",
+  "listeningTextLoadFailed": "No se pudo cargar el texto de escucha.",
+  "listeningCheckConnection": "Comprueba tu conexión e inténtalo de nuevo.",
+  "listeningRetryLoad": "Intentar de nuevo",
+  "listeningGameOverMessage": "Descansa un poco. Podrás continuar la tarea de escucha cuando recuperes tus vidas.",
+  "listeningSuccessTitle": "¡Muy buena comprensión auditiva!",
+  "listeningSuccessMessage": "Completaste correctamente todas las tareas de escucha.",
+  "listeningEvaluationCompleted": "Evaluación completada.",
+  "listeningSuccessResult": "¡Escuchaste muy bien!",
+  "listeningTryAgainResult": "Intentémoslo una vez más",
+  "listeningXpEarned": "¡Ganaste +{xp} XP!",
   "@listeningXpEarned": {
     "placeholders": {
       "xp": {
@@ -378,9 +378,9 @@
       }
     }
   },
-  "listeningLifeLost": "1 Can Gitti",
-  "listeningMissedWords": "Kaçırdığın veya yanlış yazdığın kelimeler:",
-  "listeningNextText": "Sıradaki Metin 🚀",
-  "listeningAmazing": "Muhteşem! 🚀",
-  "listeningTryAgainButton": "Tekrar Dene 🔄"
+  "listeningLifeLost": "Perdiste 1 vida",
+  "listeningMissedWords": "Palabras que omitiste o escribiste incorrectamente:",
+  "listeningNextText": "Siguiente texto 🚀",
+  "listeningAmazing": "¡Excelente! 🚀",
+  "listeningTryAgainButton": "Intentar de nuevo 🔄"
 }
