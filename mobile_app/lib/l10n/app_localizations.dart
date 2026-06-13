@@ -975,6 +975,168 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Üzgünüm, telaffuz pratiğinde çok hata yaptın. 300 XP harcayarak canlarını fulleyebilir veya haritaya dönebilirsin.'**
   String get minimalPairsGameOverMessage;
+
+  /// No description provided for @pronunciationCoachTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telaffuz Koçu 🎙️'**
+  String get pronunciationCoachTitle;
+
+  /// No description provided for @pronunciationInitialPrompt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mikrofona bas ve okumaya başla...'**
+  String get pronunciationInitialPrompt;
+
+  /// No description provided for @pronunciationPreparingText.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yapay zeka senin için uygun bir metin hazırlıyor... ⏳'**
+  String get pronunciationPreparingText;
+
+  /// No description provided for @pronunciationNoText.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu ders için uygun telaffuz metni bulunamadı.'**
+  String get pronunciationNoText;
+
+  /// No description provided for @pronunciationConnectionError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı hatası! Lütfen internetini kontrol et.'**
+  String get pronunciationConnectionError;
+
+  /// No description provided for @pronunciationRound.
+  ///
+  /// In tr, this message translates to:
+  /// **'Metin {current} / {total}'**
+  String pronunciationRound(int current, int total);
+
+  /// No description provided for @pronunciationReadClearly.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cümleyi net ve sakin oku'**
+  String get pronunciationReadClearly;
+
+  /// No description provided for @pronunciationReadSentence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aşağıdaki cümleyi oku'**
+  String get pronunciationReadSentence;
+
+  /// No description provided for @pronunciationStop.
+  ///
+  /// In tr, this message translates to:
+  /// **'Durdur'**
+  String get pronunciationStop;
+
+  /// No description provided for @pronunciationListenFirst.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce Dinle'**
+  String get pronunciationListenFirst;
+
+  /// No description provided for @pronunciationListening.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dinliyorum...'**
+  String get pronunciationListening;
+
+  /// No description provided for @pronunciationTranscriptHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mikrofona basınca söylediklerin burada görünecek.'**
+  String get pronunciationTranscriptHint;
+
+  /// No description provided for @pronunciationWaitingForSpeech.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konuşman Bekleniyor'**
+  String get pronunciationWaitingForSpeech;
+
+  /// No description provided for @pronunciationAnalyze.
+  ///
+  /// In tr, this message translates to:
+  /// **'Analiz Et'**
+  String get pronunciationAnalyze;
+
+  /// No description provided for @pronunciationTaskPreparing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telaffuz görevin hazırlanıyor...'**
+  String get pronunciationTaskPreparing;
+
+  /// No description provided for @pronunciationGameOverMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Biraz bekle, yeni can geldiğinde devam edebilirsin.'**
+  String get pronunciationGameOverMessage;
+
+  /// No description provided for @pronunciationSuccessTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika Konuştun!'**
+  String get pronunciationSuccessTitle;
+
+  /// No description provided for @pronunciationSuccessMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm telaffuz görevlerini tamamladın.'**
+  String get pronunciationSuccessMessage;
+
+  /// No description provided for @pronunciationSuccessful.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başarılı Telaffuz'**
+  String get pronunciationSuccessful;
+
+  /// No description provided for @pronunciationTryAgain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Deneyelim'**
+  String get pronunciationTryAgain;
+
+  /// No description provided for @pronunciationScoreUnit.
+  ///
+  /// In tr, this message translates to:
+  /// **'puan'**
+  String get pronunciationScoreUnit;
+
+  /// No description provided for @pronunciationXpEarned.
+  ///
+  /// In tr, this message translates to:
+  /// **'+{xp} XP Kazandın!'**
+  String pronunciationXpEarned(int xp);
+
+  /// No description provided for @pronunciationLifeLost.
+  ///
+  /// In tr, this message translates to:
+  /// **'1 Can Gitti! Tekrar Dene.'**
+  String get pronunciationLifeLost;
+
+  /// No description provided for @pronunciationWordsToWatch.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dikkat etmen gereken kelimeler:'**
+  String get pronunciationWordsToWatch;
+
+  /// No description provided for @pronunciationNextText.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıradaki Metin 🚀'**
+  String get pronunciationNextText;
+
+  /// No description provided for @pronunciationAmazing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Muhteşem! 🚀'**
+  String get pronunciationAmazing;
+
+  /// No description provided for @pronunciationRetry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Dene 🔄'**
+  String get pronunciationRetry;
 }
 
 class _AppLocalizationsDelegate

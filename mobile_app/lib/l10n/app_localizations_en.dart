@@ -508,4 +508,97 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get minimalPairsGameOverMessage =>
       'Sorry, you made too many mistakes in pronunciation practice. You can refill your lives by spending 300 XP or return to the map.';
+
+  @override
+  String get pronunciationCoachTitle => 'Pronunciation Coach 🎙️';
+
+  @override
+  String get pronunciationInitialPrompt =>
+      'Tap the microphone and start reading...';
+
+  @override
+  String get pronunciationPreparingText =>
+      'AI is preparing a suitable text for you... ⏳';
+
+  @override
+  String get pronunciationNoText =>
+      'No suitable pronunciation text was found for this lesson.';
+
+  @override
+  String get pronunciationConnectionError =>
+      'Connection error! Please check your internet connection.';
+
+  @override
+  String pronunciationRound(int current, int total) {
+    return 'Text $current / $total';
+  }
+
+  @override
+  String get pronunciationReadClearly => 'Read the sentence clearly and calmly';
+
+  @override
+  String get pronunciationReadSentence => 'Read the sentence below';
+
+  @override
+  String get pronunciationStop => 'Stop';
+
+  @override
+  String get pronunciationListenFirst => 'Listen First';
+
+  @override
+  String get pronunciationListening => 'Listening...';
+
+  @override
+  String get pronunciationTranscriptHint =>
+      'What you say will appear here after you tap the microphone.';
+
+  @override
+  String get pronunciationWaitingForSpeech => 'Waiting for Your Speech';
+
+  @override
+  String get pronunciationAnalyze => 'Analyze';
+
+  @override
+  String get pronunciationTaskPreparing =>
+      'Preparing your pronunciation task...';
+
+  @override
+  String get pronunciationGameOverMessage =>
+      'Wait a little. You can continue when you receive a new life.';
+
+  @override
+  String get pronunciationSuccessTitle => 'Great Speaking!';
+
+  @override
+  String get pronunciationSuccessMessage =>
+      'You completed all pronunciation tasks.';
+
+  @override
+  String get pronunciationSuccessful => 'Successful Pronunciation';
+
+  @override
+  String get pronunciationTryAgain => 'Let\'s Try Again';
+
+  @override
+  String get pronunciationScoreUnit => 'points';
+
+  @override
+  String pronunciationXpEarned(int xp) {
+    return 'You Earned +$xp XP!';
+  }
+
+  @override
+  String get pronunciationLifeLost => '1 Life Lost! Try Again.';
+
+  @override
+  String get pronunciationWordsToWatch => 'Words you should pay attention to:';
+
+  @override
+  String get pronunciationNextText => 'Next Text 🚀';
+
+  @override
+  String get pronunciationAmazing => 'Amazing! 🚀';
+
+  @override
+  String get pronunciationRetry => 'Try Again 🔄';
 }

@@ -510,4 +510,99 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get minimalPairsGameOverMessage =>
       'Lo siento, cometiste demasiados errores en la práctica de pronunciación. Puedes rellenar tus vidas gastando 300 XP o volver al mapa.';
+
+  @override
+  String get pronunciationCoachTitle => 'Entrenador de pronunciación 🎙️';
+
+  @override
+  String get pronunciationInitialPrompt =>
+      'Pulsa el micrófono y empieza a leer...';
+
+  @override
+  String get pronunciationPreparingText =>
+      'La IA está preparando un texto adecuado para ti... ⏳';
+
+  @override
+  String get pronunciationNoText =>
+      'No se encontró un texto de pronunciación adecuado para esta lección.';
+
+  @override
+  String get pronunciationConnectionError =>
+      '¡Error de conexión! Revisa tu conexión a internet.';
+
+  @override
+  String pronunciationRound(int current, int total) {
+    return 'Texto $current / $total';
+  }
+
+  @override
+  String get pronunciationReadClearly =>
+      'Lee la frase de forma clara y tranquila';
+
+  @override
+  String get pronunciationReadSentence => 'Lee la siguiente frase';
+
+  @override
+  String get pronunciationStop => 'Detener';
+
+  @override
+  String get pronunciationListenFirst => 'Escuchar primero';
+
+  @override
+  String get pronunciationListening => 'Escuchando...';
+
+  @override
+  String get pronunciationTranscriptHint =>
+      'Lo que digas aparecerá aquí cuando pulses el micrófono.';
+
+  @override
+  String get pronunciationWaitingForSpeech => 'Esperando tu voz';
+
+  @override
+  String get pronunciationAnalyze => 'Analizar';
+
+  @override
+  String get pronunciationTaskPreparing =>
+      'Preparando tu tarea de pronunciación...';
+
+  @override
+  String get pronunciationGameOverMessage =>
+      'Espera un poco. Podrás continuar cuando recibas una nueva vida.';
+
+  @override
+  String get pronunciationSuccessTitle => '¡Hablaste muy bien!';
+
+  @override
+  String get pronunciationSuccessMessage =>
+      '\"Completaste todas las tareas de pronunciación.';
+
+  @override
+  String get pronunciationSuccessful => 'Pronunciación correcta';
+
+  @override
+  String get pronunciationTryAgain => 'Intentémoslo de nuevo';
+
+  @override
+  String get pronunciationScoreUnit => 'puntos';
+
+  @override
+  String pronunciationXpEarned(int xp) {
+    return '¡Ganaste +$xp XP!';
+  }
+
+  @override
+  String get pronunciationLifeLost => '¡Perdiste 1 vida! Inténtalo de nuevo.';
+
+  @override
+  String get pronunciationWordsToWatch =>
+      'Palabras a las que debes prestar atención:';
+
+  @override
+  String get pronunciationNextText => 'Siguiente texto 🚀';
+
+  @override
+  String get pronunciationAmazing => '¡Excelente! 🚀';
+
+  @override
+  String get pronunciationRetry => 'Intentar de nuevo 🔄';
 }

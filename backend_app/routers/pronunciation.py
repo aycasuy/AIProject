@@ -176,12 +176,41 @@ Kurallar:
 
 @router.post("/analyze_pronunciation")
 async def analyze_pronunciation(request: schemas.PronunciationRequest, db: Session = Depends(get_db)):
+
+    native_language_key = request.native_language.strip().lower()
+
+    native_language_map = {
+        "english": "English",
+        "ingilizce": "English",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+        "german": "German",
+        "almanca": "German",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    feedback_language = native_language_map.get(
+        native_language_key,
+        request.native_language.strip(),
+    )
+
+    print(
+        "🌍 PRONUNCIATION ANALYSIS:",
+        {
+            "target_language": request.target_language,
+            "native_language": request.native_language,
+            "feedback_language": feedback_language,
+        },
+    )
     
     # =================================================================
     # 🌟 SÜPER GENİŞLETİLMİŞ YAZILIMSAL TOLERANS SÖZLÜĞÜ (MVP KATİLİ) 🌟
     # =================================================================
     stt_corrections = {
-        "a": ["i", "ah", "uh", "hey", "eight", "ay", "ei", "an", "e", "I", "a."],
+        "a": ["i", "ah", "uh", "hey", "eight", "ay", "ei", "an", "e", "a."],
         "the": ["da", "de", "di", "zee", "v", "they"],
         "an": ["and", "in", "un", "on", "a"],
         "it": ["eat", "at"],
@@ -287,25 +316,61 @@ async def analyze_pronunciation(request: schemas.PronunciationRequest, db: Sessi
     # =================================================================
     # 🌟 MÜKEMMEL EŞLEŞME BYPASS'I (SÜPER HIZ) 🌟
     # =================================================================
+    
     if orig_clean == spoken_clean:
-        print("⚡ [KESTİRME] Birebir eşleşme! Gemini'ye gitmeden 100 puan veriliyor (Maliyet: 0, Hız: Anında)")
+        perfect_feedbacks = {
+            "English": (
+                "Perfect! You read it just like a native speaker. 🎯"
+            ),
+            "Spanish": (
+                "¡Perfecto! Leíste como un hablante nativo. 🎯"
+            ),
+            "Turkish": (
+                "Mükemmel! Tıpkı bir anadil konuşuru gibi okudun. 🎯"
+            ),
+            "German": (
+                "Perfekt! Du hast es wie ein Muttersprachler gelesen. 🎯"
+            ),
+            "French": (
+                "Parfait ! Tu as lu comme un locuteur natif. 🎯"
+            ),
+        }
+
+        perfect_feedback = perfect_feedbacks.get(
+            feedback_language,
+            "Perfect pronunciation! 🎯",
+        )
+
+        print(
+            "⚡ [KESTİRME] Birebir eşleşme. "
+            f"Feedback language: {feedback_language}"
+        )
+
         return {
             "status": "success",
             "analysis": {
                 "score": 100,
                 "mispronounced_words": [],
-                "feedback": "Mükemmel! Tıpkı bir anadil konuşuru gibi okudun. 🎯"
+                "feedback": perfect_feedback,
             },
-            "added_xp": 50
+            "added_xp": 50,
         }
+
+
 
     # =================================================================
     # CACHE KONTROLÜ
     # =================================================================
-    search_text = f"lang: {request.target_language} | original: {request.original_text.strip()} | spoken: {request.spoken_text.strip()}".lower()
+    search_text = (
+    f"v2 | "
+    f"target_language: {request.target_language.strip().lower()} | "
+    f"native_language: {feedback_language.lower()} | "
+    f"original: {request.original_text.strip().lower()} | "
+    f"spoken: {request.spoken_text.strip().lower()}"
+)
     
     cached_data = db.query(models.AICache).filter(
-        models.AICache.feature_type == "pronunciation_analysis", 
+        models.AICache.feature_type == "pronunciation_analysis_v2", 
         models.AICache.input_text == search_text            
     ).first()
     
@@ -319,25 +384,35 @@ async def analyze_pronunciation(request: schemas.PronunciationRequest, db: Sessi
     try:
         print("🤖 [GEMİNİ DEVREDE - ANALİZ] Yeni bir ses geldi! Telaffuz değerlendirmesi için API'ye gidiliyor...")
         prompt = f"""
-        Sen uzman bir {request.target_language} dil öğretmeni ve telaffuz koçusun.
-        Öğrencinin ana dili: {request.native_language}.
-        Öğrencinin okuması gereken "Orijinal Metin" ve ses-yazı teknolojisiyle elde edilen "Okunan Metin" aşağıdadır:
+        You are an expert {request.target_language} pronunciation teacher.
 
-        Orijinal Metin: "{request.original_text}"
-        Okunan Metin: "{request.spoken_text}"
+        Target language: {request.target_language}
+        Student's native language: {feedback_language}
 
-        Görevlerin:
-        1. İki metni karşılaştırarak telaffuz doğruluğunu analiz et.
-        2. 0 ile 100 arasında bir puan ver (score).
-        3. Yanlış veya eksik okunan kelimeleri tespit et (mispronounced_words dizisi).
-        4. Öğrenciye motive edici, '{request.native_language}' dilinde kısa bir geri bildirim yaz (feedback).
-        
-        ÇIKTIN KESİNLİKLE JSON FORMATINDA OLMALIDIR. 
-        Beklenen Şablon:
+        Original text:
+        "{request.original_text}"
+
+        Speech recognition result:
+        "{request.spoken_text}"
+
+        Tasks:
+        1. Compare the original text with the recognized text.
+        2. Give a score between 0 and 100.
+        3. Identify missing or incorrectly pronounced words.
+        4. Write a short, supportive pronunciation assessment.
+
+        STRICT LANGUAGE RULE:
+        - The "feedback" field must be written entirely in {feedback_language}.
+        - Do not use Turkish unless the feedback language is Turkish.
+        - Do not mix languages.
+        - The values in "mispronounced_words" must remain in
+        {request.target_language}.
+
+        Return only valid JSON in this exact structure:
         {{
             "score": 85,
-            "mispronounced_words": ["yanlış1", "yanlış2"],
-            "feedback": "Harika okudun, sadece şu kelimelere dikkat et..."
+            "mispronounced_words": ["word1", "word2"],
+            "feedback": "Feedback written entirely in {feedback_language}."
         }}
         """
         
@@ -361,9 +436,9 @@ async def analyze_pronunciation(request: schemas.PronunciationRequest, db: Sessi
 
         # ANALİZ SONUCUNU VERİTABANINA KAYDET
         new_cache = models.AICache(
-            feature_type="pronunciation_analysis", 
+            feature_type="pronunciation_analysis_v2", 
             input_text=search_text, 
-            ai_response=json.dumps(result_json)
+            ai_response=json.dumps(result_json, ensure_ascii=False)
         )
         db.add(new_cache)
         db.commit()

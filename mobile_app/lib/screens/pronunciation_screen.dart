@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 import '/services/api_service.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
@@ -55,6 +56,8 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   int _remainingSeconds = 0;
   Timer? _countdownTimer;
 
+  bool _initialDataLoaded = false;
+
   bool get _canAnalyze {
     return _recognizedText.trim().length > 5 &&
         _recognizedText != "" &&
@@ -72,7 +75,16 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
     _initSpeech();
     _initTts();
     _fetchCurrentLives();
-    _fetchDynamicText();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_initialDataLoaded) {
+      _initialDataLoaded = true;
+      _fetchDynamicText();
+    }
   }
 
   @override
@@ -226,6 +238,8 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   }
 
   Future<void> _fetchDynamicText() async {
+    final loc = AppLocalizations.of(context)!;
+
     if (_isTtsPlaying) {
       await _stopTts();
     }
@@ -277,7 +291,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
         setState(() {
           _targetText = (newText != null && newText.isNotEmpty)
               ? newText
-              : "Bu ders için uygun telaffuz metni bulunamadı.";
+              : loc.pronunciationNoText;
           if (!_usedPronunciationTexts.contains(_targetText)) {
             _usedPronunciationTexts.add(_targetText);
           }
@@ -287,7 +301,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          _targetText = "Bağlantı hatası! Lütfen internetini kontrol et.";
+          _targetText = AppLocalizations.of(
+            context,
+          )!.pronunciationConnectionError;
           _isLoadingText = false;
         });
       }
@@ -523,6 +539,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   }
 
   Widget _buildHeader(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
         Row(
@@ -533,7 +550,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Metin $_currentRound / $_totalRounds",
+                    loc.pronunciationRound(_currentRound, _totalRounds),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -544,7 +561,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "Cümleyi net ve sakin oku",
+                    loc.pronunciationReadClearly,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -582,6 +599,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   }
 
   Widget _buildTargetTextCard(Color themeColor, {bool compact = false}) {
+    final loc = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -629,7 +647,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              "Aşağıdaki cümleyi oku",
+              loc.pronunciationReadSentence,
               style: TextStyle(
                 color: Colors.grey.shade700,
                 fontWeight: FontWeight.w700,
@@ -670,6 +688,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   }
 
   Widget _buildListenFirstButton(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
     return OutlinedButton.icon(
       onPressed: _isLoadingText ? null : _speakTargetText,
       icon: Icon(
@@ -677,7 +696,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
         color: themeColor,
       ),
       label: Text(
-        _isTtsPlaying ? "Durdur" : "Önce Dinle",
+        _isTtsPlaying ? loc.pronunciationStop : loc.pronunciationListenFirst,
         style: TextStyle(
           color: themeColor,
           fontWeight: FontWeight.w900,
@@ -694,17 +713,17 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   }
 
   Widget _buildTranscriptBox(Color themeColor) {
-    final bool hasSpeech =
-        _recognizedText.trim().isNotEmpty &&
-        _recognizedText != "Mikrofona bas ve okumaya başla...";
+    final loc = AppLocalizations.of(context)!;
+
+    final bool hasSpeech = _recognizedText.trim().isNotEmpty;
 
     String text;
     if (_isListening && !hasSpeech) {
-      text = "Dinliyorum...";
+      text = loc.pronunciationListening;
     } else if (hasSpeech) {
       text = _recognizedText;
     } else {
-      text = "Mikrofona basınca söylediklerin burada görünecek.";
+      text = loc.pronunciationTranscriptHint;
     }
 
     return AnimatedContainer(
@@ -815,6 +834,8 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   }
 
   Widget _buildAnalyzeButton(Color themeColor, {bool compact = false}) {
+    final loc = AppLocalizations.of(context)!;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: compact ? 56 : 62,
@@ -842,7 +863,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    _isListening ? "Konuşman Bekleniyor" : "Analiz Et",
+                    _isListening
+                        ? loc.pronunciationWaitingForSpeech
+                        : loc.pronunciationAnalyze,
                     style: TextStyle(
                       fontSize: 18,
                       color: _canAnalyze ? Colors.white : Colors.grey.shade500,
@@ -864,6 +887,8 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   }
 
   Widget _buildLoadingScreen(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: _buildScreenBackground(
@@ -875,7 +900,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
               CircularProgressIndicator(color: themeColor),
               const SizedBox(height: 18),
               Text(
-                "Telaffuz görevin hazırlanıyor...",
+                loc.pronunciationTaskPreparing,
                 style: TextStyle(
                   color: Colors.grey.shade700,
                   fontWeight: FontWeight.w700,
@@ -889,6 +914,8 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   }
 
   Widget _buildGameOverScreen(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: _buildScreenBackground(
@@ -915,9 +942,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                 children: [
                   const Text("💔", style: TextStyle(fontSize: 76)),
                   const SizedBox(height: 18),
-                  const Text(
-                    "Hakların Doldu!",
-                    style: TextStyle(
+                  Text(
+                    loc.learnGameOverTitle,
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
                       color: Colors.black87,
@@ -925,7 +952,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    "Biraz bekle, yeni can geldiğinde devam edebilirsin.",
+                    loc.pronunciationGameOverMessage,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey.shade600,
@@ -952,7 +979,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          "Yeni can: $_formattedTime",
+                          loc.learnNewLife(_formattedTime),
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w900,
@@ -980,9 +1007,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                         Icons.bolt_rounded,
                         color: Colors.black87,
                       ),
-                      label: const Text(
-                        "300 XP ile Canları Fulle",
-                        style: TextStyle(
+                      label: Text(
+                        loc.learnRefillLives,
+                        style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
                           fontWeight: FontWeight.w900,
@@ -998,9 +1025,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: const Text(
-                                  "Canlar Fullendi! Maceraya Devam 🚀",
-                                ),
+                                content: Text(loc.learnLivesRefilled),
                                 backgroundColor: Colors.green.shade600,
                               ),
                             );
@@ -1030,9 +1055,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: const Text(
-                        "Haritaya Dön",
-                        style: TextStyle(
+                      child: Text(
+                        loc.learnBackToMap,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -1050,6 +1075,8 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
   }
 
   Widget _buildSuccessScreen(Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: _buildScreenBackground(
@@ -1083,10 +1110,10 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                     child: const Text("🎙️🎯", style: TextStyle(fontSize: 54)),
                   ),
                   const SizedBox(height: 22),
-                  const Text(
-                    "Harika Konuştun!",
+                  Text(
+                    loc.pronunciationSuccessTitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
                       color: Colors.black87,
@@ -1094,7 +1121,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    "Tüm telaffuz görevlerini tamamladın.",
+                    loc.pronunciationSuccessMessage,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey.shade600,
@@ -1116,9 +1143,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                         ),
                       ),
                       onPressed: () => Navigator.pop(context, true),
-                      child: const Text(
-                        "Haritaya Dön",
-                        style: TextStyle(
+                      child: Text(
+                        loc.learnBackToMap,
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.white,
                           fontWeight: FontWeight.w900,
@@ -1137,6 +1164,8 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     final themeColor = getThemeColor(widget.userLevel);
 
     if (_isLoadingLives) {
@@ -1158,9 +1187,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
         elevation: 0,
         centerTitle: false,
         titleSpacing: 0,
-        title: const Text(
-          "Telaffuz Koçu 🎙️",
-          style: TextStyle(
+        title: Text(
+          loc.pronunciationCoachTitle,
+          style: const TextStyle(
             fontWeight: FontWeight.w900,
             color: Colors.black87,
             fontSize: 23,
@@ -1219,12 +1248,13 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
     int xp,
     bool isSuccess,
   ) {
+    final loc = AppLocalizations.of(context)!;
     final themeColor = getThemeColor(widget.userLevel);
 
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
+      builder: (dialogContext) {
         return Dialog(
           backgroundColor: Colors.transparent,
           insetPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -1256,7 +1286,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    isSuccess ? "Başarılı Telaffuz" : "Tekrar Deneyelim",
+                    isSuccess
+                        ? loc.pronunciationSuccessful
+                        : loc.pronunciationTryAgain,
                     style: TextStyle(
                       color: isSuccess
                           ? const Color(0xFF06D6A0)
@@ -1266,6 +1298,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
+
                 Stack(
                   alignment: Alignment.center,
                   children: [
@@ -1297,7 +1330,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                           ),
                         ),
                         Text(
-                          "puan",
+                          loc.pronunciationScoreUnit,
                           style: TextStyle(
                             color: Colors.grey.shade500,
                             fontWeight: FontWeight.w700,
@@ -1308,7 +1341,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 20),
+
                 if (isSuccess)
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -1320,7 +1355,7 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      "+$xp XP Kazandın!",
+                      loc.pronunciationXpEarned(xp),
                       style: const TextStyle(
                         color: Color(0xFFE5A900),
                         fontWeight: FontWeight.w900,
@@ -1337,15 +1372,17 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                       color: Colors.red.withOpacity(0.10),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Text(
-                      "1 Can Gitti! Tekrar Dene.",
-                      style: TextStyle(
+                    child: Text(
+                      loc.pronunciationLifeLost,
+                      style: const TextStyle(
                         color: Colors.redAccent,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
                   ),
+
                 const SizedBox(height: 18),
+
                 Text(
                   feedback,
                   textAlign: TextAlign.center,
@@ -1356,12 +1393,13 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                     height: 1.4,
                   ),
                 ),
+
                 if (mispronounced.isNotEmpty) ...[
                   const SizedBox(height: 20),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Dikkat etmen gereken kelimeler:",
+                      loc.pronunciationWordsToWatch,
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontSize: 13,
@@ -1373,57 +1411,59 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: mispronounced
-                        .map(
-                          (word) => Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 7,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFF6B6B).withOpacity(0.10),
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                color: const Color(
-                                  0xFFFF6B6B,
-                                ).withOpacity(0.25),
-                              ),
-                            ),
-                            child: Text(
-                              word,
-                              style: const TextStyle(
-                                color: Color(0xFFFF6B6B),
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
+                    children: mispronounced.map((word) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 7,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFF6B6B).withOpacity(0.10),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: const Color(0xFFFF6B6B).withOpacity(0.25),
                           ),
-                        )
-                        .toList(),
+                        ),
+                        child: Text(
+                          word,
+                          style: const TextStyle(
+                            color: Color(0xFFFF6B6B),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
+
                 const SizedBox(height: 24),
+
                 SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(dialogContext);
 
                       if (isSuccess) {
                         _stopTts();
+
                         if (_currentRound < _totalRounds) {
                           setState(() {
                             _currentRound++;
-                            _recognizedText =
-                                "Mikrofona bas ve okumaya başla...";
+                            _recognizedText = "";
                           });
+
                           _fetchDynamicText();
                         } else {
-                          setState(() => _isAllFinished = true);
+                          setState(() {
+                            _isAllFinished = true;
+                            _recognizedText = "";
+                          });
                         }
                       } else {
                         setState(() {
-                          _recognizedText = "Mikrofona bas ve okumaya başla...";
+                          _recognizedText = "";
                         });
                       }
                     },
@@ -1442,9 +1482,9 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
                     child: Text(
                       isSuccess
                           ? (_currentRound < _totalRounds
-                                ? "Sıradaki Metin 🚀"
-                                : "Muhteşem! 🚀")
-                          : "Tekrar Dene 🔄",
+                                ? loc.pronunciationNextText
+                                : loc.pronunciationAmazing)
+                          : loc.pronunciationRetry,
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.white,

@@ -503,4 +503,95 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get minimalPairsGameOverMessage =>
       'Üzgünüm, telaffuz pratiğinde çok hata yaptın. 300 XP harcayarak canlarını fulleyebilir veya haritaya dönebilirsin.';
+
+  @override
+  String get pronunciationCoachTitle => 'Telaffuz Koçu 🎙️';
+
+  @override
+  String get pronunciationInitialPrompt => 'Mikrofona bas ve okumaya başla...';
+
+  @override
+  String get pronunciationPreparingText =>
+      'Yapay zeka senin için uygun bir metin hazırlıyor... ⏳';
+
+  @override
+  String get pronunciationNoText =>
+      'Bu ders için uygun telaffuz metni bulunamadı.';
+
+  @override
+  String get pronunciationConnectionError =>
+      'Bağlantı hatası! Lütfen internetini kontrol et.';
+
+  @override
+  String pronunciationRound(int current, int total) {
+    return 'Metin $current / $total';
+  }
+
+  @override
+  String get pronunciationReadClearly => 'Cümleyi net ve sakin oku';
+
+  @override
+  String get pronunciationReadSentence => 'Aşağıdaki cümleyi oku';
+
+  @override
+  String get pronunciationStop => 'Durdur';
+
+  @override
+  String get pronunciationListenFirst => 'Önce Dinle';
+
+  @override
+  String get pronunciationListening => 'Dinliyorum...';
+
+  @override
+  String get pronunciationTranscriptHint =>
+      'Mikrofona basınca söylediklerin burada görünecek.';
+
+  @override
+  String get pronunciationWaitingForSpeech => 'Konuşman Bekleniyor';
+
+  @override
+  String get pronunciationAnalyze => 'Analiz Et';
+
+  @override
+  String get pronunciationTaskPreparing => 'Telaffuz görevin hazırlanıyor...';
+
+  @override
+  String get pronunciationGameOverMessage =>
+      'Biraz bekle, yeni can geldiğinde devam edebilirsin.';
+
+  @override
+  String get pronunciationSuccessTitle => 'Harika Konuştun!';
+
+  @override
+  String get pronunciationSuccessMessage =>
+      'Tüm telaffuz görevlerini tamamladın.';
+
+  @override
+  String get pronunciationSuccessful => 'Başarılı Telaffuz';
+
+  @override
+  String get pronunciationTryAgain => 'Tekrar Deneyelim';
+
+  @override
+  String get pronunciationScoreUnit => 'puan';
+
+  @override
+  String pronunciationXpEarned(int xp) {
+    return '+$xp XP Kazandın!';
+  }
+
+  @override
+  String get pronunciationLifeLost => '1 Can Gitti! Tekrar Dene.';
+
+  @override
+  String get pronunciationWordsToWatch => 'Dikkat etmen gereken kelimeler:';
+
+  @override
+  String get pronunciationNextText => 'Sıradaki Metin 🚀';
+
+  @override
+  String get pronunciationAmazing => 'Muhteşem! 🚀';
+
+  @override
+  String get pronunciationRetry => 'Tekrar Dene 🔄';
 }
