@@ -383,17 +383,17 @@
   "listeningNextText": "Next Text 🚀",
   "listeningAmazing": "Amazing! 🚀",
   "listeningTryAgainButton": "Try Again 🔄",
-  "pathVisualLearning": "Görsel Öğrenim",
-  "pathFillBlank": "Boşluk Doldurma",
-  "pathSentenceOrder": "Cümle Kurma",
-  "pathQuickQuiz": "Hızlı Quiz",
-  "pathMinimalPairs": "Ses Çiftleri",
-  "pathPronunciation": "Telaffuz",
-  "pathListening": "Dinleme",
+  "pathVisualLearning": "Visual Learning",
+  "pathFillBlank": "Fill in the Blanks",
+  "pathSentenceOrder": "Sentence Building",
+  "pathQuickQuiz": "Quick Quiz",
+  "pathMinimalPairs": "Minimal Pairs",
+  "pathPronunciation": "Pronunciation",
+  "pathListening": "Listening",
   "pathTest": "Test",
-  "pathLevelUp": "SEVİYE ATLA",
-  "pathFinalTest": "FİNAL TESTİ",
-  "pathLessonNumber": "DERS {number}",
+  "pathLevelUp": "LEVEL UP",
+  "pathFinalTest": "FINAL TEST",
+  "pathLessonNumber": "LESSON {number}",
   "@pathLessonNumber": {
     "placeholders": {
       "number": {
@@ -401,14 +401,14 @@
       }
     }
   },
-  "pathUnknownLesson": "Bilinmeyen Ders",
-  "pathSectionFallback": "Bölüm",
-  "pathExam": "Sınav",
-  "pathNext": "Sıradaki",
-  "pathLockedMessage": "Bu adım henüz kilitli! Öncekileri tamamla.",
-  "pathOldFinalMessage": "Bu final sınavı zaten tamamlandı. Eski seviyelerde sadece pratik yapabilirsin.",
-  "pathWelcomeNewLevel": "Yepyeni bir seviyeye hoş geldin! 🎉",
-  "pathLoadError": "Harita yüklenirken hata oluştu: {error}",
+  "pathUnknownLesson": "Unknown Lesson",
+  "pathSectionFallback": "Section",
+  "pathExam": "Exam",
+  "pathNext": "Next",
+  "pathLockedMessage": "This step is still locked! Complete the previous steps first.",
+  "pathOldFinalMessage": "You have already completed this final test. You can only practise in previous levels.",
+  "pathWelcomeNewLevel": "Welcome to a brand-new level! 🎉",
+  "pathLoadError": "An error occurred while loading the learning path: {error}",
   "@pathLoadError": {
     "placeholders": {
       "error": {
