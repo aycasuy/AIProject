@@ -382,5 +382,38 @@
   "listeningMissedWords": "Palabras que omitiste o escribiste incorrectamente:",
   "listeningNextText": "Siguiente texto 🚀",
   "listeningAmazing": "¡Excelente! 🚀",
-  "listeningTryAgainButton": "Intentar de nuevo 🔄"
+  "listeningTryAgainButton": "Intentar de nuevo 🔄",
+  "pathVisualLearning": "Görsel Öğrenim",
+  "pathFillBlank": "Boşluk Doldurma",
+  "pathSentenceOrder": "Cümle Kurma",
+  "pathQuickQuiz": "Hızlı Quiz",
+  "pathMinimalPairs": "Ses Çiftleri",
+  "pathPronunciation": "Telaffuz",
+  "pathListening": "Dinleme",
+  "pathTest": "Test",
+  "pathLevelUp": "SEVİYE ATLA",
+  "pathFinalTest": "FİNAL TESTİ",
+  "pathLessonNumber": "DERS {number}",
+  "@pathLessonNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "pathUnknownLesson": "Bilinmeyen Ders",
+  "pathSectionFallback": "Bölüm",
+  "pathExam": "Sınav",
+  "pathNext": "Sıradaki",
+  "pathLockedMessage": "Bu adım henüz kilitli! Öncekileri tamamla.",
+  "pathOldFinalMessage": "Bu final sınavı zaten tamamlandı. Eski seviyelerde sadece pratik yapabilirsin.",
+  "pathWelcomeNewLevel": "Yepyeni bir seviyeye hoş geldin! 🎉",
+  "pathLoadError": "Harita yüklenirken hata oluştu: {error}",
+  "@pathLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }
