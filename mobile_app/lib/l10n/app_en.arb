@@ -415,5 +415,53 @@
         "type": "String"
       }
     }
-  }
+  },
+  "finalTestTitle": "FINAL TEST 🚀",
+  "finalTestLoading": "Preparing your final test...",
+  "finalTestLoadFailed": "The final test could not be loaded.",
+  "finalTestNoQuestions": "No questions were found for this test.",
+  "finalTestRetry": "Try Again",
+  "finalTestQuestionCounter": "Question {current} / {total}",
+  "@finalTestQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "finalTestAnswer": "Submit Answer",
+  "finalTestCorrect": "✅ Correct!",
+  "finalTestWrong": "❌ Incorrect!",
+  "finalTestFillBlank": "Fill in the Blank",
+  "finalTestBuildSentence": "Build the Sentence",
+  "finalTestListenAndWrite": "Write What You Hear",
+  "finalTestReadAloud": "Read Aloud",
+  "finalTestAnswerHint": "Write your answer...",
+  "finalTestWriteInLanguage": "Write in {language}...",
+  "@finalTestWriteInLanguage": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "finalTestMicrophoneHint": "Tap the microphone...",
+  "finalTestListening": "Listening...",
+  "finalTestCongratulations": "CONGRATULATIONS!",
+  "finalTestFailedTitle": "YOU DID NOT PASS",
+  "finalTestScore": "Your score: {score} / 100",
+  "@finalTestScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "finalTestPassedMessage": "Great job! You unlocked the next lesson.",
+  "finalTestFailedMessage": "You did not reach 70 points. Review your mistakes and try again.",
+  "finalTestNextLesson": "Continue to the Next Lesson 🚀",
+  "finalTestBackToMap": "Back to Map"
 }

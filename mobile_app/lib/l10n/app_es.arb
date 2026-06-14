@@ -415,5 +415,53 @@
         "type": "String"
       }
     }
-  }
+  },
+  "finalTestTitle": "PRUEBA FINAL 🚀",
+  "finalTestLoading": "Preparando tu prueba final...",
+  "finalTestLoadFailed": "No se pudo cargar la prueba final.",
+  "finalTestNoQuestions": "No se encontraron preguntas para esta prueba.",
+  "finalTestRetry": "Intentar de nuevo",
+  "finalTestQuestionCounter": "Pregunta {current} / {total}",
+  "@finalTestQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "finalTestAnswer": "Responder",
+  "finalTestCorrect": "✅ ¡Correcto!",
+  "finalTestWrong": "❌ ¡Incorrecto!",
+  "finalTestFillBlank": "Completa el espacio",
+  "finalTestBuildSentence": "Construye la oración",
+  "finalTestListenAndWrite": "Escribe lo que escuchas",
+  "finalTestReadAloud": "Leer en voz alta",
+  "finalTestAnswerHint": "Escribe tu respuesta...",
+  "finalTestWriteInLanguage": "Escribe en {language}...",
+  "@finalTestWriteInLanguage": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "finalTestMicrophoneHint": "Pulsa el micrófono...",
+  "finalTestListening": "Escuchando...",
+  "finalTestCongratulations": "¡CONGRATULACIONES!",
+  "finalTestFailedTitle": "NO PASAS",
+  "finalTestScore": "Tu puntuación: {score} / 100",
+  "@finalTestScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "finalTestPassedMessage": "¡Muy buen trabajo! Desbloqueaste la siguiente lección.",
+  "finalTestFailedMessage": "No ha alcanzado 70 puntos. Revise sus errores y vuelva a intentarlo.",
+  "finalTestNextLesson": "Continuar a la siguiente lección 🚀",
+  "finalTestBackToMap": "Volver al mapa"
 }
