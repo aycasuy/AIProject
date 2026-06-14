@@ -382,5 +382,38 @@
   "listeningMissedWords": "Words you missed or wrote incorrectly:",
   "listeningNextText": "Next Text 🚀",
   "listeningAmazing": "Amazing! 🚀",
-  "listeningTryAgainButton": "Try Again 🔄"
+  "listeningTryAgainButton": "Try Again 🔄",
+  "pathVisualLearning": "Visual Learning",
+  "pathFillBlank": "Fill in the Blanks",
+  "pathSentenceOrder": "Sentence Building",
+  "pathQuickQuiz": "Quick Quiz",
+  "pathMinimalPairs": "Minimal Pairs",
+  "pathPronunciation": "Pronunciation",
+  "pathListening": "Listening",
+  "pathTest": "Test",
+  "pathLevelUp": "LEVEL UP",
+  "pathFinalTest": "FINAL TEST",
+  "pathLessonNumber": "LESSON {number}",
+  "@pathLessonNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "pathUnknownLesson": "Unknown Lesson",
+  "pathSectionFallback": "Section",
+  "pathExam": "Exam",
+  "pathNext": "Next",
+  "pathLockedMessage": "This step is still locked! Complete the previous steps first.",
+  "pathOldFinalMessage": "You have already completed this final test. You can only practise in previous levels.",
+  "pathWelcomeNewLevel": "Welcome to a brand-new level! 🎉",
+  "pathLoadError": "An error occurred while loading the learning path: {error}",
+  "@pathLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -382,5 +382,38 @@
   "listeningMissedWords": "Palabras que omitiste o escribiste incorrectamente:",
   "listeningNextText": "Siguiente texto 🚀",
   "listeningAmazing": "¡Excelente! 🚀",
-  "listeningTryAgainButton": "Intentar de nuevo 🔄"
+  "listeningTryAgainButton": "Intentar de nuevo 🔄",
+  "pathVisualLearning": "Aprendizaje visual",
+  "pathFillBlank": "Completar espacios",
+  "pathSentenceOrder": "Construir oraciones",
+  "pathQuickQuiz": "Cuestionario rápido",
+  "pathMinimalPairs": "Pares mínimos",
+  "pathPronunciation": "Pronunciación",
+  "pathListening": "Comprensión auditiva",
+  "pathTest": "Prueba",
+  "pathLevelUp": "SUBIR DE NIVEL",
+  "pathFinalTest": "PRUEBA FINAL",
+  "pathLessonNumber": "LECCIÓN {number}",
+  "@pathLessonNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "pathUnknownLesson": "Lección desconocida",
+  "pathSectionFallback": "Sección",
+  "pathExam": "Examen",
+  "pathNext": "Siguiente",
+  "pathLockedMessage": "¡Este paso todavía está bloqueado! Completa primero los pasos anteriores.",
+  "pathOldFinalMessage": "Ya completaste esta prueba final. En los niveles anteriores solo puedes practicar.",
+  "pathWelcomeNewLevel": "¡Te damos la bienvenida a un nuevo nivel! 🎉",
+  "pathLoadError": "Se produjo un error al cargar la ruta de aprendizaje: {error}",
+  "@pathLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }
