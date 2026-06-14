@@ -39,15 +39,15 @@ class _PathScreenState extends State<PathScreen> {
 
   // Standart Derslerin 8 Adımı
   final List<Map<String, dynamic>> stepDefinitions = [
-    {"type": "learn_image", "title": "Görsel Öğrenim", "icon": "🖼️"},
-    {"type": "learn_blank", "title": "Boşluk Doldurma", "icon": "✍️"},
-    {"type": "learn_order", "title": "Cümle Kurma", "icon": "🧩"},
-    {"type": "learn_quiz", "title": "Hızlı Quiz", "icon": "❓"},
+    {"type": "learn_image", "icon": "🖼️"},
+    {"type": "learn_blank", "icon": "✍️"},
+    {"type": "learn_order", "icon": "🧩"},
+    {"type": "learn_quiz", "icon": "❓"},
     // {"type": "use_ai", "title": "Kullan (AI)", "icon": "🤖"},
-    {"type": "minimal_pairs", "title": "Ses Çiftleri", "icon": "⚖️"},
-    {"type": "speak", "title": "Telaffuz", "icon": "🎙️"},
-    {"type": "listen", "title": "Dinleme", "icon": "🎧"},
-    {"type": "test", "title": "Test", "icon": "📝"},
+    {"type": "minimal_pairs", "icon": "⚖️"},
+    {"type": "speak", "icon": "🎙️"},
+    {"type": "listen", "icon": "🎧"},
+    {"type": "test", "icon": "📝"},
   ];
 
   @override
