@@ -416,12 +416,12 @@
       }
     }
   },
-  "finalTestTitle": "FİNAL SINAVI 🚀",
-  "finalTestLoading": "Final sınavın hazırlanıyor...",
-  "finalTestLoadFailed": "Final sınavı yüklenemedi.",
-  "finalTestNoQuestions": "Bu sınav için soru bulunamadı.",
-  "finalTestRetry": "Tekrar Dene",
-  "finalTestQuestionCounter": "Soru {current} / {total}",
+  "finalTestTitle": "PRUEBA FINAL 🚀",
+  "finalTestLoading": "Preparando tu prueba final...",
+  "finalTestLoadFailed": "No se pudo cargar la prueba final.",
+  "finalTestNoQuestions": "No se encontraron preguntas para esta prueba.",
+  "finalTestRetry": "Intentar de nuevo",
+  "finalTestQuestionCounter": "Pregunta {current} / {total}",
   "@finalTestQuestionCounter": {
     "placeholders": {
       "current": {
@@ -432,15 +432,15 @@
       }
     }
   },
-  "finalTestAnswer": "Cevapla",
-  "finalTestCorrect": "✅ Doğru!",
-  "finalTestWrong": "❌ Yanlış!",
-  "finalTestFillBlank": "Boşluğu Doldur",
-  "finalTestBuildSentence": "Cümleyi Kur",
-  "finalTestListenAndWrite": "Duyduğunu Yaz",
-  "finalTestReadAloud": "Yüksek Sesle Oku",
-  "finalTestAnswerHint": "Cevabını yaz...",
-  "finalTestWriteInLanguage": "{language} dilinde yaz...",
+  "finalTestAnswer": "Responder",
+  "finalTestCorrect": "✅ ¡Correcto!",
+  "finalTestWrong": "❌ ¡Incorrecto!",
+  "finalTestFillBlank": "Completa el espacio",
+  "finalTestBuildSentence": "Construye la oración",
+  "finalTestListenAndWrite": "Escribe lo que escuchas",
+  "finalTestReadAloud": "Leer en voz alta",
+  "finalTestAnswerHint": "Escribe tu respuesta...",
+  "finalTestWriteInLanguage": "Escribe en {language}...",
   "@finalTestWriteInLanguage": {
     "placeholders": {
       "language": {
@@ -448,11 +448,11 @@
       }
     }
   },
-  "finalTestMicrophoneHint": "Mikrofona bas...",
-  "finalTestListening": "Dinleniyor...",
-  "finalTestCongratulations": "TEBRİKLER!",
-  "finalTestFailedTitle": "SINAVI GEÇEMEDİN",
-  "finalTestScore": "Puanın: {score} / 100",
+  "finalTestMicrophoneHint": "Pulsa el micrófono...",
+  "finalTestListening": "Escuchando...",
+  "finalTestCongratulations": "¡CONGRATULACIONES!",
+  "finalTestFailedTitle": "NO PASAS",
+  "finalTestScore": "Tu puntuación: {score} / 100",
   "@finalTestScore": {
     "placeholders": {
       "score": {
@@ -460,8 +460,8 @@
       }
     }
   },
-  "finalTestPassedMessage": "Harika iş çıkardın! Yeni dersin kilidi açıldı.",
-  "finalTestFailedMessage": "70 puanı geçemedin. Eksiklerini kapatıp tekrar denemelisin.",
-  "finalTestNextLesson": "Sonraki Derse Geç 🚀",
-  "finalTestBackToMap": "Haritaya Dön"
+  "finalTestPassedMessage": "¡Muy buen trabajo! Desbloqueaste la siguiente lección.",
+  "finalTestFailedMessage": "No ha alcanzado 70 puntos. Revise sus errores y vuelva a intentarlo.",
+  "finalTestNextLesson": "Continuar a la siguiente lección 🚀",
+  "finalTestBackToMap": "Volver al mapa"
 }
