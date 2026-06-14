@@ -697,4 +697,68 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get listeningTryAgainButton => 'Intentar de nuevo 🔄';
+
+  @override
+  String get pathVisualLearning => 'Aprendizaje visual';
+
+  @override
+  String get pathFillBlank => 'Completar espacios';
+
+  @override
+  String get pathSentenceOrder => 'Construir oraciones';
+
+  @override
+  String get pathQuickQuiz => 'Cuestionario rápido';
+
+  @override
+  String get pathMinimalPairs => 'Pares mínimos';
+
+  @override
+  String get pathPronunciation => 'Pronunciación';
+
+  @override
+  String get pathListening => 'Comprensión auditiva';
+
+  @override
+  String get pathTest => 'Prueba';
+
+  @override
+  String get pathLevelUp => 'SUBIR DE NIVEL';
+
+  @override
+  String get pathFinalTest => 'PRUEBA FINAL';
+
+  @override
+  String pathLessonNumber(int number) {
+    return 'LECCIÓN $number';
+  }
+
+  @override
+  String get pathUnknownLesson => 'Lección desconocida';
+
+  @override
+  String get pathSectionFallback => 'Sección';
+
+  @override
+  String get pathExam => 'Examen';
+
+  @override
+  String get pathNext => 'Siguiente';
+
+  @override
+  String get pathLockedMessage =>
+      '¡Este paso todavía está bloqueado! Completa primero los pasos anteriores.';
+
+  @override
+  String get pathOldFinalMessage =>
+      'Ya completaste esta prueba final. En los niveles anteriores solo puedes practicar.';
+
+  @override
+  String get pathWelcomeNewLevel =>
+      '¡Te damos la bienvenida a un nuevo nivel! 🎉';
+
+  @override
+  String pathLoadError(String error) {
+    return 'Se produjo un error al cargar la ruta de aprendizaje: $error';
+  }
 }

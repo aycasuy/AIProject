@@ -691,4 +691,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get listeningTryAgainButton => 'Try Again 🔄';
+
+  @override
+  String get pathVisualLearning => 'Visual Learning';
+
+  @override
+  String get pathFillBlank => 'Fill in the Blanks';
+
+  @override
+  String get pathSentenceOrder => 'Sentence Building';
+
+  @override
+  String get pathQuickQuiz => 'Quick Quiz';
+
+  @override
+  String get pathMinimalPairs => 'Minimal Pairs';
+
+  @override
+  String get pathPronunciation => 'Pronunciation';
+
+  @override
+  String get pathListening => 'Listening';
+
+  @override
+  String get pathTest => 'Test';
+
+  @override
+  String get pathLevelUp => 'LEVEL UP';
+
+  @override
+  String get pathFinalTest => 'FINAL TEST';
+
+  @override
+  String pathLessonNumber(int number) {
+    return 'LESSON $number';
+  }
+
+  @override
+  String get pathUnknownLesson => 'Unknown Lesson';
+
+  @override
+  String get pathSectionFallback => 'Section';
+
+  @override
+  String get pathExam => 'Exam';
+
+  @override
+  String get pathNext => 'Next';
+
+  @override
+  String get pathLockedMessage =>
+      'This step is still locked! Complete the previous steps first.';
+
+  @override
+  String get pathOldFinalMessage =>
+      'You have already completed this final test. You can only practise in previous levels.';
+
+  @override
+  String get pathWelcomeNewLevel => 'Welcome to a brand-new level! 🎉';
+
+  @override
+  String pathLoadError(String error) {
+    return 'An error occurred while loading the learning path: $error';
+  }
 }

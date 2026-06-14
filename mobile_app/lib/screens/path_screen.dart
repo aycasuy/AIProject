@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 import '/screens/minimal_pairs_screen.dart';
 
 import '/screens/final_test_screen.dart';
@@ -49,6 +50,31 @@ class _PathScreenState extends State<PathScreen> {
     {"type": "listen", "icon": "🎧"},
     {"type": "test", "icon": "📝"},
   ];
+
+  String _getLocalizedStepTitle(String type, AppLocalizations loc) {
+    switch (type) {
+      case "learn_image":
+        return loc.pathVisualLearning;
+      case "learn_blank":
+        return loc.pathFillBlank;
+      case "learn_order":
+        return loc.pathSentenceOrder;
+      case "learn_quiz":
+        return loc.pathQuickQuiz;
+      case "minimal_pairs":
+        return loc.pathMinimalPairs;
+      case "speak":
+        return loc.pathPronunciation;
+      case "listen":
+        return loc.pathListening;
+      case "test":
+        return loc.pathTest;
+      case "level_jump":
+        return loc.pathLevelUp;
+      default:
+        return type;
+    }
+  }
 
   @override
   void initState() {
@@ -289,6 +315,7 @@ class _PathScreenState extends State<PathScreen> {
     required Color themeColor,
     required bool isFinalLesson,
   }) {
+    final loc = AppLocalizations.of(context)!;
     final lessonNumber = lessonIndex + 1;
     final completedSteps = isFinalLesson
         ? 0
@@ -348,7 +375,9 @@ class _PathScreenState extends State<PathScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isFinalLesson ? "FİNAL TESTİ" : "DERS $lessonNumber",
+                  isFinalLesson
+                      ? loc.pathFinalTest
+                      : loc.pathLessonNumber(lessonNumber),
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.82),
                     fontSize: 12,
@@ -358,7 +387,7 @@ class _PathScreenState extends State<PathScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  lesson['title'] ?? "Bilinmeyen Ders",
+                  (lesson['title'] ?? loc.pathUnknownLesson).toString(),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -392,7 +421,7 @@ class _PathScreenState extends State<PathScreen> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
-              isFinalLesson ? "Sınav" : "$completedSteps/$totalSteps",
+              isFinalLesson ? loc.pathExam : "$completedSteps/$totalSteps",
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 13,
@@ -411,6 +440,11 @@ class _PathScreenState extends State<PathScreen> {
     required Color themeColor,
     required bool isFinalLesson,
   }) {
+    final loc = AppLocalizations.of(context)!;
+    final String stepTitle = _getLocalizedStepTitle(
+      stepDef['type'].toString(),
+      loc,
+    );
     final Color activeColor = isFinalLesson
         ? Colors.amber.shade700
         : themeColor;
@@ -447,7 +481,7 @@ class _PathScreenState extends State<PathScreen> {
           const SizedBox(width: 6),
           Flexible(
             child: Text(
-              "${stepDef['title']}",
+              stepTitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -465,9 +499,9 @@ class _PathScreenState extends State<PathScreen> {
                 color: activeColor,
                 borderRadius: BorderRadius.circular(999),
               ),
-              child: const Text(
-                "Sıradaki",
-                style: TextStyle(
+              child: Text(
+                loc.pathNext,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 10,
                   fontWeight: FontWeight.w900,
@@ -548,22 +582,20 @@ class _PathScreenState extends State<PathScreen> {
     required UserProgress progress,
     required Color themeColor,
   }) async {
+    final loc = AppLocalizations.of(context)!;
+
     if (status == "locked") {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Bu adım henüz kilitli! Öncekileri tamamla."),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(loc.pathLockedMessage)));
       return;
     }
 
     if (stepDef['type'] == "level_jump" &&
         widget.displayLevel != progress.currentLevel) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Bu final sınavı zaten tamamlandı. Eski seviyelerde sadece pratik yapabilirsin.",
-          ),
+        SnackBar(
+          content: Text(loc.pathOldFinalMessage),
           backgroundColor: Colors.orange,
         ),
       );
@@ -592,7 +624,8 @@ class _PathScreenState extends State<PathScreen> {
         MaterialPageRoute(
           builder: (context) => LearnActivityScreen(
             activityType: stepDef['type'],
-            lessonTitle: lesson['title'] ?? "Bölüm",
+            lessonTitle: (lesson['title'] ?? loc.pathSectionFallback)
+                .toString(),
             themeColor: themeColor,
             username: progress.userName,
             minLevel: lesson['min_level'] ?? "A1",
@@ -667,13 +700,13 @@ class _PathScreenState extends State<PathScreen> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
-              "Yepyeni bir seviyeye hoş geldin! 🎉",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              loc.pathWelcomeNewLevel,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
-            backgroundColor: Color(0xFF06D6A0),
-            duration: Duration(seconds: 3),
+            backgroundColor: const Color(0xFF06D6A0),
+            duration: const Duration(seconds: 3),
           ),
         );
       }
@@ -729,6 +762,8 @@ class _PathScreenState extends State<PathScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -749,7 +784,7 @@ class _PathScreenState extends State<PathScreen> {
             if (snapshot.hasError) {
               return Center(
                 child: Text(
-                  "Hata: ${snapshot.error}",
+                  loc.pathLoadError(snapshot.error.toString()),
                   style: const TextStyle(color: Colors.red),
                 ),
               );
@@ -778,11 +813,7 @@ class _PathScreenState extends State<PathScreen> {
                   "lessonIndex": i,
                   "stepIndex": 0,
                   "lesson": lesson,
-                  "stepDef": {
-                    "type": "level_jump",
-                    "title": "SEVİYE ATLA",
-                    "icon": "🚀",
-                  },
+                  "stepDef": {"type": "level_jump", "icon": "🚀"},
                   "isFirstStep": true,
                   "isFinalLesson": true,
                 });

@@ -1299,6 +1299,120 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Tekrar Dene 🔄'**
   String get listeningTryAgainButton;
+
+  /// No description provided for @pathVisualLearning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görsel Öğrenim'**
+  String get pathVisualLearning;
+
+  /// No description provided for @pathFillBlank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boşluk Doldurma'**
+  String get pathFillBlank;
+
+  /// No description provided for @pathSentenceOrder.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cümle Kurma'**
+  String get pathSentenceOrder;
+
+  /// No description provided for @pathQuickQuiz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hızlı Quiz'**
+  String get pathQuickQuiz;
+
+  /// No description provided for @pathMinimalPairs.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ses Çiftleri'**
+  String get pathMinimalPairs;
+
+  /// No description provided for @pathPronunciation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telaffuz'**
+  String get pathPronunciation;
+
+  /// No description provided for @pathListening.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dinleme'**
+  String get pathListening;
+
+  /// No description provided for @pathTest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Test'**
+  String get pathTest;
+
+  /// No description provided for @pathLevelUp.
+  ///
+  /// In tr, this message translates to:
+  /// **'SEVİYE ATLA'**
+  String get pathLevelUp;
+
+  /// No description provided for @pathFinalTest.
+  ///
+  /// In tr, this message translates to:
+  /// **'FİNAL TESTİ'**
+  String get pathFinalTest;
+
+  /// No description provided for @pathLessonNumber.
+  ///
+  /// In tr, this message translates to:
+  /// **'DERS {number}'**
+  String pathLessonNumber(int number);
+
+  /// No description provided for @pathUnknownLesson.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilinmeyen Ders'**
+  String get pathUnknownLesson;
+
+  /// No description provided for @pathSectionFallback.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölüm'**
+  String get pathSectionFallback;
+
+  /// No description provided for @pathExam.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınav'**
+  String get pathExam;
+
+  /// No description provided for @pathNext.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıradaki'**
+  String get pathNext;
+
+  /// No description provided for @pathLockedMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu adım henüz kilitli! Öncekileri tamamla.'**
+  String get pathLockedMessage;
+
+  /// No description provided for @pathOldFinalMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu final sınavı zaten tamamlandı. Eski seviyelerde sadece pratik yapabilirsin.'**
+  String get pathOldFinalMessage;
+
+  /// No description provided for @pathWelcomeNewLevel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yepyeni bir seviyeye hoş geldin! 🎉'**
+  String get pathWelcomeNewLevel;
+
+  /// No description provided for @pathLoadError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita yüklenirken hata oluştu: {error}'**
+  String pathLoadError(String error);
 }
 
 class _AppLocalizationsDelegate

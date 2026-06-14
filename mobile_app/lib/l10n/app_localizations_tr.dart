@@ -684,4 +684,66 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get listeningTryAgainButton => 'Tekrar Dene 🔄';
+
+  @override
+  String get pathVisualLearning => 'Görsel Öğrenim';
+
+  @override
+  String get pathFillBlank => 'Boşluk Doldurma';
+
+  @override
+  String get pathSentenceOrder => 'Cümle Kurma';
+
+  @override
+  String get pathQuickQuiz => 'Hızlı Quiz';
+
+  @override
+  String get pathMinimalPairs => 'Ses Çiftleri';
+
+  @override
+  String get pathPronunciation => 'Telaffuz';
+
+  @override
+  String get pathListening => 'Dinleme';
+
+  @override
+  String get pathTest => 'Test';
+
+  @override
+  String get pathLevelUp => 'SEVİYE ATLA';
+
+  @override
+  String get pathFinalTest => 'FİNAL TESTİ';
+
+  @override
+  String pathLessonNumber(int number) {
+    return 'DERS $number';
+  }
+
+  @override
+  String get pathUnknownLesson => 'Bilinmeyen Ders';
+
+  @override
+  String get pathSectionFallback => 'Bölüm';
+
+  @override
+  String get pathExam => 'Sınav';
+
+  @override
+  String get pathNext => 'Sıradaki';
+
+  @override
+  String get pathLockedMessage => 'Bu adım henüz kilitli! Öncekileri tamamla.';
+
+  @override
+  String get pathOldFinalMessage =>
+      'Bu final sınavı zaten tamamlandı. Eski seviyelerde sadece pratik yapabilirsin.';
+
+  @override
+  String get pathWelcomeNewLevel => 'Yepyeni bir seviyeye hoş geldin! 🎉';
+
+  @override
+  String pathLoadError(String error) {
+    return 'Harita yüklenirken hata oluştu: $error';
+  }
 }
