@@ -4,12 +4,14 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 //import '../services/api_service.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class FinalTestScreen extends StatefulWidget {
   final String username;
   final String targetLanguage;
   final String userLevel;
   final int lessonId;
+  final String nativeLanguage;
 
   const FinalTestScreen({
     super.key,
@@ -17,6 +19,7 @@ class FinalTestScreen extends StatefulWidget {
     required this.targetLanguage,
     required this.userLevel,
     required this.lessonId,
+    required this.nativeLanguage,
   });
 
   @override

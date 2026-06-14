@@ -675,6 +675,7 @@ class _PathScreenState extends State<PathScreen> {
             targetLanguage: widget.selectedLanguage,
             userLevel: widget.displayLevel,
             lessonId: lesson['id'],
+            nativeLanguage: widget.nativeLanguage,
           ),
         ),
       );
