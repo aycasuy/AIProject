@@ -415,5 +415,53 @@
         "type": "String"
       }
     }
-  }
+  },
+  "finalTestTitle": "FİNAL SINAVI 🚀",
+  "finalTestLoading": "Final sınavın hazırlanıyor...",
+  "finalTestLoadFailed": "Final sınavı yüklenemedi.",
+  "finalTestNoQuestions": "Bu sınav için soru bulunamadı.",
+  "finalTestRetry": "Tekrar Dene",
+  "finalTestQuestionCounter": "Soru {current} / {total}",
+  "@finalTestQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "finalTestAnswer": "Cevapla",
+  "finalTestCorrect": "✅ Doğru!",
+  "finalTestWrong": "❌ Yanlış!",
+  "finalTestFillBlank": "Boşluğu Doldur",
+  "finalTestBuildSentence": "Cümleyi Kur",
+  "finalTestListenAndWrite": "Duyduğunu Yaz",
+  "finalTestReadAloud": "Yüksek Sesle Oku",
+  "finalTestAnswerHint": "Cevabını yaz...",
+  "finalTestWriteInLanguage": "{language} dilinde yaz...",
+  "@finalTestWriteInLanguage": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "finalTestMicrophoneHint": "Mikrofona bas...",
+  "finalTestListening": "Dinleniyor...",
+  "finalTestCongratulations": "TEBRİKLER!",
+  "finalTestFailedTitle": "SINAVI GEÇEMEDİN",
+  "finalTestScore": "Puanın: {score} / 100",
+  "@finalTestScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "finalTestPassedMessage": "Harika iş çıkardın! Yeni dersin kilidi açıldı.",
+  "finalTestFailedMessage": "70 puanı geçemedin. Eksiklerini kapatıp tekrar denemelisin.",
+  "finalTestNextLesson": "Sonraki Derse Geç 🚀",
+  "finalTestBackToMap": "Haritaya Dön"
 }
