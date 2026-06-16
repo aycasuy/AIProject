@@ -463,5 +463,69 @@
   "finalTestPassedMessage": "¡Muy buen trabajo! Desbloqueaste la siguiente lección.",
   "finalTestFailedMessage": "No ha alcanzado 70 puntos. Revise sus errores y vuelva a intentarlo.",
   "finalTestNextLesson": "Continuar a la siguiente lección 🚀",
-  "finalTestBackToMap": "Volver al mapa"
+  "finalTestBackToMap": "Volver al mapa",
+  "profileTitle": "Profilim",
+  "profileLanguageLevel": "{language} • {level} Seviyesi",
+  "@profileLanguageLevel": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTotalXp": "Toplam XP",
+  "profileRemainingLives": "Kalan Can",
+  "profileProgress": "İlerleme",
+  "profileProgressValue": "Bölüm {section} - Ders {lesson}",
+  "@profileProgressValue": {
+    "placeholders": {
+      "section": {
+        "type": "int"
+      },
+      "lesson": {
+        "type": "int"
+      }
+    }
+  },
+  "profileDayStreak": "Gün Serisi",
+  "profileDayCount": "{count} Gün",
+  "@profileDayCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileWeeklyXpAnalysis": "Haftalık XP Analizi",
+  "profileMondayShort": "Pzt",
+  "profileTuesdayShort": "Sal",
+  "profileWednesdayShort": "Çar",
+  "profileThursdayShort": "Per",
+  "profileFridayShort": "Cum",
+  "profileSaturdayShort": "Cmt",
+  "profileSundayShort": "Paz",
+  "profileLearningCenter": "Öğrenme Merkezi",
+  "profileWordBank": "Kelime Kumbaram",
+  "profileDailyTraining": "Günlük Antrenman",
+  "profileDailyQuestions": "Bugün seni bekleyen {count} özel soru var!",
+  "@profileDailyQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileWordTraining": "Kelime Antrenmanı",
+  "profileUnlearnedWords": "Öğrenilmeyi bekleyen {count} kelime var",
+  "@profileUnlearnedWords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileStatsLoadFailed": "Profil istatistikleri yüklenemedi."
 }
