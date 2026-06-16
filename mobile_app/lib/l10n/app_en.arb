@@ -463,5 +463,69 @@
   "finalTestPassedMessage": "Great job! You unlocked the next lesson.",
   "finalTestFailedMessage": "You did not reach 70 points. Review your mistakes and try again.",
   "finalTestNextLesson": "Continue to the Next Lesson 🚀",
-  "finalTestBackToMap": "Back to Map"
+  "finalTestBackToMap": "Back to Map",
+  "profileTitle": "My Profile",
+  "profileLanguageLevel": "{language} • {level} Level",
+  "@profileLanguageLevel": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTotalXp": "Total XP",
+  "profileRemainingLives": "Lives Remaining",
+  "profileProgress": "\"Progress",
+  "profileProgressValue": "Section {section} - Lesson {lesson}",
+  "@profileProgressValue": {
+    "placeholders": {
+      "section": {
+        "type": "int"
+      },
+      "lesson": {
+        "type": "int"
+      }
+    }
+  },
+  "profileDayStreak": "Day Streak",
+  "profileDayCount": "{count} Days",
+  "@profileDayCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileWeeklyXpAnalysis": "Weekly XP Analysis",
+  "profileMondayShort": "Mon",
+  "profileTuesdayShort": "Tue",
+  "profileWednesdayShort": "Wed",
+  "profileThursdayShort": "Thu",
+  "profileFridayShort": "Fri",
+  "profileSaturdayShort": "Sat",
+  "profileSundayShort": "Sun",
+  "profileLearningCenter": "Learning Center",
+  "profileWordBank": "My Word Bank",
+  "profileDailyTraining": "Daily Training",
+  "profileDailyQuestions": "{count} personalized questions are waiting for you today!",
+  "@profileDailyQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileWordTraining": "Vocabulary Training",
+  "profileUnlearnedWords": "{count} words are waiting to be learned",
+  "@profileUnlearnedWords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileStatsLoadFailed": "Profile statistics could not be loaded."
 }

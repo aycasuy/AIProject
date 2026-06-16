@@ -463,5 +463,69 @@
   "finalTestPassedMessage": "¡Muy buen trabajo! Desbloqueaste la siguiente lección.",
   "finalTestFailedMessage": "No ha alcanzado 70 puntos. Revise sus errores y vuelva a intentarlo.",
   "finalTestNextLesson": "Continuar a la siguiente lección 🚀",
-  "finalTestBackToMap": "Volver al mapa"
+  "finalTestBackToMap": "Volver al mapa",
+  "profileTitle": "Mi perfil",
+  "profileLanguageLevel": "{language} • Nivel {level}",
+  "@profileLanguageLevel": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTotalXp": "XP total",
+  "profileRemainingLives": "Vidas restantes",
+  "profileProgress": "\"Progreso",
+  "profileProgressValue": "Sección {section} - Lección {lesson}",
+  "@profileProgressValue": {
+    "placeholders": {
+      "section": {
+        "type": "int"
+      },
+      "lesson": {
+        "type": "int"
+      }
+    }
+  },
+  "profileDayStreak": "Racha diaria",
+  "profileDayCount": "{count} días",
+  "@profileDayCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileWeeklyXpAnalysis": "Análisis semanal de XP",
+  "profileMondayShort": "Mon",
+  "profileTuesdayShort": "Tue",
+  "profileWednesdayShort": "Mié",
+  "profileThursdayShort": "Thu",
+  "profileFridayShort": "Vie",
+  "profileSaturdayShort": "Sáb",
+  "profileSundayShort": "Sol",
+  "profileLearningCenter": "Centro de aprendizaje",
+  "profileWordBank": "Mi Banco de palabras",
+  "profileDailyTraining": "Entrenamiento diario",
+  "profileDailyQuestions": "{count} preguntas personalizadas te están esperando hoy!",
+  "@profileDailyQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileWordTraining": "Entrenamiento vocabulario",
+  "profileUnlearnedWords": "{count} palabras están esperando ser aprendidas",
+  "@profileUnlearnedWords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileStatsLoadFailed": "No se han podido cargar las estadísticas del perfil."
 }
