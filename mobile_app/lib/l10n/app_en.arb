@@ -464,8 +464,8 @@
   "finalTestFailedMessage": "You did not reach 70 points. Review your mistakes and try again.",
   "finalTestNextLesson": "Continue to the Next Lesson 🚀",
   "finalTestBackToMap": "Back to Map",
-  "profileTitle": "Profilim",
-  "profileLanguageLevel": "{language} • {level} Seviyesi",
+  "profileTitle": "My Profile",
+  "profileLanguageLevel": "{language} • {level} Level",
   "@profileLanguageLevel": {
     "placeholders": {
       "language": {
@@ -476,10 +476,10 @@
       }
     }
   },
-  "profileTotalXp": "Toplam XP",
-  "profileRemainingLives": "Kalan Can",
-  "profileProgress": "İlerleme",
-  "profileProgressValue": "Bölüm {section} - Ders {lesson}",
+  "profileTotalXp": "Total XP",
+  "profileRemainingLives": "Lives Remaining",
+  "profileProgress": "\"Progress",
+  "profileProgressValue": "Section {section} - Lesson {lesson}",
   "@profileProgressValue": {
     "placeholders": {
       "section": {
@@ -490,8 +490,8 @@
       }
     }
   },
-  "profileDayStreak": "Gün Serisi",
-  "profileDayCount": "{count} Gün",
+  "profileDayStreak": "Day Streak",
+  "profileDayCount": "{count} Days",
   "@profileDayCount": {
     "placeholders": {
       "count": {
@@ -499,18 +499,18 @@
       }
     }
   },
-  "profileWeeklyXpAnalysis": "Haftalık XP Analizi",
-  "profileMondayShort": "Pzt",
-  "profileTuesdayShort": "Sal",
-  "profileWednesdayShort": "Çar",
-  "profileThursdayShort": "Per",
-  "profileFridayShort": "Cum",
-  "profileSaturdayShort": "Cmt",
-  "profileSundayShort": "Paz",
-  "profileLearningCenter": "Öğrenme Merkezi",
-  "profileWordBank": "Kelime Kumbaram",
-  "profileDailyTraining": "Günlük Antrenman",
-  "profileDailyQuestions": "Bugün seni bekleyen {count} özel soru var!",
+  "profileWeeklyXpAnalysis": "Weekly XP Analysis",
+  "profileMondayShort": "Mon",
+  "profileTuesdayShort": "Tue",
+  "profileWednesdayShort": "Wed",
+  "profileThursdayShort": "Thu",
+  "profileFridayShort": "Fri",
+  "profileSaturdayShort": "Sat",
+  "profileSundayShort": "Sun",
+  "profileLearningCenter": "Learning Center",
+  "profileWordBank": "My Word Bank",
+  "profileDailyTraining": "Daily Training",
+  "profileDailyQuestions": "{count} personalized questions are waiting for you today!",
   "@profileDailyQuestions": {
     "placeholders": {
       "count": {
@@ -518,8 +518,8 @@
       }
     }
   },
-  "profileWordTraining": "Kelime Antrenmanı",
-  "profileUnlearnedWords": "Öğrenilmeyi bekleyen {count} kelime var",
+  "profileWordTraining": "Vocabulary Training",
+  "profileUnlearnedWords": "{count} words are waiting to be learned",
   "@profileUnlearnedWords": {
     "placeholders": {
       "count": {
@@ -527,5 +527,5 @@
       }
     }
   },
-  "profileStatsLoadFailed": "Profil istatistikleri yüklenemedi."
+  "profileStatsLoadFailed": "Profile statistics could not be loaded."
 }
