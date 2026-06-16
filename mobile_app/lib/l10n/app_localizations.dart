@@ -1413,6 +1413,150 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Harita yüklenirken hata oluştu: {error}'**
   String pathLoadError(String error);
+
+  /// No description provided for @finalTestTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'FİNAL SINAVI 🚀'**
+  String get finalTestTitle;
+
+  /// No description provided for @finalTestLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Final sınavın hazırlanıyor...'**
+  String get finalTestLoading;
+
+  /// No description provided for @finalTestLoadFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Final sınavı yüklenemedi.'**
+  String get finalTestLoadFailed;
+
+  /// No description provided for @finalTestNoQuestions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu sınav için soru bulunamadı.'**
+  String get finalTestNoQuestions;
+
+  /// No description provided for @finalTestRetry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Dene'**
+  String get finalTestRetry;
+
+  /// No description provided for @finalTestQuestionCounter.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soru {current} / {total}'**
+  String finalTestQuestionCounter(int current, int total);
+
+  /// No description provided for @finalTestAnswer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cevapla'**
+  String get finalTestAnswer;
+
+  /// No description provided for @finalTestCorrect.
+  ///
+  /// In tr, this message translates to:
+  /// **'✅ Doğru!'**
+  String get finalTestCorrect;
+
+  /// No description provided for @finalTestWrong.
+  ///
+  /// In tr, this message translates to:
+  /// **'❌ Yanlış!'**
+  String get finalTestWrong;
+
+  /// No description provided for @finalTestFillBlank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boşluğu Doldur'**
+  String get finalTestFillBlank;
+
+  /// No description provided for @finalTestBuildSentence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cümleyi Kur'**
+  String get finalTestBuildSentence;
+
+  /// No description provided for @finalTestListenAndWrite.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duyduğunu Yaz'**
+  String get finalTestListenAndWrite;
+
+  /// No description provided for @finalTestReadAloud.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek Sesle Oku'**
+  String get finalTestReadAloud;
+
+  /// No description provided for @finalTestAnswerHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cevabını yaz...'**
+  String get finalTestAnswerHint;
+
+  /// No description provided for @finalTestWriteInLanguage.
+  ///
+  /// In tr, this message translates to:
+  /// **'{language} dilinde yaz...'**
+  String finalTestWriteInLanguage(String language);
+
+  /// No description provided for @finalTestMicrophoneHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mikrofona bas...'**
+  String get finalTestMicrophoneHint;
+
+  /// No description provided for @finalTestListening.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dinleniyor...'**
+  String get finalTestListening;
+
+  /// No description provided for @finalTestCongratulations.
+  ///
+  /// In tr, this message translates to:
+  /// **'TEBRİKLER!'**
+  String get finalTestCongratulations;
+
+  /// No description provided for @finalTestFailedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'SINAVI GEÇEMEDİN'**
+  String get finalTestFailedTitle;
+
+  /// No description provided for @finalTestScore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puanın: {score} / 100'**
+  String finalTestScore(int score);
+
+  /// No description provided for @finalTestPassedMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika iş çıkardın! Yeni dersin kilidi açıldı.'**
+  String get finalTestPassedMessage;
+
+  /// No description provided for @finalTestFailedMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'70 puanı geçemedin. Eksiklerini kapatıp tekrar denemelisin.'**
+  String get finalTestFailedMessage;
+
+  /// No description provided for @finalTestNextLesson.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonraki Derse Geç 🚀'**
+  String get finalTestNextLesson;
+
+  /// No description provided for @finalTestBackToMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritaya Dön'**
+  String get finalTestBackToMap;
 }
 
 class _AppLocalizationsDelegate

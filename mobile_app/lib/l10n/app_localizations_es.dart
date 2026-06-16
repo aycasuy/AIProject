@@ -761,4 +761,85 @@ class AppLocalizationsEs extends AppLocalizations {
   String pathLoadError(String error) {
     return 'Se produjo un error al cargar la ruta de aprendizaje: $error';
   }
+
+  @override
+  String get finalTestTitle => 'PRUEBA FINAL 🚀';
+
+  @override
+  String get finalTestLoading => 'Preparando tu prueba final...';
+
+  @override
+  String get finalTestLoadFailed => 'No se pudo cargar la prueba final.';
+
+  @override
+  String get finalTestNoQuestions =>
+      'No se encontraron preguntas para esta prueba.';
+
+  @override
+  String get finalTestRetry => 'Intentar de nuevo';
+
+  @override
+  String finalTestQuestionCounter(int current, int total) {
+    return 'Pregunta $current / $total';
+  }
+
+  @override
+  String get finalTestAnswer => 'Responder';
+
+  @override
+  String get finalTestCorrect => '✅ ¡Correcto!';
+
+  @override
+  String get finalTestWrong => '❌ ¡Incorrecto!';
+
+  @override
+  String get finalTestFillBlank => 'Completa el espacio';
+
+  @override
+  String get finalTestBuildSentence => 'Construye la oración';
+
+  @override
+  String get finalTestListenAndWrite => 'Escribe lo que escuchas';
+
+  @override
+  String get finalTestReadAloud => 'Leer en voz alta';
+
+  @override
+  String get finalTestAnswerHint => 'Escribe tu respuesta...';
+
+  @override
+  String finalTestWriteInLanguage(String language) {
+    return 'Escribe en $language...';
+  }
+
+  @override
+  String get finalTestMicrophoneHint => 'Pulsa el micrófono...';
+
+  @override
+  String get finalTestListening => 'Escuchando...';
+
+  @override
+  String get finalTestCongratulations => '¡CONGRATULACIONES!';
+
+  @override
+  String get finalTestFailedTitle => 'NO PASAS';
+
+  @override
+  String finalTestScore(int score) {
+    return 'Tu puntuación: $score / 100';
+  }
+
+  @override
+  String get finalTestPassedMessage =>
+      '¡Muy buen trabajo! Desbloqueaste la siguiente lección.';
+
+  @override
+  String get finalTestFailedMessage =>
+      'No ha alcanzado 70 puntos. Revise sus errores y vuelva a intentarlo.';
+
+  @override
+  String get finalTestNextLesson => 'Continuar a la siguiente lección 🚀';
+
+  @override
+  String get finalTestBackToMap => 'Volver al mapa';
 }

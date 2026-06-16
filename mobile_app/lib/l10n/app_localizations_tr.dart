@@ -746,4 +746,84 @@ class AppLocalizationsTr extends AppLocalizations {
   String pathLoadError(String error) {
     return 'Harita yüklenirken hata oluştu: $error';
   }
+
+  @override
+  String get finalTestTitle => 'FİNAL SINAVI 🚀';
+
+  @override
+  String get finalTestLoading => 'Final sınavın hazırlanıyor...';
+
+  @override
+  String get finalTestLoadFailed => 'Final sınavı yüklenemedi.';
+
+  @override
+  String get finalTestNoQuestions => 'Bu sınav için soru bulunamadı.';
+
+  @override
+  String get finalTestRetry => 'Tekrar Dene';
+
+  @override
+  String finalTestQuestionCounter(int current, int total) {
+    return 'Soru $current / $total';
+  }
+
+  @override
+  String get finalTestAnswer => 'Cevapla';
+
+  @override
+  String get finalTestCorrect => '✅ Doğru!';
+
+  @override
+  String get finalTestWrong => '❌ Yanlış!';
+
+  @override
+  String get finalTestFillBlank => 'Boşluğu Doldur';
+
+  @override
+  String get finalTestBuildSentence => 'Cümleyi Kur';
+
+  @override
+  String get finalTestListenAndWrite => 'Duyduğunu Yaz';
+
+  @override
+  String get finalTestReadAloud => 'Yüksek Sesle Oku';
+
+  @override
+  String get finalTestAnswerHint => 'Cevabını yaz...';
+
+  @override
+  String finalTestWriteInLanguage(String language) {
+    return '$language dilinde yaz...';
+  }
+
+  @override
+  String get finalTestMicrophoneHint => 'Mikrofona bas...';
+
+  @override
+  String get finalTestListening => 'Dinleniyor...';
+
+  @override
+  String get finalTestCongratulations => 'TEBRİKLER!';
+
+  @override
+  String get finalTestFailedTitle => 'SINAVI GEÇEMEDİN';
+
+  @override
+  String finalTestScore(int score) {
+    return 'Puanın: $score / 100';
+  }
+
+  @override
+  String get finalTestPassedMessage =>
+      'Harika iş çıkardın! Yeni dersin kilidi açıldı.';
+
+  @override
+  String get finalTestFailedMessage =>
+      '70 puanı geçemedin. Eksiklerini kapatıp tekrar denemelisin.';
+
+  @override
+  String get finalTestNextLesson => 'Sonraki Derse Geç 🚀';
+
+  @override
+  String get finalTestBackToMap => 'Haritaya Dön';
 }

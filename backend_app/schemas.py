@@ -207,6 +207,7 @@ class TestRequest(BaseModel):
     lesson_id: int
     level: str
     target_language: str
+    native_language: str = "Turkish"
 
 class PronunciationCorrectionRequest(BaseModel):
     target_word: str      # Örn: Ship

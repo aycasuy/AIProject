@@ -754,4 +754,84 @@ class AppLocalizationsEn extends AppLocalizations {
   String pathLoadError(String error) {
     return 'An error occurred while loading the learning path: $error';
   }
+
+  @override
+  String get finalTestTitle => 'FINAL TEST 🚀';
+
+  @override
+  String get finalTestLoading => 'Preparing your final test...';
+
+  @override
+  String get finalTestLoadFailed => 'The final test could not be loaded.';
+
+  @override
+  String get finalTestNoQuestions => 'No questions were found for this test.';
+
+  @override
+  String get finalTestRetry => 'Try Again';
+
+  @override
+  String finalTestQuestionCounter(int current, int total) {
+    return 'Question $current / $total';
+  }
+
+  @override
+  String get finalTestAnswer => 'Submit Answer';
+
+  @override
+  String get finalTestCorrect => '✅ Correct!';
+
+  @override
+  String get finalTestWrong => '❌ Incorrect!';
+
+  @override
+  String get finalTestFillBlank => 'Fill in the Blank';
+
+  @override
+  String get finalTestBuildSentence => 'Build the Sentence';
+
+  @override
+  String get finalTestListenAndWrite => 'Write What You Hear';
+
+  @override
+  String get finalTestReadAloud => 'Read Aloud';
+
+  @override
+  String get finalTestAnswerHint => 'Write your answer...';
+
+  @override
+  String finalTestWriteInLanguage(String language) {
+    return 'Write in $language...';
+  }
+
+  @override
+  String get finalTestMicrophoneHint => 'Tap the microphone...';
+
+  @override
+  String get finalTestListening => 'Listening...';
+
+  @override
+  String get finalTestCongratulations => 'CONGRATULATIONS!';
+
+  @override
+  String get finalTestFailedTitle => 'YOU DID NOT PASS';
+
+  @override
+  String finalTestScore(int score) {
+    return 'Your score: $score / 100';
+  }
+
+  @override
+  String get finalTestPassedMessage =>
+      'Great job! You unlocked the next lesson.';
+
+  @override
+  String get finalTestFailedMessage =>
+      'You did not reach 70 points. Review your mistakes and try again.';
+
+  @override
+  String get finalTestNextLesson => 'Continue to the Next Lesson 🚀';
+
+  @override
+  String get finalTestBackToMap => 'Back to Map';
 }

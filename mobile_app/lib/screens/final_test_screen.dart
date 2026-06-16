@@ -44,30 +44,110 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
   // Drag & Drop için
   List<String> _availableWords = [];
   List<String> _selectedWords = [];
+  String? _loadError;
+  bool _initialLoadStarted = false;
+
+  String _getTtsLanguageCode(String language) {
+    switch (language.toLowerCase()) {
+      case "english":
+        return "en-US";
+      case "spanish":
+        return "es-ES";
+      case "french":
+        return "fr-FR";
+      case "german":
+        return "de-DE";
+      case "italian":
+        return "it-IT";
+      case "turkish":
+        return "tr-TR";
+      default:
+        return "en-US";
+    }
+  }
+
+  String _getSpeechLocaleId(String language) {
+    switch (language.toLowerCase()) {
+      case "english":
+        return "en_US";
+      case "spanish":
+        return "es_ES";
+      case "french":
+        return "fr_FR";
+      case "german":
+        return "de_DE";
+      case "italian":
+        return "it_IT";
+      case "turkish":
+        return "tr_TR";
+      default:
+        return "en_US";
+    }
+  }
+
+  String _localizedLanguageName(String language, AppLocalizations loc) {
+    switch (language.toLowerCase()) {
+      case "english":
+        return loc.langEnglish;
+      case "spanish":
+        return loc.langSpanish;
+      case "german":
+        return loc.langGerman;
+      case "french":
+        return loc.langFrench;
+      case "turkish":
+        return loc.langTurkish;
+      default:
+        return language;
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _initTools();
-    _fetchTestQuestions();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_initialLoadStarted) {
+      _initialLoadStarted = true;
+      _fetchTestQuestions();
+    }
   }
 
   void _initTools() async {
     _flutterTts = FlutterTts();
     _speech = stt.SpeechToText();
+
+    await _flutterTts.setLanguage(_getTtsLanguageCode(widget.targetLanguage));
+    await _flutterTts.setSpeechRate(0.45);
+    await _flutterTts.setPitch(1.0);
     await _speech.initialize();
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    _speech.stop();
     _flutterTts.stop();
     super.dispose();
   }
 
   Future<void> _fetchTestQuestions() async {
+    final loc = AppLocalizations.of(context)!;
+
+    setState(() {
+      _isLoading = true;
+      _loadError = null;
+      _questions = [];
+    });
+
     try {
       final url = Uri.parse('http://10.0.2.2:8000/generate_final_test');
+
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
@@ -75,19 +155,44 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
           "lesson_id": widget.lessonId,
           "level": widget.userLevel,
           "target_language": widget.targetLanguage,
+          "native_language": widget.nativeLanguage,
         }),
       );
 
+      if (!mounted) return;
+
       if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
+
+        final List<dynamic> questions = data['questions'] is List
+            ? List<dynamic>.from(data['questions'])
+            : <dynamic>[];
+
         setState(() {
-          _questions = data['questions'];
+          _questions = questions;
           _isLoading = false;
-          _prepareQuestionData(); // İlk sorunun verilerini hazırla
+
+          if (_questions.isNotEmpty) {
+            _prepareQuestionData();
+          }
+        });
+      } else {
+        debugPrint(
+          "FINAL TEST ERROR: ${response.statusCode} - ${response.body}",
+        );
+
+        setState(() {
+          _loadError = "${loc.finalTestLoadFailed} (${response.statusCode})";
+          _isLoading = false;
         });
       }
     } catch (e) {
-      print("Sınav yüklenemedi: $e");
+      if (!mounted) return;
+
+      setState(() {
+        _loadError = loc.connectionErrorWithDetail(e.toString());
+        _isLoading = false;
+      });
     }
   }
 
@@ -135,8 +240,9 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
       );
       // Konuşmada %80 benzerlik yeterli sayılabilir, basitlik için tam eşleşme veya kapsama bakıyoruz
       isCorrect =
-          userAnswer.contains(correctAnswer) ||
-          correctAnswer.contains(userAnswer) && userAnswer.length > 5;
+          userAnswer.length > 5 &&
+          (userAnswer.contains(correctAnswer) ||
+              correctAnswer.contains(userAnswer));
     }
 
     // Puanlama ve Geçiş
@@ -161,10 +267,12 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
   }
 
   void _showFeedback(bool isCorrect) {
+    final loc = AppLocalizations.of(context)!;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          isCorrect ? "✅ Doğru!" : "❌ Yanlış!", // Doğru cevabı SÖYLEMİYORUZ!
+          isCorrect ? loc.finalTestCorrect : loc.finalTestWrong,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
@@ -186,12 +294,81 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
   }
 
   // --- UI GÖVDESİ ---
+
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Color(0xFF1E1E2C),
-        body: Center(child: CircularProgressIndicator(color: Colors.amber)),
+      return Scaffold(
+        backgroundColor: const Color(0xFF1E1E2C),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(color: Colors.amber),
+              const SizedBox(height: 18),
+              Text(
+                loc.finalTestLoading,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_loadError != null) {
+      return Scaffold(
+        backgroundColor: const Color(0xFF1E1E2C),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.error_outline_rounded,
+                  color: Colors.redAccent,
+                  size: 58,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  _loadError!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                const SizedBox(height: 22),
+                ElevatedButton(
+                  onPressed: _fetchTestQuestions,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber,
+                    foregroundColor: Colors.black87,
+                  ),
+                  child: Text(loc.finalTestRetry),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (_questions.isEmpty) {
+      return Scaffold(
+        backgroundColor: const Color(0xFF1E1E2C),
+        body: Center(
+          child: Text(
+            loc.finalTestNoQuestions,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white, fontSize: 17),
+          ),
+        ),
       );
     }
 
@@ -206,22 +383,21 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          "FİNAL SINAVI 🚀",
-          style: TextStyle(
+        title: Text(
+          loc.finalTestTitle,
+          style: const TextStyle(
             color: Colors.amber,
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
           ),
         ),
         centerTitle: true,
-        automaticallyImplyLeading: false, // Sınavdan geri çıkamaz!
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            // İlerleme Çubuğu
             LinearProgressIndicator(
               value: (_currentIndex + 1) / _questions.length,
               backgroundColor: Colors.white24,
@@ -231,13 +407,15 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
             ),
             const SizedBox(height: 10),
             Text(
-              "Soru ${_currentIndex + 1} / ${_questions.length}",
+              loc.finalTestQuestionCounter(
+                _currentIndex + 1,
+                _questions.length,
+              ),
               style: const TextStyle(color: Colors.grey),
             ),
 
             const Spacer(),
 
-            // Soru Tipine Göre Ekran Değişir
             if (q['type'] == 'blank') _buildBlankQuestion(q),
             if (q['type'] == 'order') _buildOrderQuestion(q),
             if (q['type'] == 'listen') _buildListenQuestion(q),
@@ -245,7 +423,6 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
 
             const Spacer(),
 
-            // KONTROL ET BUTONU
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -257,9 +434,9 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: const Text(
-                  "Cevapla",
-                  style: TextStyle(
+                child: Text(
+                  loc.finalTestAnswer,
+                  style: const TextStyle(
                     fontSize: 20,
                     color: Colors.black87,
                     fontWeight: FontWeight.bold,
@@ -276,11 +453,13 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
   // --- SORU TİPİ WIDGET'LARI ---
 
   Widget _buildBlankQuestion(Map<String, dynamic> q) {
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       children: [
-        const Text(
-          "Boşluğu Doldur",
-          style: TextStyle(color: Colors.white54, fontSize: 16),
+        Text(
+          loc.finalTestFillBlank,
+          style: const TextStyle(color: Colors.white54, fontSize: 16),
         ),
         const SizedBox(height: 20),
         Text(
@@ -302,7 +481,7 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white10,
-            hintText: "Cevabını yaz...",
+            hintText: loc.finalTestAnswerHint,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
           ),
         ),
@@ -311,11 +490,13 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
   }
 
   Widget _buildOrderQuestion(Map<String, dynamic> q) {
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       children: [
-        const Text(
-          "Cümleyi Kur",
-          style: TextStyle(color: Colors.white54, fontSize: 16),
+        Text(
+          loc.finalTestBuildSentence,
+          style: const TextStyle(color: Colors.white54, fontSize: 16),
         ),
         const SizedBox(height: 20),
         Text(
@@ -410,11 +591,13 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
   }
 
   Widget _buildListenQuestion(Map<String, dynamic> q) {
+    final loc = AppLocalizations.of(context)!;
+    final languageName = _localizedLanguageName(widget.targetLanguage, loc);
     return Column(
       children: [
-        const Text(
-          "Duyduğunu Yaz",
-          style: TextStyle(color: Colors.white54, fontSize: 16),
+        Text(
+          loc.finalTestListenAndWrite,
+          style: const TextStyle(color: Colors.white54, fontSize: 16),
         ),
         const SizedBox(height: 30),
         GestureDetector(
@@ -433,7 +616,7 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white10,
-            hintText: "İngilizce yaz...",
+            hintText: loc.finalTestWriteInLanguage(languageName),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
           ),
         ),
@@ -442,11 +625,12 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
   }
 
   Widget _buildSpeakQuestion(Map<String, dynamic> q) {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
-        const Text(
-          "Yüksek Sesle Oku",
-          style: TextStyle(color: Colors.white54, fontSize: 16),
+        Text(
+          loc.finalTestReadAloud,
+          style: const TextStyle(color: Colors.white54, fontSize: 16),
         ),
         const SizedBox(height: 20),
         Container(
@@ -467,7 +651,9 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
         ),
         const SizedBox(height: 40),
         Text(
-          _recognizedText.isEmpty ? "Mikrofona bas..." : _recognizedText,
+          _recognizedText.isEmpty
+              ? loc.finalTestMicrophoneHint
+              : _recognizedText,
           style: const TextStyle(color: Colors.amber, fontSize: 18),
           textAlign: TextAlign.center,
         ),
@@ -479,8 +665,12 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
               if (available) {
                 setState(() => _isListening = true);
                 _speech.listen(
-                  onResult: (val) =>
-                      setState(() => _recognizedText = val.recognizedWords),
+                  localeId: _getSpeechLocaleId(widget.targetLanguage),
+                  onResult: (val) {
+                    setState(() {
+                      _recognizedText = val.recognizedWords;
+                    });
+                  },
                 );
               }
             } else {
@@ -504,6 +694,8 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
 
   // 🏆 KARNE EKRANI (BÖLÜM SONU)
   Widget _buildReportCard() {
+    final loc = AppLocalizations.of(context)!;
+
     bool passed = _score >= 70;
     return Scaffold(
       backgroundColor: passed
@@ -516,7 +708,7 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
             Text(passed ? "🎉" : "💔", style: const TextStyle(fontSize: 100)),
             const SizedBox(height: 20),
             Text(
-              passed ? "TEBRİKLER!" : "SINAVI GEÇEMEDİN",
+              passed ? loc.finalTestCongratulations : loc.finalTestFailedTitle,
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
@@ -527,7 +719,7 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
             ),
             const SizedBox(height: 10),
             Text(
-              "Puanın: $_score / 100",
+              loc.finalTestScore(_score),
               style: const TextStyle(fontSize: 24, color: Colors.white),
             ),
             const SizedBox(height: 20),
@@ -535,8 +727,8 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Text(
                 passed
-                    ? "Harika iş çıkardın! Yeni dersin kilidi açıldı."
-                    : "70 puanı geçemedin. Eksiklerini kapatıp tekrar denemelisin.",
+                    ? loc.finalTestPassedMessage
+                    : loc.finalTestFailedMessage,
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.grey, fontSize: 16),
               ),
@@ -560,7 +752,7 @@ class _FinalTestScreenState extends State<FinalTestScreen> {
                 ),
               ),
               child: Text(
-                passed ? "Sonraki Derse Geç 🚀" : "Haritaya Dön",
+                passed ? loc.finalTestNextLesson : loc.finalTestBackToMap,
                 style: const TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
