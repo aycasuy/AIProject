@@ -479,7 +479,7 @@
   "profileTotalXp": "Total XP",
   "profileRemainingLives": "Lives Remaining",
   "profileProgress": "\"Progress",
-  "profileProgressValue": "Section {section} - Lesson {lesson}",
+  "profileProgressValue": "Sec. {section} • Lsn. {lesson}",
   "@profileProgressValue": {
     "placeholders": {
       "section": {
