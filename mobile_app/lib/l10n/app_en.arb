@@ -463,5 +463,69 @@
   "finalTestPassedMessage": "Great job! You unlocked the next lesson.",
   "finalTestFailedMessage": "You did not reach 70 points. Review your mistakes and try again.",
   "finalTestNextLesson": "Continue to the Next Lesson 🚀",
-  "finalTestBackToMap": "Back to Map"
+  "finalTestBackToMap": "Back to Map",
+  "profileTitle": "Profilim",
+  "profileLanguageLevel": "{language} • {level} Seviyesi",
+  "@profileLanguageLevel": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTotalXp": "Toplam XP",
+  "profileRemainingLives": "Kalan Can",
+  "profileProgress": "İlerleme",
+  "profileProgressValue": "Bölüm {section} - Ders {lesson}",
+  "@profileProgressValue": {
+    "placeholders": {
+      "section": {
+        "type": "int"
+      },
+      "lesson": {
+        "type": "int"
+      }
+    }
+  },
+  "profileDayStreak": "Gün Serisi",
+  "profileDayCount": "{count} Gün",
+  "@profileDayCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileWeeklyXpAnalysis": "Haftalık XP Analizi",
+  "profileMondayShort": "Pzt",
+  "profileTuesdayShort": "Sal",
+  "profileWednesdayShort": "Çar",
+  "profileThursdayShort": "Per",
+  "profileFridayShort": "Cum",
+  "profileSaturdayShort": "Cmt",
+  "profileSundayShort": "Paz",
+  "profileLearningCenter": "Öğrenme Merkezi",
+  "profileWordBank": "Kelime Kumbaram",
+  "profileDailyTraining": "Günlük Antrenman",
+  "profileDailyQuestions": "Bugün seni bekleyen {count} özel soru var!",
+  "@profileDailyQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileWordTraining": "Kelime Antrenmanı",
+  "profileUnlearnedWords": "Öğrenilmeyi bekleyen {count} kelime var",
+  "@profileUnlearnedWords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileStatsLoadFailed": "Profil istatistikleri yüklenemedi."
 }
