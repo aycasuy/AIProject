@@ -490,7 +490,13 @@
     }
   },
 
-  "profileStatsLoadFailed": "Profil istatistikleri yüklenemedi."
+  "profileStatsLoadFailed": "Profil istatistikleri yüklenemedi.",
+
+
+
+  "speedReadingFinishedTitle": "Harika Okudun!",
+  "speedReadingFinishedSubtitle": "Şimdi anladıklarını test etme zamanı.",
+  "speedReadingStartQuiz": "Quiz'e Başla!"
 
 
 
