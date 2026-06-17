@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/screens/speed_quiz_screen.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class SpeedReadingScreen extends StatefulWidget {
   final String storyText;
@@ -146,6 +147,8 @@ class _SpeedReadingScreenState extends State<SpeedReadingScreen> {
 
   // 🌟 Okuma bittiğinde ekrana çıkacak o gösterişli ekran
   Widget _buildFinishButton(BuildContext context, Color themeColor) {
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -154,18 +157,18 @@ class _SpeedReadingScreenState extends State<SpeedReadingScreen> {
         const SizedBox(height: 16),
 
         // Kullanıcıyı gaza getiren metin
-        const Text(
-          "Harika Okudun!",
-          style: TextStyle(
+        Text(
+          loc.speedReadingFinishedTitle,
+          style: const TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
         const SizedBox(height: 8),
-        const Text(
-          "Şimdi anladıklarını test etme zamanı.",
-          style: TextStyle(fontSize: 16, color: Colors.white70),
+        Text(
+          loc.speedReadingFinishedSubtitle,
+          style: const TextStyle(fontSize: 16, color: Colors.white70),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 40),
@@ -203,9 +206,9 @@ class _SpeedReadingScreenState extends State<SpeedReadingScreen> {
             }
           },
           icon: const Icon(Icons.flash_on, size: 28),
-          label: const Text(
-            "Quize Başla!",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          label: Text(
+            loc.speedReadingStartQuiz,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
         ),
       ],

@@ -1695,6 +1695,24 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Profil istatistikleri yüklenemedi.'**
   String get profileStatsLoadFailed;
+
+  /// No description provided for @speedReadingFinishedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika Okudun!'**
+  String get speedReadingFinishedTitle;
+
+  /// No description provided for @speedReadingFinishedSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi anladıklarını test etme zamanı.'**
+  String get speedReadingFinishedSubtitle;
+
+  /// No description provided for @speedReadingStartQuiz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Quiz\'e Başla!'**
+  String get speedReadingStartQuiz;
 }
 
 class _AppLocalizationsDelegate

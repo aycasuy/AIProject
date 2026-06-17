@@ -905,4 +905,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get profileStatsLoadFailed => 'Profil istatistikleri yüklenemedi.';
+
+  @override
+  String get speedReadingFinishedTitle => 'Harika Okudun!';
+
+  @override
+  String get speedReadingFinishedSubtitle =>
+      'Şimdi anladıklarını test etme zamanı.';
+
+  @override
+  String get speedReadingStartQuiz => 'Quiz\'e Başla!';
 }

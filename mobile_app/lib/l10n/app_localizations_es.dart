@@ -922,4 +922,14 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get profileStatsLoadFailed =>
       'No se han podido cargar las estadísticas del perfil.';
+
+  @override
+  String get speedReadingFinishedTitle => '¡Excelente lectura!';
+
+  @override
+  String get speedReadingFinishedSubtitle =>
+      'Ahora es el momento de comprobar lo que entendiste.';
+
+  @override
+  String get speedReadingStartQuiz => '¡Comenzar cuestionario!';
 }

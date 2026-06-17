@@ -496,7 +496,27 @@
 
   "speedReadingFinishedTitle": "Harika Okudun!",
   "speedReadingFinishedSubtitle": "Şimdi anladıklarını test etme zamanı.",
-  "speedReadingStartQuiz": "Quiz'e Başla!"
+  "speedReadingStartQuiz": "Quiz'e Başla!",
+
+  "speedQuizNoQuestions": "Soru bulunamadı.",
+  "speedQuizQuestionCounter": "Soru {current} / {total}",
+  "@speedQuizQuestionCounter": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "speedQuizShowTranslation": "Çeviriyi Göster",
+  "speedQuizCheckAnswer": "Kontrol Et ✔️",
+  "speedQuizNextQuestion": "Sıradaki Soru ➡️",
+
+  "speedQuizLevelUpTitle": "Seviye Atladın!",
+  "speedQuizCongratulations": "Tebrikler!",
+  "speedQuizLevelUpMessage": "Harika performans! Yeni seviyenin kilidi açıldı.",
+  "speedQuizCompletedMessage": "Hızlı quizi başarıyla tamamladın.",
+  "speedQuizCorrectAnswers": "Doğru",
+  "speedQuizXp": "XP",
+  "speedQuizContinue": "Devam Et"
 
 
 
