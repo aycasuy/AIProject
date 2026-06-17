@@ -530,5 +530,27 @@
   "profileStatsLoadFailed": "Profile statistics could not be loaded.",
   "speedReadingFinishedTitle": "Great Reading!",
   "speedReadingFinishedSubtitle": "Now it is time to test what you understood.",
-  "speedReadingStartQuiz": "Start Quiz!"
+  "speedReadingStartQuiz": "Start Quiz!",
+  "speedQuizNoQuestions": "No questions were found.",
+  "speedQuizQuestionCounter": "Question {current} / {total}",
+  "@speedQuizQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "speedQuizShowTranslation": "Show Translation",
+  "speedQuizCheckAnswer": "Check Answer ✔️",
+  "speedQuizNextQuestion": "Next Question ➡️",
+  "speedQuizLevelUpTitle": "You Leveled Up!",
+  "speedQuizCongratulations": "Congratulations!",
+  "speedQuizLevelUpMessage": "Great performance! You unlocked a new level.",
+  "speedQuizCompletedMessage": "You successfully completed the quick quiz.",
+  "speedQuizCorrectAnswers": "Correct",
+  "speedQuizXp": "XP",
+  "speedQuizContinue": "Continue"
 }
