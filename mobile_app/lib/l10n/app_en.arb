@@ -531,8 +531,8 @@
   "speedReadingFinishedTitle": "Great Reading!",
   "speedReadingFinishedSubtitle": "Now it is time to test what you understood.",
   "speedReadingStartQuiz": "Start Quiz!",
-  "speedQuizNoQuestions": "Soru bulunamadı.",
-  "speedQuizQuestionCounter": "Soru {current} / {total}",
+  "speedQuizNoQuestions": "No questions were found.",
+  "speedQuizQuestionCounter": "Question {current} / {total}",
   "@speedQuizQuestionCounter": {
     "placeholders": {
       "current": {
@@ -543,14 +543,14 @@
       }
     }
   },
-  "speedQuizShowTranslation": "Çeviriyi Göster",
-  "speedQuizCheckAnswer": "Kontrol Et ✔️",
-  "speedQuizNextQuestion": "Sıradaki Soru ➡️",
-  "speedQuizLevelUpTitle": "Seviye Atladın!",
-  "speedQuizCongratulations": "Tebrikler!",
-  "speedQuizLevelUpMessage": "Harika performans! Yeni seviyenin kilidi açıldı.",
-  "speedQuizCompletedMessage": "Hızlı quizi başarıyla tamamladın.",
-  "speedQuizCorrectAnswers": "Doğru",
+  "speedQuizShowTranslation": "Show Translation",
+  "speedQuizCheckAnswer": "Check Answer ✔️",
+  "speedQuizNextQuestion": "Next Question ➡️",
+  "speedQuizLevelUpTitle": "You Leveled Up!",
+  "speedQuizCongratulations": "Congratulations!",
+  "speedQuizLevelUpMessage": "Great performance! You unlocked a new level.",
+  "speedQuizCompletedMessage": "You successfully completed the quick quiz.",
+  "speedQuizCorrectAnswers": "Correct",
   "speedQuizXp": "XP",
-  "speedQuizContinue": "Devam Et"
+  "speedQuizContinue": "Continue"
 }
