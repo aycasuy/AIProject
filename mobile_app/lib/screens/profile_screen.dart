@@ -5,6 +5,7 @@ import 'package:mobile_app/screens/practice_screen.dart';
 import 'package:mobile_app/screens/settings_screen.dart';
 // 🌟 GRAFİK KÜTÜPHANESİ EKLENDİ
 import '../services/api_service.dart'; // Bu yolu kendi projene göre düzelt
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String username;
@@ -48,6 +49,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _unlearnedWords = 0;
   String _realMaxLevel = ""; // 🌟 EKLENECEK YENİ DEĞİŞKEN
 
+  String _localizedLanguageName(String language, AppLocalizations loc) {
+    switch (language.toLowerCase()) {
+      case "english":
+        return loc.langEnglish;
+      case "spanish":
+        return loc.langSpanish;
+      case "german":
+        return loc.langGerman;
+      case "french":
+        return loc.langFrench;
+      case "turkish":
+        return loc.langTurkish;
+      default:
+        return language;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -64,6 +82,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // 2. 🌟 YENİ: Haftalık XP listesini çek
       final weeklyData = await ApiService.fetchWeeklyXp(widget.username);
 
+      final List<int> safeWeeklyXp = List<int>.filled(7, 0);
+
+      for (int i = 0; i < weeklyData.length && i < safeWeeklyXp.length; i++) {
+        safeWeeklyXp[i] = weeklyData[i];
+      }
+
       // 🌟 YENİ: Öğrenme İstatistiklerini Çek
       final learningStats = await ApiService.fetchLearningStats(
         widget.username,
@@ -77,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _currentSection = progress.currentSection;
           _currentLesson = progress.currentLesson;
           _streak = progress.streakDays;
-          _weeklyXp = weeklyData;
+          _weeklyXp = safeWeeklyXp;
           // 🌟 YENİ: Gelen verileri state'e kaydet
           _totalWords = learningStats["total_words"] ?? 0;
           _learnedWords = learningStats["learned_words"] ?? 0;
@@ -96,15 +120,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FE),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
-          "Profilim",
-          style: TextStyle(
+        title: Text(
+          loc.profileTitle,
+          style: const TextStyle(
             color: Colors.black87,
             fontWeight: FontWeight.bold,
             fontSize: 22,
@@ -182,6 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
+
                   // 1. AŞAMA: HERO BÖLÜMÜ
                   _buildHeroSection(),
 
@@ -209,6 +236,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // --- 1. HERO BÖLÜMÜ ---
   Widget _buildHeroSection() {
+    final loc = AppLocalizations.of(context)!;
+
+    final String languageName = _localizedLanguageName(
+      widget.targetLanguage,
+      loc,
+    );
+
+    final String currentLevel = _realMaxLevel.isNotEmpty
+        ? _realMaxLevel
+        : widget.userLevel;
+
     return Column(
       children: [
         Container(
@@ -273,7 +311,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const Icon(Icons.language, size: 20, color: Color(0xFF118AB2)),
               const SizedBox(width: 8),
               Text(
-                "${widget.targetLanguage} • ${widget.userLevel} Seviyesi",
+                loc.profileLanguageLevel(languageName, currentLevel),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -289,6 +327,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // --- 2. İSTATİSTİK GRID TASARIMI ---
   Widget _buildStatGrid() {
+    final loc = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: GridView.count(
@@ -300,26 +340,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
         childAspectRatio: 1.1,
         children: [
           _buildStatCard(
-            "Toplam XP",
+            loc.profileTotalXp,
             "$_totalXp",
             Icons.bolt,
             const Color(0xFFFFB703),
           ),
           _buildStatCard(
-            "Kalan Can",
+            loc.profileRemainingLives,
             "$_lives / 5",
             Icons.favorite,
             const Color(0xFFFF4D6D),
           ),
           _buildStatCard(
-            "İlerleme",
-            "Böl. $_currentSection - Ders $_currentLesson",
+            loc.profileProgress,
+            loc.profileProgressValue(_currentSection, _currentLesson),
             Icons.map_rounded,
             const Color(0xFF00B4D8),
+            valueFontSize: 17,
           ),
           _buildStatCard(
-            "Gün Serisi",
-            "$_streak Gün",
+            loc.profileDayStreak,
+            loc.profileDayCount(_streak),
             Icons.local_fire_department_rounded,
             const Color(0xFFF4A261),
           ),
@@ -332,9 +373,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String title,
     String value,
     IconData icon,
-    Color themeColor,
-  ) {
+    Color themeColor, {
+    double valueFontSize = 22,
+  }) {
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -360,15 +403,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 12),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 22,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: valueFontSize,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2D2D2D),
+              color: const Color(0xFF2D2D2D),
+              height: 1.15,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey.shade600,
@@ -383,6 +433,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // --- 🌟 PAKETSİZ, %100 SAF FLUTTER XP GRAFİĞİ ---
   // --- 🌟 GERÇEK VERİYLE ÇALIŞAN SAF FLUTTER XP GRAFİĞİ ---
   Widget _buildWeeklyXpChart() {
+    final loc = AppLocalizations.of(context)!;
+
+    final List<String> days = [
+      loc.profileMondayShort,
+      loc.profileTuesdayShort,
+      loc.profileWednesdayShort,
+      loc.profileThursdayShort,
+      loc.profileFridayShort,
+      loc.profileSaturdayShort,
+      loc.profileSundayShort,
+    ];
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24),
       padding: const EdgeInsets.all(24),
@@ -400,9 +462,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Haftalık XP Analizi",
-            style: TextStyle(
+          Text(
+            loc.profileWeeklyXpAnalysis,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Color(0xFF2D2D2D),
@@ -412,15 +474,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              _buildCustomBar("Pzt", _weeklyXp[0].toDouble()),
-              _buildCustomBar("Sal", _weeklyXp[1].toDouble()),
-              _buildCustomBar("Çar", _weeklyXp[2].toDouble()),
-              _buildCustomBar("Per", _weeklyXp[3].toDouble()),
-              _buildCustomBar("Cum", _weeklyXp[4].toDouble()),
-              _buildCustomBar("Cmt", _weeklyXp[5].toDouble()),
-              _buildCustomBar("Paz", _weeklyXp[6].toDouble()),
-            ],
+            children: List.generate(
+              7,
+              (index) =>
+                  _buildCustomBar(days[index], _weeklyXp[index].toDouble()),
+            ),
           ),
         ],
       ),
@@ -478,14 +536,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // --- 🌟 YENİ: ÖĞRENME MERKEZİ KARTLARI ---
   Widget _buildLearningCenter() {
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
           child: Text(
-            "Öğrenme Merkezi",
-            style: TextStyle(
+            loc.profileLearningCenter,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Color(0xFF2D2D2D),
@@ -528,9 +588,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      const Text(
-                        "Kelime Kumbaram",
-                        style: TextStyle(
+                      Text(
+                        loc.profileWordBank,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
@@ -571,7 +631,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   builder: (context) => PracticeScreen(
                     username: widget.username,
                     targetLanguage: widget.targetLanguage,
-                    nativeLanguage: 'tr',
+                    nativeLanguage: widget.nativeLanguage,
                   ),
                 ),
               ).then((_) {
@@ -619,9 +679,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Günlük Antrenman",
-                          style: TextStyle(
+                        Text(
+                          loc.profileDailyTraining,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -629,7 +689,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          "Bugün seni bekleyen $_mistakeCount özel soru var!",
+                          loc.profileDailyQuestions(_mistakeCount),
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.9),
                             fontSize: 13,
@@ -701,16 +761,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Kelime Antrenmanı",
-                          style: TextStyle(
+                        Text(
+                          loc.profileWordTraining,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
                         Text(
-                          "Öğrenilmeyi bekleyen $_unlearnedWords kelime var",
+                          loc.profileUnlearnedWords(_unlearnedWords),
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.9),
                             fontSize: 13,

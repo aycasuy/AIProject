@@ -826,4 +826,83 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get finalTestBackToMap => 'Haritaya Dön';
+
+  @override
+  String get profileTitle => 'Profilim';
+
+  @override
+  String profileLanguageLevel(String language, String level) {
+    return '$language • $level Seviyesi';
+  }
+
+  @override
+  String get profileTotalXp => 'Toplam XP';
+
+  @override
+  String get profileRemainingLives => 'Kalan Can';
+
+  @override
+  String get profileProgress => 'İlerleme';
+
+  @override
+  String profileProgressValue(int section, int lesson) {
+    return 'Böl. $section • Ders $lesson';
+  }
+
+  @override
+  String get profileDayStreak => 'Gün Serisi';
+
+  @override
+  String profileDayCount(int count) {
+    return '$count Gün';
+  }
+
+  @override
+  String get profileWeeklyXpAnalysis => 'Haftalık XP Analizi';
+
+  @override
+  String get profileMondayShort => 'Pzt';
+
+  @override
+  String get profileTuesdayShort => 'Sal';
+
+  @override
+  String get profileWednesdayShort => 'Çar';
+
+  @override
+  String get profileThursdayShort => 'Per';
+
+  @override
+  String get profileFridayShort => 'Cum';
+
+  @override
+  String get profileSaturdayShort => 'Cmt';
+
+  @override
+  String get profileSundayShort => 'Paz';
+
+  @override
+  String get profileLearningCenter => 'Öğrenme Merkezi';
+
+  @override
+  String get profileWordBank => 'Kelime Kumbaram';
+
+  @override
+  String get profileDailyTraining => 'Günlük Antrenman';
+
+  @override
+  String profileDailyQuestions(int count) {
+    return 'Bugün seni bekleyen $count özel soru var!';
+  }
+
+  @override
+  String get profileWordTraining => 'Kelime Antrenmanı';
+
+  @override
+  String profileUnlearnedWords(int count) {
+    return 'Öğrenilmeyi bekleyen $count kelime var';
+  }
+
+  @override
+  String get profileStatsLoadFailed => 'Profil istatistikleri yüklenemedi.';
 }

@@ -1557,6 +1557,144 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Haritaya Dön'**
   String get finalTestBackToMap;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Profilim'**
+  String get profileTitle;
+
+  /// No description provided for @profileLanguageLevel.
+  ///
+  /// In tr, this message translates to:
+  /// **'{language} • {level} Seviyesi'**
+  String profileLanguageLevel(String language, String level);
+
+  /// No description provided for @profileTotalXp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam XP'**
+  String get profileTotalXp;
+
+  /// No description provided for @profileRemainingLives.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalan Can'**
+  String get profileRemainingLives;
+
+  /// No description provided for @profileProgress.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlerleme'**
+  String get profileProgress;
+
+  /// No description provided for @profileProgressValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Böl. {section} • Ders {lesson}'**
+  String profileProgressValue(int section, int lesson);
+
+  /// No description provided for @profileDayStreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gün Serisi'**
+  String get profileDayStreak;
+
+  /// No description provided for @profileDayCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} Gün'**
+  String profileDayCount(int count);
+
+  /// No description provided for @profileWeeklyXpAnalysis.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haftalık XP Analizi'**
+  String get profileWeeklyXpAnalysis;
+
+  /// No description provided for @profileMondayShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pzt'**
+  String get profileMondayShort;
+
+  /// No description provided for @profileTuesdayShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sal'**
+  String get profileTuesdayShort;
+
+  /// No description provided for @profileWednesdayShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çar'**
+  String get profileWednesdayShort;
+
+  /// No description provided for @profileThursdayShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Per'**
+  String get profileThursdayShort;
+
+  /// No description provided for @profileFridayShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cum'**
+  String get profileFridayShort;
+
+  /// No description provided for @profileSaturdayShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cmt'**
+  String get profileSaturdayShort;
+
+  /// No description provided for @profileSundayShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Paz'**
+  String get profileSundayShort;
+
+  /// No description provided for @profileLearningCenter.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öğrenme Merkezi'**
+  String get profileLearningCenter;
+
+  /// No description provided for @profileWordBank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime Kumbaram'**
+  String get profileWordBank;
+
+  /// No description provided for @profileDailyTraining.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günlük Antrenman'**
+  String get profileDailyTraining;
+
+  /// No description provided for @profileDailyQuestions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün seni bekleyen {count} özel soru var!'**
+  String profileDailyQuestions(int count);
+
+  /// No description provided for @profileWordTraining.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime Antrenmanı'**
+  String get profileWordTraining;
+
+  /// No description provided for @profileUnlearnedWords.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öğrenilmeyi bekleyen {count} kelime var'**
+  String profileUnlearnedWords(int count);
+
+  /// No description provided for @profileStatsLoadFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Profil istatistikleri yüklenemedi.'**
+  String get profileStatsLoadFailed;
 }
 
 class _AppLocalizationsDelegate

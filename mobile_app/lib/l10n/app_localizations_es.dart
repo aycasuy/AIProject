@@ -842,4 +842,84 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get finalTestBackToMap => 'Volver al mapa';
+
+  @override
+  String get profileTitle => 'Mi perfil';
+
+  @override
+  String profileLanguageLevel(String language, String level) {
+    return '$language • Nivel $level';
+  }
+
+  @override
+  String get profileTotalXp => 'XP total';
+
+  @override
+  String get profileRemainingLives => 'Vidas restantes';
+
+  @override
+  String get profileProgress => '\"Progreso';
+
+  @override
+  String profileProgressValue(int section, int lesson) {
+    return 'Secc. $section • Lecc. $lesson';
+  }
+
+  @override
+  String get profileDayStreak => 'Racha diaria';
+
+  @override
+  String profileDayCount(int count) {
+    return '$count días';
+  }
+
+  @override
+  String get profileWeeklyXpAnalysis => 'Análisis semanal de XP';
+
+  @override
+  String get profileMondayShort => 'Mon';
+
+  @override
+  String get profileTuesdayShort => 'Tue';
+
+  @override
+  String get profileWednesdayShort => 'Mié';
+
+  @override
+  String get profileThursdayShort => 'Thu';
+
+  @override
+  String get profileFridayShort => 'Vie';
+
+  @override
+  String get profileSaturdayShort => 'Sáb';
+
+  @override
+  String get profileSundayShort => 'Sol';
+
+  @override
+  String get profileLearningCenter => 'Centro de aprendizaje';
+
+  @override
+  String get profileWordBank => 'Mi Banco de palabras';
+
+  @override
+  String get profileDailyTraining => 'Entrenamiento diario';
+
+  @override
+  String profileDailyQuestions(int count) {
+    return '$count preguntas personalizadas te están esperando hoy!';
+  }
+
+  @override
+  String get profileWordTraining => 'Entrenamiento vocabulario';
+
+  @override
+  String profileUnlearnedWords(int count) {
+    return '$count palabras están esperando ser aprendidas';
+  }
+
+  @override
+  String get profileStatsLoadFailed =>
+      'No se han podido cargar las estadísticas del perfil.';
 }

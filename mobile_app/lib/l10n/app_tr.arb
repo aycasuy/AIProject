@@ -447,7 +447,7 @@
   "profileTotalXp": "Toplam XP",
   "profileRemainingLives": "Kalan Can",
   "profileProgress": "İlerleme",
-  "profileProgressValue": "Bölüm {section} - Ders {lesson}",
+  "profileProgressValue": "Böl. {section} • Ders {lesson}",
   "@profileProgressValue": {
     "placeholders": {
       "section": { "type": "int" },
