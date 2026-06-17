@@ -479,7 +479,7 @@
   "profileTotalXp": "Total XP",
   "profileRemainingLives": "Lives Remaining",
   "profileProgress": "Progress",
-  "profileProgressValue": "Sec. {section} • Lsn. {lesson}",
+  "profileProgressValue": "Böl. {section} • Ders {lesson}",
   "@profileProgressValue": {
     "placeholders": {
       "section": {
@@ -527,5 +527,8 @@
       }
     }
   },
-  "profileStatsLoadFailed": "Profile statistics could not be loaded."
+  "profileStatsLoadFailed": "Profile statistics could not be loaded.",
+  "speedReadingFinishedTitle": "Harika Okudun!",
+  "speedReadingFinishedSubtitle": "Şimdi anladıklarını test etme zamanı.",
+  "speedReadingStartQuiz": "Quiz'e Başla!"
 }
