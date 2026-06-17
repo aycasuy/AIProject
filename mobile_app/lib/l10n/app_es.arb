@@ -527,5 +527,8 @@
       }
     }
   },
-  "profileStatsLoadFailed": "No se han podido cargar las estadísticas del perfil."
+  "profileStatsLoadFailed": "No se han podido cargar las estadísticas del perfil.",
+  "speedReadingFinishedTitle": "¡Excelente lectura!",
+  "speedReadingFinishedSubtitle": "Ahora es el momento de comprobar lo que entendiste.",
+  "speedReadingStartQuiz": "¡Comenzar cuestionario!"
 }

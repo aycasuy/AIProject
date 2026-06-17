@@ -527,5 +527,8 @@
       }
     }
   },
-  "profileStatsLoadFailed": "Profile statistics could not be loaded."
+  "profileStatsLoadFailed": "Profile statistics could not be loaded.",
+  "speedReadingFinishedTitle": "Great Reading!",
+  "speedReadingFinishedSubtitle": "Now it is time to test what you understood.",
+  "speedReadingStartQuiz": "Start Quiz!"
 }
