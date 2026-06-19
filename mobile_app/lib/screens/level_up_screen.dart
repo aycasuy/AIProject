@@ -109,6 +109,54 @@ class _LevelUpScreenState extends State<LevelUpScreen> {
     }
   }
 
+  ///////////
+  // 🌟 YENİ EKLENEN NORMALİZASYON FONKSİYONU
+  String _normalizeSpokenText(String text) {
+    if (text.isEmpty) return "";
+
+    // Önce noktalama işaretlerini sil ve küçük harfe çevir
+    String normalized = text
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^\w\s]'), '')
+        .trim();
+
+    // En yaygın sayıları kelimeye çeviren basit bir sözlük (Demo kurtarıcı!)
+    Map<String, String> numberWords = {
+      '0': 'zero',
+      '1': 'one',
+      '2': 'two',
+      '3': 'three',
+      '4': 'four',
+      '5': 'five',
+      '6': 'six',
+      '7': 'seven',
+      '8': 'eight',
+      '9': 'nine',
+      '10': 'ten',
+      '11': 'eleven',
+      '12': 'twelve',
+      '20': 'twenty',
+      '30': 'thirty',
+      '40': 'forty',
+      '50': 'fifty',
+      '100': 'one hundred',
+      '1000': 'one thousand',
+    };
+
+    // Cümleyi kelimelere böl
+    List<String> words = normalized.split(' ');
+
+    for (int i = 0; i < words.length; i++) {
+      // Eğer kelime bir rakamsa (Örn: "100") ve sözlüğümüzde varsa kelimeye ("one hundred") çevir
+      if (RegExp(r'^[0-9]+$').hasMatch(words[i]) &&
+          numberWords.containsKey(words[i])) {
+        words[i] = numberWords[words[i]]!;
+      }
+    }
+
+    return words.join(' ');
+  }
+
   void _submitAnswer() {
     final q = _questions[_currentIndex];
     bool isCorrect = false;
@@ -128,14 +176,8 @@ class _LevelUpScreenState extends State<LevelUpScreen> {
       String userAnswer = _selectedWords.join(" ");
       isCorrect = userAnswer.toLowerCase() == q['correct'].toLowerCase();
     } else if (q['type'] == 'speak') {
-      String userAnswer = _recognizedText.trim().toLowerCase().replaceAll(
-        RegExp(r'[^\w\s]'),
-        '',
-      );
-      String correctAnswer = q['text'].toLowerCase().replaceAll(
-        RegExp(r'[^\w\s]'),
-        '',
-      );
+      String userAnswer = _normalizeSpokenText(_recognizedText);
+      String correctAnswer = _normalizeSpokenText(q['text']);
       isCorrect =
           userAnswer.contains(correctAnswer) ||
           (correctAnswer.contains(userAnswer) && userAnswer.length > 5);

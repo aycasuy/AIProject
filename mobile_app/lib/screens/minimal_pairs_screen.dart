@@ -142,12 +142,33 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
       final url = Uri.parse(endpoint);
       final response = await http.get(url);
 
-      if (response.statusCode == 200) {
+      /* if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
         setState(() {
           _pairsList = List.from(data);
           _isLoading = false;
           _targetWordIndex = (DateTime.now().millisecondsSinceEpoch % 2 == 0)
+              ? 0
+              : 1;
+        });
+      }*/
+      if (response.statusCode == 200) {
+        final data = jsonDecode(utf8.decode(response.bodyBytes));
+
+        final List<dynamic> allPairs = data is List
+            ? List<dynamic>.from(data)
+            : <dynamic>[];
+
+        setState(() {
+          // Pratik modunda backend'den gelen tek soru korunur.
+          // Normal derste yalnızca ilk 4 ses çifti gösterilir.
+          _pairsList = widget.isPracticeMode
+              ? allPairs
+              : allPairs.take(4).toList();
+
+          _isLoading = false;
+
+          _targetWordIndex = DateTime.now().millisecondsSinceEpoch % 2 == 0
               ? 0
               : 1;
         });

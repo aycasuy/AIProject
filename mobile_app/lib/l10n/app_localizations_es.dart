@@ -932,4 +932,44 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get speedReadingStartQuiz => '¡Comenzar cuestionario!';
+
+  @override
+  String get speedQuizNoQuestions => 'No se encontraron preguntas.';
+
+  @override
+  String speedQuizQuestionCounter(int current, int total) {
+    return 'Pregunta $current / $total';
+  }
+
+  @override
+  String get speedQuizShowTranslation => 'Mostrar traducción';
+
+  @override
+  String get speedQuizCheckAnswer => 'Comprobar ✔️';
+
+  @override
+  String get speedQuizNextQuestion => 'Siguiente pregunta ➡️';
+
+  @override
+  String get speedQuizLevelUpTitle => '¡Has subido de nivel!';
+
+  @override
+  String get speedQuizCongratulations => '¡Felicidades!';
+
+  @override
+  String get speedQuizLevelUpMessage =>
+      '¡Gran rendimiento! Desbloqueaste un nuevo nivel.';
+
+  @override
+  String get speedQuizCompletedMessage =>
+      'Has completado con éxito el cuestionario rápido.';
+
+  @override
+  String get speedQuizCorrectAnswers => 'Corregido';
+
+  @override
+  String get speedQuizXp => 'EP';
+
+  @override
+  String get speedQuizContinue => 'Continuar';
 }

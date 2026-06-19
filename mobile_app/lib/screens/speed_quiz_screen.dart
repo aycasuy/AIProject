@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/services/api_service.dart';
 import 'package:lottie/lottie.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -151,6 +152,8 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
   }
 
   void _showResultDialog({required int earnedXp, required bool levelUp}) {
+    final loc = AppLocalizations.of(context)!;
+
     final Color themeColor = getThemeColor(widget.level);
 
     showGeneralDialog(
@@ -158,7 +161,7 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.58),
       transitionDuration: const Duration(milliseconds: 360),
-      pageBuilder: (context, animation, secondaryAnimation) {
+      pageBuilder: (dialogContext, animation, secondaryAnimation) {
         return Scaffold(
           backgroundColor: Colors.transparent,
           body: Stack(
@@ -216,7 +219,9 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
                         ),
                         const SizedBox(height: 22),
                         Text(
-                          levelUp ? "Seviye Atladın!" : "Tebrikler!",
+                          levelUp
+                              ? loc.speedQuizLevelUpTitle
+                              : loc.speedQuizCongratulations,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 30,
@@ -227,8 +232,8 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
                         const SizedBox(height: 8),
                         Text(
                           levelUp
-                              ? "Harika performans! Yeni seviyenin kilidi açıldı."
-                              : "Boss savaşını başarıyla tamamladın.",
+                              ? loc.speedQuizLevelUpMessage
+                              : loc.speedQuizCompletedMessage,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
@@ -243,7 +248,7 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
                             Expanded(
                               child: _buildResultStatCard(
                                 icon: Icons.check_circle_rounded,
-                                title: "Doğru",
+                                title: loc.speedQuizCorrectAnswers,
                                 value:
                                     "$_correctCount / ${_allQuestions.length}",
                                 color: Colors.green,
@@ -253,7 +258,7 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
                             Expanded(
                               child: _buildResultStatCard(
                                 icon: Icons.bolt_rounded,
-                                title: "XP",
+                                title: loc.speedQuizXp,
                                 value: "+$earnedXp",
                                 color: Colors.amber.shade700,
                               ),
@@ -274,12 +279,15 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context, true);
+                              Navigator.pop(dialogContext);
+
+                              if (mounted) {
+                                Navigator.pop(context, true);
+                              }
                             },
-                            child: const Text(
-                              "Devam Et",
-                              style: TextStyle(
+                            child: Text(
+                              loc.speedQuizContinue,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900,
@@ -351,6 +359,8 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     if (_allQuestions.isEmpty) {
       return const Scaffold(body: Center(child: Text("Soru bulunamadı.")));
     }
@@ -440,7 +450,7 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                "Çeviriyi Göster",
+                                loc.speedQuizShowTranslation,
                                 style: TextStyle(
                                   color: themeColor,
                                   fontSize: 14,
@@ -522,7 +532,9 @@ class _SpeedQuizScreenState extends State<SpeedQuizScreen> {
                   ? null
                   : (_isAnswerChecked ? _nextQuestion : _checkAnswer),
               child: Text(
-                _isAnswerChecked ? "Sıradaki Soru ➡️" : "Kontrol Et ✔️",
+                _isAnswerChecked
+                    ? loc.speedQuizNextQuestion
+                    : loc.speedQuizCheckAnswer,
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white,

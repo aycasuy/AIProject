@@ -915,4 +915,43 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get speedReadingStartQuiz => 'Quiz\'e Başla!';
+
+  @override
+  String get speedQuizNoQuestions => 'Soru bulunamadı.';
+
+  @override
+  String speedQuizQuestionCounter(int current, int total) {
+    return 'Soru $current / $total';
+  }
+
+  @override
+  String get speedQuizShowTranslation => 'Çeviriyi Göster';
+
+  @override
+  String get speedQuizCheckAnswer => 'Kontrol Et ✔️';
+
+  @override
+  String get speedQuizNextQuestion => 'Sıradaki Soru ➡️';
+
+  @override
+  String get speedQuizLevelUpTitle => 'Seviye Atladın!';
+
+  @override
+  String get speedQuizCongratulations => 'Tebrikler!';
+
+  @override
+  String get speedQuizLevelUpMessage =>
+      'Harika performans! Yeni seviyenin kilidi açıldı.';
+
+  @override
+  String get speedQuizCompletedMessage => 'Hızlı quizi başarıyla tamamladın.';
+
+  @override
+  String get speedQuizCorrectAnswers => 'Doğru';
+
+  @override
+  String get speedQuizXp => 'XP';
+
+  @override
+  String get speedQuizContinue => 'Devam Et';
 }

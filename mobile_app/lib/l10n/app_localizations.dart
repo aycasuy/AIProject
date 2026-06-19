@@ -1713,6 +1713,78 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Quiz\'e Başla!'**
   String get speedReadingStartQuiz;
+
+  /// No description provided for @speedQuizNoQuestions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soru bulunamadı.'**
+  String get speedQuizNoQuestions;
+
+  /// No description provided for @speedQuizQuestionCounter.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soru {current} / {total}'**
+  String speedQuizQuestionCounter(int current, int total);
+
+  /// No description provided for @speedQuizShowTranslation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çeviriyi Göster'**
+  String get speedQuizShowTranslation;
+
+  /// No description provided for @speedQuizCheckAnswer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kontrol Et ✔️'**
+  String get speedQuizCheckAnswer;
+
+  /// No description provided for @speedQuizNextQuestion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıradaki Soru ➡️'**
+  String get speedQuizNextQuestion;
+
+  /// No description provided for @speedQuizLevelUpTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seviye Atladın!'**
+  String get speedQuizLevelUpTitle;
+
+  /// No description provided for @speedQuizCongratulations.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tebrikler!'**
+  String get speedQuizCongratulations;
+
+  /// No description provided for @speedQuizLevelUpMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika performans! Yeni seviyenin kilidi açıldı.'**
+  String get speedQuizLevelUpMessage;
+
+  /// No description provided for @speedQuizCompletedMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hızlı quizi başarıyla tamamladın.'**
+  String get speedQuizCompletedMessage;
+
+  /// No description provided for @speedQuizCorrectAnswers.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğru'**
+  String get speedQuizCorrectAnswers;
+
+  /// No description provided for @speedQuizXp.
+  ///
+  /// In tr, this message translates to:
+  /// **'XP'**
+  String get speedQuizXp;
+
+  /// No description provided for @speedQuizContinue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam Et'**
+  String get speedQuizContinue;
 }
 
 class _AppLocalizationsDelegate
