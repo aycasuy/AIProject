@@ -552,5 +552,36 @@
   "speedQuizCompletedMessage": "You successfully completed the quick quiz.",
   "speedQuizCorrectAnswers": "Correct",
   "speedQuizXp": "XP",
-  "speedQuizContinue": "Continue"
+  "speedQuizContinue": "Continue",
+  "practiceScreenTitle": "Practice Weak Points",
+  "practiceUnknownQuestion": "Unknown Question",
+  "practiceQuestionInfo": "Question Type: {type} | Mistakes: {count}",
+  "@practiceQuestionInfo": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "practiceSolve": "Solve",
+  "practiceInvalidQuestion": "This question is invalid or outdated.",
+  "practiceUnknownPuzzleType": "Unknown question type: {type}",
+  "@practiceUnknownPuzzleType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "practiceBlankTitle": "Practice: Fill in the Blanks",
+  "practiceSentenceTitle": "Practice: Build a Sentence",
+  "practiceTypeBlank": "Fill in the Blanks",
+  "practiceTypeSentence": "Build a Sentence",
+  "practiceTypeMinimalPair": "Minimal Pairs",
+  "practiceTypeUnknown": "Unknown",
+  "practiceEmptyTitle": "Great Job!",
+  "practiceEmptyMessage": "You have no mistakes to review."
 }
