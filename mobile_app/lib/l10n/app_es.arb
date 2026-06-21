@@ -552,5 +552,36 @@
   "speedQuizCompletedMessage": "Has completado con éxito el cuestionario rápido.",
   "speedQuizCorrectAnswers": "Corregido",
   "speedQuizXp": "EP",
-  "speedQuizContinue": "Continuar"
+  "speedQuizContinue": "Continuar",
+  "practiceScreenTitle": "Puntos débiles prácticos",
+  "practiceUnknownQuestion": "Pregunta desconocida",
+  "practiceQuestionInfo": "Tipo de pregunta: {type} | Errores: {count}",
+  "@practiceQuestionInfo": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "practiceSolve": "Resolver",
+  "practiceInvalidQuestion": "Esta pregunta no es válida o está obsoleta.",
+  "practiceUnknownPuzzleType": "Tipo de pregunta desconocida: {type}",
+  "@practiceUnknownPuzzleType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "practiceBlankTitle": "Práctica: Rellena los espacios vacíos",
+  "practiceSentenceTitle": "Práctica: Construye una oración",
+  "practiceTypeBlank": "Rellena los espacios en blanco",
+  "practiceTypeSentence": "Construir una sentencia",
+  "practiceTypeMinimalPair": "Minimal Pairs",
+  "practiceTypeUnknown": "Desconocido",
+  "practiceEmptyTitle": "¡Buen trabajo!",
+  "practiceEmptyMessage": "No tienes errores que revisar."
 }
