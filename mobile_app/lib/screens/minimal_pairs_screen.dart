@@ -132,36 +132,55 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
   }
 
   // Python API'den verileri çek
+
   Future<void> _fetchPairs() async {
     try {
-      // 🌟 EFSANEVİ YÖNLENDİRME BURADA!
-      final String endpoint = widget.isPracticeMode
-          ? 'http://10.0.2.2:8000/api/get_single_minimal_pair/${widget.id}' // Sadece tek hatayı getir
-          : 'http://10.0.2.2:8000/fetch_minimal_pairs/${widget.id}?target_language=${widget.targetLanguage}'; // Normal ders listesini getir
+      late final Uri url;
 
-      final url = Uri.parse(endpoint);
+      if (widget.isPracticeMode) {
+        // Pratik modu şimdilik kendi endpoint'ini kullanıyor.
+        url =
+            Uri.parse(
+              'http://10.0.2.2:8000/api/get_single_minimal_pair/${widget.id}',
+            ).replace(
+              queryParameters: {
+                'native_language': widget.nativeLanguage,
+                'target_language': widget.targetLanguage,
+              },
+            );
+      } else {
+        // Normal ders modu
+        url = Uri.parse('http://10.0.2.2:8000/fetch_minimal_pairs/${widget.id}')
+            .replace(
+              queryParameters: {
+                'target_language': widget.targetLanguage,
+                'native_language': widget.nativeLanguage,
+              },
+            );
+      }
+
+      debugPrint(
+        'MINIMAL PAIRS REQUEST → '
+        'target=${widget.targetLanguage}, '
+        'native=${widget.nativeLanguage}, '
+        'practice=${widget.isPracticeMode}, '
+        'url=$url',
+      );
+
       final response = await http.get(url);
 
-      /* if (response.statusCode == 200) {
-        final data = jsonDecode(utf8.decode(response.bodyBytes));
-        setState(() {
-          _pairsList = List.from(data);
-          _isLoading = false;
-          _targetWordIndex = (DateTime.now().millisecondsSinceEpoch % 2 == 0)
-              ? 0
-              : 1;
-        });
-      }*/
-      if (response.statusCode == 200) {
-        final data = jsonDecode(utf8.decode(response.bodyBytes));
+      if (!mounted) return;
 
-        final List<dynamic> allPairs = data is List
-            ? List<dynamic>.from(data)
+      if (response.statusCode == 200) {
+        final dynamic decoded = jsonDecode(utf8.decode(response.bodyBytes));
+
+        final List<dynamic> allPairs = decoded is List
+            ? List<dynamic>.from(decoded)
             : <dynamic>[];
 
         setState(() {
           // Pratik modunda backend'den gelen tek soru korunur.
-          // Normal derste yalnızca ilk 4 ses çifti gösterilir.
+          // Normal derste sunum için yalnızca ilk 4 ses çifti gösterilir.
           _pairsList = widget.isPracticeMode
               ? allPairs
               : allPairs.take(4).toList();
@@ -173,13 +192,23 @@ class _MinimalPairsScreenState extends State<MinimalPairsScreen> {
               : 1;
         });
       } else {
-        // Hata durumunda yükleme ekranında kalmaması için
-        setState(() => _isLoading = false);
-        print("API Hatası: ${response.statusCode}");
+        debugPrint(
+          'Minimal pairs API hatası: '
+          '${response.statusCode} - ${response.body}',
+        );
+
+        setState(() {
+          _isLoading = false;
+        });
       }
     } catch (e) {
-      print("Ses çiftleri çekilemedi: $e");
-      setState(() => _isLoading = false);
+      debugPrint('Ses çiftleri çekilemedi: $e');
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 

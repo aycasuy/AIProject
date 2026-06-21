@@ -99,7 +99,9 @@ class _PathScreenState extends State<PathScreen> {
 
           return progress;
         });
-    _lessonsFuture = ApiService.fetchAllLessons();
+    _lessonsFuture = ApiService.fetchAllLessons(
+      nativeLanguage: widget.nativeLanguage,
+    );
   }
 
   Color getThemeColor(String level) {

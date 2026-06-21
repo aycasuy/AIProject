@@ -516,7 +516,48 @@
   "speedQuizCompletedMessage": "Hızlı quizi başarıyla tamamladın.",
   "speedQuizCorrectAnswers": "Doğru",
   "speedQuizXp": "XP",
-  "speedQuizContinue": "Devam Et"
+  "speedQuizContinue": "Devam Et",
+
+
+
+  "practiceScreenTitle": "Zayıf Noktaları Çalış",
+  "practiceUnknownQuestion": "Bilinmeyen Soru",
+
+  "practiceQuestionInfo": "Soru Tipi: {type} | Hata: {count} kez",
+  "@practiceQuestionInfo": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "practiceSolve": "Çöz",
+
+  "practiceInvalidQuestion": "Bu soru geçersiz veya eski bir kayıt.",
+
+  "practiceUnknownPuzzleType": "Bilinmeyen soru tipi: {type}",
+  "@practiceUnknownPuzzleType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+
+  "practiceBlankTitle": "Pratik: Boşluk Doldurma",
+  "practiceSentenceTitle": "Pratik: Cümle Kur",
+
+  "practiceTypeBlank": "Boşluk Doldurma",
+  "practiceTypeSentence": "Cümle Kurma",
+  "practiceTypeMinimalPair": "Ses Çiftleri",
+  "practiceTypeUnknown": "Bilinmeyen",
+
+  "practiceEmptyTitle": "Harika İş Çıkardın!",
+  "practiceEmptyMessage": "Tekrar etmen gereken hiçbir hatan yok."
 
 
 

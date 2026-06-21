@@ -84,14 +84,25 @@ class ApiService {
     }
   }
 
-  static Future<List<dynamic>> fetchAllLessons() async {
+  static Future<List<dynamic>> fetchAllLessons({
+    String nativeLanguage = "Turkish",
+  }) async {
     try {
-      // Backend'deki @router.get("/api/lessons") adresine gidiyoruz
-      final response = await http.get(Uri.parse("$baseUrl/lessons"));
+      final uri = Uri.parse(
+        "$baseUrl/lessons",
+      ).replace(queryParameters: {"native_language": nativeLanguage});
+
+      final response = await http.get(uri);
 
       if (response.statusCode == 200) {
-        // Gelen JSON verisini Dart'ın anlayacağı List formuna çeviriyoruz
-        return json.decode(response.body);
+        final dynamic decoded = json.decode(utf8.decode(response.bodyBytes));
+
+        if (decoded is List) {
+          return decoded;
+        }
+
+        debugPrint("fetchAllLessons: Sunucudan liste dışında veri geldi.");
+        return [];
       } else {
         throw Exception("Dersler yüklenemedi: ${response.statusCode}");
       }
@@ -233,6 +244,7 @@ class ApiService {
   static Future<List<Map<String, dynamic>>> fetchSentencePuzzle({
     required String targetLanguage,
     required int lessonId,
+    required String nativeLanguage,
   }) async {
     final String url =
         "http://10.0.2.2:8000/fetch_sentence_puzzle"; // api takısı yoksa böyle
@@ -244,6 +256,7 @@ class ApiService {
         body: json.encode({
           "target_language": targetLanguage,
           "lesson_id": lessonId, // 🌟 Filtremiz buradan gidiyor!
+          "native_language": nativeLanguage,
         }),
       );
 
@@ -300,9 +313,9 @@ class ApiService {
   static Future<List<Map<String, dynamic>>> fetchBlankPuzzles({
     required String targetLanguage,
     required int lessonId,
+    String nativeLanguage = "Turkish",
   }) async {
-    // baseUrl tanımlı değilse "http://10.0.2.2:8000/fetch_blank_puzzles" olarak yazabilirsin
-    final String url = "http://10.0.2.2:8000/fetch_blank_puzzles";
+    const String url = "http://10.0.2.2:8000/fetch_blank_puzzles";
 
     try {
       final response = await http.post(
@@ -311,20 +324,33 @@ class ApiService {
         body: json.encode({
           "target_language": targetLanguage,
           "lesson_id": lessonId,
+          "native_language": nativeLanguage,
         }),
       );
 
       if (response.statusCode == 200) {
-        // Gelen JSON verisini çöz ve bir Liste'ye dönüştür
-        final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
-        return data.cast<Map<String, dynamic>>();
-      } else {
-        print("Boşluk doldurma verisi çekilemedi. Kod: ${response.statusCode}");
-        return []; // Uygulama çökmesin diye boş liste dönüyoruz
+        final dynamic decoded = json.decode(utf8.decode(response.bodyBytes));
+
+        if (decoded is! List) {
+          debugPrint("fetchBlankPuzzles: Sunucudan liste dışında veri geldi.");
+          return <Map<String, dynamic>>[];
+        }
+
+        return decoded
+            .map((item) => Map<String, dynamic>.from(item as Map))
+            .toList();
       }
+
+      debugPrint(
+        "Boşluk doldurma verisi çekilemedi. "
+        "Kod: ${response.statusCode} "
+        "Cevap: ${response.body}",
+      );
+
+      return <Map<String, dynamic>>[];
     } catch (e) {
-      print("Bağlantı hatası (fetchBlankPuzzles): $e");
-      return []; // İnternet yoksa boş liste döner, UI bunu "Yüklenemedi" olarak algılar
+      debugPrint("Bağlantı hatası (fetchBlankPuzzles): $e");
+      return <Map<String, dynamic>>[];
     }
   }
 
@@ -655,45 +681,93 @@ class ApiService {
   }
 
   // --- ZAYIF NOKTALARI (HATALARI) ÇEKME ---
+
   static Future<List<dynamic>> fetchMistakeDetails(
     String userName,
-    String targetLanguage,
-  ) async {
+    String targetLanguage, {
+    String nativeLanguage = 'Turkish',
+  }) async {
     try {
-      final url = Uri.parse(
-        'http://10.0.2.2:8000/get_mistake_details/$userName?target_language=$targetLanguage',
+      final url =
+          Uri.parse(
+            'http://10.0.2.2:8000/get_mistake_details/$userName',
+          ).replace(
+            queryParameters: {
+              'target_language': targetLanguage,
+              'native_language': nativeLanguage,
+            },
+          );
+
+      debugPrint(
+        'MISTAKE DETAILS REQUEST → '
+        'user=$userName, '
+        'target=$targetLanguage, '
+        'native=$nativeLanguage, '
+        'url=$url',
       );
+
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        print("Hatalar çekilemedi: ${response.statusCode}");
-        return [];
+        final dynamic data = jsonDecode(utf8.decode(response.bodyBytes));
+
+        return data is List ? List<dynamic>.from(data) : <dynamic>[];
       }
+
+      debugPrint(
+        'Hatalar çekilemedi: '
+        '${response.statusCode} - ${response.body}',
+      );
     } catch (e) {
-      print("Hata detayları servisi çöktü: $e");
-      return [];
+      debugPrint('Hata detayları servisi çöktü: $e');
     }
+
+    return [];
   }
 
   // 🌟 Pratik Modu için tek soru çeken fonksiyon
-  static Future<List<dynamic>> fetchPracticePuzzle(
-    int puzzleId,
-    String puzzleType,
-  ) async {
+
+  static Future<List<dynamic>> fetchPracticePuzzle({
+    required int puzzleId,
+    required String puzzleType,
+    required String nativeLanguage,
+    required String targetLanguage,
+  }) async {
     try {
-      final url = Uri.parse(
-        'http://10.0.2.2:8000/get_practice_puzzle?puzzle_id=$puzzleId&puzzle_type=$puzzleType',
+      final url = Uri.parse('http://10.0.2.2:8000/get_practice_puzzle').replace(
+        queryParameters: {
+          'puzzle_id': puzzleId.toString(),
+          'puzzle_type': puzzleType,
+          'native_language': nativeLanguage,
+          'target_language': targetLanguage,
+        },
       );
+
+      debugPrint(
+        'PRACTICE PUZZLE REQUEST → '
+        'id=$puzzleId, '
+        'type=$puzzleType, '
+        'native=$nativeLanguage, '
+        'target=$targetLanguage, '
+        'url=$url',
+      );
+
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        final dynamic data = jsonDecode(utf8.decode(response.bodyBytes));
+
+        return data is List ? List<dynamic>.from(data) : <dynamic>[];
       }
+
+      debugPrint(
+        'Pratik sorusu API hatası: '
+        '${response.statusCode} - ${response.body}',
+      );
     } catch (e) {
-      print("Pratik sorusu çekilemedi: $e");
+      debugPrint('Pratik sorusu çekilemedi: $e');
     }
+
     return [];
   }
 

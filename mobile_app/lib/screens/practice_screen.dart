@@ -33,6 +33,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
     final data = await ApiService.fetchMistakeDetails(
       widget.username,
       widget.targetLanguage,
+      nativeLanguage: widget.nativeLanguage,
     );
     if (mounted) {
       setState(() {

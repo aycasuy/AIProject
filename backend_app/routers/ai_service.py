@@ -195,10 +195,105 @@ async def correct_user_text(request: schemas.CorrectionRequest, db: Session = De
             "next_step": "Şimdi bana başka ne söylemek istersin?" # Sohbet kopmasın diye topu ona atıyoruz
         }
     
-@router.get("/api/lessons")
-def get_lessons(db: Session = Depends(get_db)):
-    return db.query(models.Lesson).order_by(models.Lesson.order).all()
 
+@router.get("/api/lessons")
+def get_lessons(
+    native_language: str = "Turkish",
+    db: Session = Depends(get_db),
+):
+    native_language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+
+        "de": "German",
+        "german": "German",
+        "almanca": "German",
+
+        "fr": "French",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    requested_language = native_language.strip().lower()
+
+    normalized_native_language = native_language_map.get(
+        requested_language,
+        native_language.strip(),
+    )
+
+    lessons = (
+        db.query(models.Lesson)
+        .order_by(models.Lesson.order)
+        .all()
+    )
+
+    # İstenen dildeki bütün çevirileri tek sorguda alıyoruz.
+    translations = (
+        db.query(models.LessonTranslation)
+        .filter(
+            models.LessonTranslation.native_language
+            == normalized_native_language
+        )
+        .all()
+    )
+
+    translations_by_lesson_id = {
+        translation.lesson_id: translation
+        for translation in translations
+    }
+
+    response_data = []
+
+    for lesson in lessons:
+        translation_record = translations_by_lesson_id.get(
+            lesson.id
+        )
+
+        # Çeviri bulunamazsa lessons tablosundaki mevcut değerler kullanılır.
+        localized_title = lesson.title
+        localized_topic = lesson.topic
+
+        if translation_record is not None:
+            localized_title = (
+                translation_record.title or lesson.title
+            )
+            localized_topic = (
+                translation_record.topic or lesson.topic
+            )
+
+        response_data.append(
+            {
+                "id": lesson.id,
+                "order": lesson.order,
+                "title": localized_title,
+                "topic": localized_topic,
+                "min_level": lesson.min_level,
+                "xp_reward": lesson.xp_reward,
+                "target_words": lesson.target_words or "",
+                "target_language": lesson.target_language,
+            }
+        )
+
+    print(
+        "📚 LESSON REQUEST:",
+        {
+            "native_language": native_language,
+            "normalized_native_language":
+                normalized_native_language,
+            "lesson_count": len(response_data),
+        },
+    )
+
+    return response_data
 
 
 

@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, ForeignKey, Text, UniqueConstraint
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, ForeignKey, Text, UniqueConstraint, func
 from sqlalchemy.orm import relationship
 from database import Base
 from sqlalchemy import Date
@@ -95,6 +95,47 @@ class Lesson(Base):
     puzzles = relationship("SentencePuzzle", back_populates="lesson", cascade="all, delete-orphan")
 
 
+#################################################################################
+
+class LessonTranslation(Base):
+    __tablename__ = "lesson_translations"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    lesson_id = Column(
+        Integer,
+        ForeignKey("lessons.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    native_language = Column(
+        String(30),
+        nullable=False,
+    )
+
+    title = Column(
+        Text,
+        nullable=False,
+    )
+
+    topic = Column(
+        Text,
+        nullable=True,
+    )
+
+    created_at = Column(
+        DateTime,
+        server_default=func.now(),
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "lesson_id",
+            "native_language",
+            name="uq_lesson_translation",
+        ),
+    )
+
 # -----------------------------------------
 # OYUN MODÜLLERİ İÇİN SORU TABLOLARI
 # -----------------------------------------
@@ -113,6 +154,45 @@ class SentencePuzzle(Base):
 
     # İLİŞKİ (Çift Yönlü Bağlantı)
     lesson = relationship("Lesson", back_populates="puzzles")
+
+
+
+class SentencePuzzleTranslation(Base):
+    __tablename__ = "sentence_puzzle_translations"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    puzzle_id = Column(
+        Integer,
+        ForeignKey("sentence_puzzles.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    native_language = Column(
+        String(30),
+        nullable=False,
+    )
+
+    original_sentence = Column(
+        Text,
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime,
+        server_default=func.now(),
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "puzzle_id",
+            "native_language",
+            name="uq_sentence_puzzle_translation",
+        ),
+    )
+
+
+
 
 class Flashcard(Base):
     __tablename__ = "flashcards"
@@ -182,6 +262,47 @@ class MinimalPair(Base):
     lesson = relationship("Lesson")
 
 
+
+class MinimalPairTranslation(Base):
+    __tablename__ = "minimal_pair_translations"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    minimal_pair_id = Column(
+        Integer,
+        ForeignKey("minimal_pairs.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    native_language = Column(
+        String(30),
+        nullable=False,
+    )
+
+    translation_1 = Column(
+        Text,
+        nullable=True,
+    )
+
+    translation_2 = Column(
+        Text,
+        nullable=True,
+    )
+
+    created_at = Column(
+        DateTime,
+        server_default=func.now(),
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "minimal_pair_id",
+            "native_language",
+            name="uq_minimal_pair_translation",
+        ),
+    )
+    
+
 # --- 🌟 YENİ TABLOMUZ: GÜNLÜK XP LOGLARI ---
 class DailyXPLog(Base):
     __tablename__ = "daily_xp_logs"
@@ -192,3 +313,40 @@ class DailyXPLog(Base):
     xp_earned = Column(Integer, default=0)
 
     user = relationship("UserDB", back_populates="daily_xps")
+
+
+############################################
+
+class BlankPuzzleTranslation(Base):
+    __tablename__ = "blank_puzzle_translations"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    puzzle_id = Column(
+        Integer,
+        ForeignKey("blank_puzzles.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    native_language = Column(
+        String(30),
+        nullable=False,
+    )
+
+    translation = Column(
+        Text,
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime,
+        server_default=func.now(),
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "puzzle_id",
+            "native_language",
+            name="uq_blank_puzzle_translation",
+        ),
+    )

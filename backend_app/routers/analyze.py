@@ -320,51 +320,151 @@ Instructions:
         }
 
 
-@router.post("/fetch_sentence_puzzle", response_model=List[schemas.SentenceFetchResponse])
-async def fetch_sentence_puzzle(request: schemas.SentenceFetchRequest, db: Session = Depends(get_db)):
-    
-    # 1. Temel sorguyu oluştur (Sadece dili ve dersi filtrele)
-    query = db.query(SentencePuzzle).filter(
-        SentencePuzzle.target_language == request.target_language
-    )
-    if request.lesson_id is not None:
-        query = query.filter(SentencePuzzle.lesson_id == request.lesson_id)
 
-    # Bütün soruları çek
+@router.post(
+    "/fetch_sentence_puzzle",
+    response_model=List[schemas.SentenceFetchResponse],
+)
+async def fetch_sentence_puzzle(
+    request: schemas.SentenceFetchRequest,
+    db: Session = Depends(get_db),
+):
+    native_language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+
+        "de": "German",
+        "german": "German",
+        "almanca": "German",
+
+        "fr": "French",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    normalized_native_language = native_language_map.get(
+        request.native_language.strip().lower(),
+        request.native_language.strip(),
+    )
+
+    print(
+        "🧩 SENTENCE PUZZLE REQUEST:",
+        {
+            "target_language": request.target_language,
+            "native_language": request.native_language,
+            "normalized_native_language": normalized_native_language,
+            "lesson_id": request.lesson_id,
+        },
+    )
+
+    # Hedef dile göre soruları getir.
+    query = db.query(models.SentencePuzzle).filter(
+        models.SentencePuzzle.target_language
+        == request.target_language
+    )
+
+    if request.lesson_id is not None:
+        query = query.filter(
+            models.SentencePuzzle.lesson_id
+            == request.lesson_id
+        )
+
     puzzles = query.all()
 
-    # 2. Yedek Veri (Eğer veritabanı boşsa çökmesin diye listeli halini dönüyoruz)
+    # Veritabanında soru yoksa uygulama çökmesin.
     if not puzzles:
         fallback_words = ["home", "I", "am", "going"]
         random.shuffle(fallback_words)
+
+        fallback_sentence = (
+            "No questions were found for this lesson."
+            if normalized_native_language == "English"
+            else "Veritabanında bu derse ait soru yok! (YEDEK)"
+        )
+
         return [
             schemas.SentenceFetchResponse(
                 id=0,
-                original_sentence="Veritabanında bu derse ait soru yok! (YEDEK)",
+                original_sentence=fallback_sentence,
                 correct_sentence="I am going home",
-                scrambled_words=fallback_words
+                scrambled_words=fallback_words,
             )
         ]
 
-    # 🌟 3. İŞTE SENİOR DOKUNUŞU: Bütün soruların içinden RASTGELE 5 tanesini seç!
-    # (Eğer tablonda 3 soru varsa 3'ünü alır çökmez, 50 soru varsa rastgele 5'ini alır)
-    selected_puzzles = random.sample(puzzles, min(5, len(puzzles)))
+    selected_puzzles = random.sample(
+        puzzles,
+        min(5, len(puzzles)),
+    )
 
-    # 4. Seçilen her sorunun kelimelerini karıştırıp listeye ekle
+    # Seçilen soruların istenen ana dildeki çevirilerini
+    # tek sorguda getiriyoruz.
+    translations_by_puzzle_id = {}
+
+    if normalized_native_language != "Turkish":
+        selected_ids = [
+            puzzle.id
+            for puzzle in selected_puzzles
+        ]
+
+        translation_records = (
+            db.query(models.SentencePuzzleTranslation)
+            .filter(
+                models.SentencePuzzleTranslation.puzzle_id.in_(
+                    selected_ids
+                ),
+                models.SentencePuzzleTranslation.native_language
+                == normalized_native_language,
+            )
+            .all()
+        )
+
+        translations_by_puzzle_id = {
+            translation.puzzle_id: translation
+            for translation in translation_records
+        }
+
     response_list = []
-    for p in selected_puzzles:
-        words_list = p.correct_sentence.split()
-        random.shuffle(words_list)
-        
-        response_list.append(schemas.SentenceFetchResponse(
-            id=p.id,
-            original_sentence=p.original_sentence,
-            correct_sentence=p.correct_sentence,
-            scrambled_words=words_list
-        ))
 
-    # 5 Soruluk listeyi Flutter'a postala!
+    for puzzle in selected_puzzles:
+        localized_original_sentence = (
+            puzzle.original_sentence
+        )
+
+        translation_record = translations_by_puzzle_id.get(
+            puzzle.id
+        )
+
+        # İstenen dilde çeviri varsa onu kullan.
+        # Yoksa mevcut Türkçe cümleye geri dön.
+        if translation_record is not None:
+            localized_original_sentence = (
+                translation_record.original_sentence
+            )
+
+        words_list = puzzle.correct_sentence.split()
+        random.shuffle(words_list)
+
+        response_list.append(
+            schemas.SentenceFetchResponse(
+                id=puzzle.id,
+                original_sentence=localized_original_sentence,
+                correct_sentence=puzzle.correct_sentence,
+                scrambled_words=words_list,
+            )
+        )
+
     return response_list
+
+
 
 @router.get("/fetch_flashcards/{lesson_id}")
 async def fetch_flashcards(lesson_id: int,target_language: str, db: Session = Depends(get_db)):
@@ -411,19 +511,112 @@ def log_mistake(request: schemas.AddMistakeRequest, db: Session = Depends(get_db
 
 
 #boşluk doldurma için kullanılacak endpoint
-@router.post("/fetch_blank_puzzles", response_model=List[schemas.BlankFetchResponse])
-async def fetch_blank_puzzles(request: schemas.SentenceFetchRequest, db: Session = Depends(get_db)):
-    # Derse ve dile göre soruları getir, karıştır ve 5 tane seç
-    puzzles = db.query(models.BlankPuzzle).filter(
-        models.BlankPuzzle.lesson_id == request.lesson_id,
-        models.BlankPuzzle.target_language == request.target_language
-    ).all()
-    
+
+@router.post(
+    "/fetch_blank_puzzles",
+    response_model=List[schemas.BlankFetchResponse],
+)
+async def fetch_blank_puzzles(
+    request: schemas.BlankPuzzleFetchRequest,
+    db: Session = Depends(get_db),
+):
+    # Ana dil adını veritabanındaki değerlerle eşleştiriyoruz.
+    native_language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+
+        "de": "German",
+        "german": "German",
+        "almanca": "German",
+
+        "fr": "French",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    requested_native_language = request.native_language.strip().lower()
+
+    normalized_native_language = native_language_map.get(
+        requested_native_language,
+        request.native_language.strip(),
+    )
+
+    print(
+        "🌍 BLANK PUZZLE REQUEST:",
+        {
+            "target_language": request.target_language,
+            "native_language": request.native_language,
+            "normalized_native_language": normalized_native_language,
+            "lesson_id": request.lesson_id,
+        },
+    )
+
+    # Ana tablodaki soruları getiriyoruz.
+    puzzles = (
+        db.query(models.BlankPuzzle)
+        .filter(
+            models.BlankPuzzle.lesson_id == request.lesson_id,
+            models.BlankPuzzle.target_language
+            == request.target_language,
+        )
+        .all()
+    )
+
     if not puzzles:
         return []
-        
-    selected_puzzles = random.sample(puzzles, min(5, len(puzzles)))
-    return selected_puzzles
+
+    selected_puzzles = random.sample(
+        puzzles,
+        min(5, len(puzzles)),
+    )
+
+    response_data = []
+
+    for puzzle in selected_puzzles:
+        # Varsayılan olarak mevcut Türkçe çeviri kullanılır.
+        localized_translation = puzzle.translation or ""
+
+        # Kullanıcının ana dili Türkçe değilse yeni tabloya bakılır.
+        if normalized_native_language != "Turkish":
+            translation_record = (
+                db.query(models.BlankPuzzleTranslation)
+                .filter(
+                    models.BlankPuzzleTranslation.puzzle_id
+                    == puzzle.id,
+                    models.BlankPuzzleTranslation.native_language
+                    == normalized_native_language,
+                )
+                .first()
+            )
+
+            # İstenen dilde çeviri varsa onu kullan.
+            # Yoksa eski Türkçe çeviri kullanılmaya devam eder.
+            if translation_record is not None:
+                localized_translation = (
+                    translation_record.translation
+                )
+
+        response_data.append(
+            {
+                "id": puzzle.id,
+                "before_text": puzzle.before_text or "",
+                "after_text": puzzle.after_text or "",
+                "correct_answer": puzzle.correct_answer or "",
+                "translation": localized_translation,
+            }
+        )
+
+    return response_data
+
 
 
 @router.post("/evaluate_answer")
@@ -529,56 +722,168 @@ def get_learning_stats(username: str, target_language: str, db: Session = Depend
     }
 import random
 
+
 @router.get("/get_mistake_details/{username}")
-def get_mistake_details(username: str, target_language: str, db: Session = Depends(get_db)):
-    
-    user = db.query(models.UserDB).filter(models.UserDB.username == username).first()
+def get_mistake_details(
+    username: str,
+    target_language: str,
+    native_language: str = "Turkish",
+    db: Session = Depends(get_db),
+):
+    native_language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+
+        "de": "German",
+        "german": "German",
+        "almanca": "German",
+
+        "fr": "French",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    normalized_native_language = native_language_map.get(
+        native_language.strip().lower(),
+        native_language.strip(),
+    )
+
+    user = (
+        db.query(models.UserDB)
+        .filter(models.UserDB.username == username)
+        .first()
+    )
+
     if not user:
-        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+        raise HTTPException(
+            status_code=404,
+            detail="Kullanıcı bulunamadı",
+        )
 
     practice_list = []
 
-    # 🌟 1. MİMARİ FİLTRE: Sadece gramer/mantık bulmacalarını getir, kelimeleri (flashcard) alma!
-    allowed_types = ["blank_puzzle", "sentence_puzzle", "minimal_pair"]
+    allowed_types = [
+        "blank_puzzle",
+        "sentence_puzzle",
+        "minimal_pair",
+    ]
 
-    # 2. HATALARI (Mistakes) ÇEK
-    mistakes = db.query(models.MistakeDB).filter(
-        models.MistakeDB.user_id == user.id,
-        models.MistakeDB.target_language == target_language,
-        models.MistakeDB.puzzle_type.in_(allowed_types) # Filtreyi uyguladık
-    ).limit(10).all()
+    mistakes = (
+        db.query(models.MistakeDB)
+        .filter(
+            models.MistakeDB.user_id == user.id,
+            models.MistakeDB.target_language == target_language,
+            models.MistakeDB.puzzle_type.in_(allowed_types),
+        )
+        .limit(10)
+        .all()
+    )
 
-    for m in mistakes:
-        question_text = "Soru içeriği bulunamadı"
-        
-        if m.puzzle_type == "blank_puzzle":
-            p = db.query(models.BlankPuzzle).filter(models.BlankPuzzle.id == m.puzzle_id).first()
-            if p: question_text = f"{p.before_text} ___ {p.after_text}"
-            
-        elif m.puzzle_type == "minimal_pair":
-            p = db.query(models.MinimalPair).filter(models.MinimalPair.id == m.puzzle_id).first()
-            if p: question_text = f"{p.word_1} vs {p.word_2}"
-            
-        elif m.puzzle_type == "sentence_puzzle":
-            # 🚨 BUG FİXLENDİ: Eskiden VocabularyDB'de arıyordu, şimdi doğru tabloda arıyor!
-            p = db.query(models.SentencePuzzle).filter(models.SentencePuzzle.id == m.puzzle_id).first()
-            if p: question_text = p.original_sentence 
+    for mistake in mistakes:
+        question_text = (
+            "Question content not found"
+            if normalized_native_language == "English"
+            else "Soru içeriği bulunamadı"
+        )
 
-        practice_list.append({
-            "puzzle_id": m.puzzle_id,
-            "puzzle_type": m.puzzle_type,
-            "question_text": question_text,
-            "mistake_count": m.mistake_count,
-            "is_new_word": False # Artık listeye giren her şey %100 bir hata telafisidir
-        })
+        # -----------------------------------------------------
+        # BOŞLUK DOLDURMA
+        # Soru hedef dilde olduğu için çevrilmez.
+        # -----------------------------------------------------
+        if mistake.puzzle_type == "blank_puzzle":
+            puzzle = (
+                db.query(models.BlankPuzzle)
+                .filter(
+                    models.BlankPuzzle.id == mistake.puzzle_id
+                )
+                .first()
+            )
 
-    # (Eski koddaki "10'a tamamlamak için Flashcard ekle" kısmı bilerek silindi)
+            if puzzle:
+                question_text = (
+                    f"{puzzle.before_text} ___ "
+                    f"{puzzle.after_text}"
+                )
 
-    # 3. KULLANICI SIKILMASIN DİYE LİSTEYİ KARIŞTIR!
+        # -----------------------------------------------------
+        # MİNİMAL PAIR
+        # Kelimeler hedef dilde olduğu için çevrilmez.
+        # -----------------------------------------------------
+        elif mistake.puzzle_type == "minimal_pair":
+            puzzle = (
+                db.query(models.MinimalPair)
+                .filter(
+                    models.MinimalPair.id == mistake.puzzle_id
+                )
+                .first()
+            )
+
+            if puzzle:
+                question_text = (
+                    f"{puzzle.word_1} vs {puzzle.word_2}"
+                )
+
+        # -----------------------------------------------------
+        # CÜMLE KURMA
+        # original_sentence kullanıcının ana diline çevrilir.
+        # -----------------------------------------------------
+        elif mistake.puzzle_type == "sentence_puzzle":
+            puzzle = (
+                db.query(models.SentencePuzzle)
+                .filter(
+                    models.SentencePuzzle.id == mistake.puzzle_id
+                )
+                .first()
+            )
+
+            if puzzle:
+                question_text = puzzle.original_sentence
+
+                if normalized_native_language != "Turkish":
+                    translation_record = (
+                        db.query(
+                            models.SentencePuzzleTranslation
+                        )
+                        .filter(
+                            models.SentencePuzzleTranslation.puzzle_id
+                            == puzzle.id,
+                            models.SentencePuzzleTranslation.native_language
+                            == normalized_native_language,
+                        )
+                        .first()
+                    )
+
+                    if translation_record is not None:
+                        question_text = (
+                            translation_record.original_sentence
+                            or puzzle.original_sentence
+                        )
+
+        practice_list.append(
+            {
+                "puzzle_id": mistake.puzzle_id,
+                "puzzle_type": mistake.puzzle_type,
+                "question_text": question_text,
+                "mistake_count": mistake.mistake_count,
+                "is_new_word": False,
+            }
+        )
+
     if practice_list:
         random.shuffle(practice_list)
 
     return practice_list
+
+
 
 # 1. Sadece öğrenilmemiş kelimeleri çeken GET endpoint'i
 @router.get("/get_flashcard_practice/{username}")
@@ -620,41 +925,144 @@ def mark_word_learned(request: schemas.MarkLearnedRequest, db: Session = Depends
 
 
 @router.get("/get_practice_puzzle")
-def get_practice_puzzle(puzzle_id: int, puzzle_type: str, db: Session = Depends(get_db)):
-    
-    if puzzle_type == "blank_puzzle":
-        puzzle = db.query(models.BlankPuzzle).filter(models.BlankPuzzle.id == puzzle_id).first()
-        if puzzle:
-            # Sadece Flutter'ın beklediği bilgileri gönderiyoruz
-            return [{
-                "id": puzzle.id, 
-                "before_text": puzzle.before_text, 
-                "after_text": puzzle.after_text, 
-                "correct_answer": puzzle.correct_answer, 
-                "translation": puzzle.translation
-            }]
-        return []
-        
-    elif puzzle_type == "sentence_puzzle": 
-        puzzle = db.query(models.SentencePuzzle).filter(models.SentencePuzzle.id == puzzle_id).first()
-        if puzzle:
-            # 🌟 İŞTE O MEŞHUR KARIŞTIRMA KODU:
-            # 1. Doğru cümleyi kelimelere böl (Örn: "I am happy" -> ["I", "am", "happy"])
-            words = puzzle.correct_sentence.split() 
-            
-            # 2. Bu kelimelerin yerini rastgele karıştır
-            random.shuffle(words) 
+def get_practice_puzzle(
+    puzzle_id: int,
+    puzzle_type: str,
+    native_language: str = "Turkish",
+    db: Session = Depends(get_db),
+):
+    native_language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
 
-            # 3. Flutter'a gönder
-            return [{
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+
+        "de": "German",
+        "german": "German",
+        "almanca": "German",
+
+        "fr": "French",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    normalized_native_language = native_language_map.get(
+        native_language.strip().lower(),
+        native_language.strip(),
+    )
+
+    print(
+        "🎯 PRACTICE PUZZLE REQUEST:",
+        {
+            "puzzle_id": puzzle_id,
+            "puzzle_type": puzzle_type,
+            "native_language": native_language,
+            "normalized_native_language": normalized_native_language,
+        },
+    )
+
+    # ---------------------------------------------------------
+    # BOŞLUK DOLDURMA PRATİĞİ
+    # ---------------------------------------------------------
+    if puzzle_type == "blank_puzzle":
+        puzzle = (
+            db.query(models.BlankPuzzle)
+            .filter(models.BlankPuzzle.id == puzzle_id)
+            .first()
+        )
+
+        if not puzzle:
+            return []
+
+        # Varsayılan olarak ana tablodaki Türkçe çeviriyi kullan.
+        localized_translation = puzzle.translation or ""
+
+        # Kullanıcının ana dili Türkçe değilse çeviri tablosuna bak.
+        if normalized_native_language != "Turkish":
+            translation_record = (
+                db.query(models.BlankPuzzleTranslation)
+                .filter(
+                    models.BlankPuzzleTranslation.puzzle_id == puzzle.id,
+                    models.BlankPuzzleTranslation.native_language
+                    == normalized_native_language,
+                )
+                .first()
+            )
+
+            if translation_record is not None:
+                localized_translation = (
+                    translation_record.translation
+                    or puzzle.translation
+                    or ""
+                )
+
+        return [
+            {
                 "id": puzzle.id,
-                "original_sentence": puzzle.original_sentence,
+                "before_text": puzzle.before_text,
+                "after_text": puzzle.after_text,
+                "correct_answer": puzzle.correct_answer,
+                "translation": localized_translation,
+            }
+        ]
+
+    # ---------------------------------------------------------
+    # CÜMLE KURMA PRATİĞİ
+    # ---------------------------------------------------------
+    elif puzzle_type == "sentence_puzzle":
+        puzzle = (
+            db.query(models.SentencePuzzle)
+            .filter(models.SentencePuzzle.id == puzzle_id)
+            .first()
+        )
+
+        if not puzzle:
+            return []
+
+        # Varsayılan olarak ana tablodaki Türkçe cümleyi kullan.
+        localized_original_sentence = puzzle.original_sentence or ""
+
+        # Kullanıcının ana dili Türkçe değilse çeviri tablosuna bak.
+        if normalized_native_language != "Turkish":
+            translation_record = (
+                db.query(models.SentencePuzzleTranslation)
+                .filter(
+                    models.SentencePuzzleTranslation.puzzle_id == puzzle.id,
+                    models.SentencePuzzleTranslation.native_language
+                    == normalized_native_language,
+                )
+                .first()
+            )
+
+            if translation_record is not None:
+                localized_original_sentence = (
+                    translation_record.original_sentence
+                    or puzzle.original_sentence
+                    or ""
+                )
+
+        # Doğru cümleyi kelimelere ayır ve karıştır.
+        words = puzzle.correct_sentence.split()
+        random.shuffle(words)
+
+        return [
+            {
+                "id": puzzle.id,
+                "original_sentence": localized_original_sentence,
                 "correct_sentence": puzzle.correct_sentence,
-                "scrambled_words": words # 🌟 Flutter tam olarak bunu bekliyor!
-            }]
-        return []
-        
+                "scrambled_words": words,
+            }
+        ]
+
     return []
+
 
 
 #zayıf noktalara çalış çözüldükten sonra gelen endpoint

@@ -1785,6 +1785,90 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Devam Et'**
   String get speedQuizContinue;
+
+  /// No description provided for @practiceScreenTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zayıf Noktaları Çalış'**
+  String get practiceScreenTitle;
+
+  /// No description provided for @practiceUnknownQuestion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilinmeyen Soru'**
+  String get practiceUnknownQuestion;
+
+  /// No description provided for @practiceQuestionInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soru Tipi: {type} | Hata: {count} kez'**
+  String practiceQuestionInfo(String type, int count);
+
+  /// No description provided for @practiceSolve.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çöz'**
+  String get practiceSolve;
+
+  /// No description provided for @practiceInvalidQuestion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu soru geçersiz veya eski bir kayıt.'**
+  String get practiceInvalidQuestion;
+
+  /// No description provided for @practiceUnknownPuzzleType.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilinmeyen soru tipi: {type}'**
+  String practiceUnknownPuzzleType(String type);
+
+  /// No description provided for @practiceBlankTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pratik: Boşluk Doldurma'**
+  String get practiceBlankTitle;
+
+  /// No description provided for @practiceSentenceTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pratik: Cümle Kur'**
+  String get practiceSentenceTitle;
+
+  /// No description provided for @practiceTypeBlank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boşluk Doldurma'**
+  String get practiceTypeBlank;
+
+  /// No description provided for @practiceTypeSentence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cümle Kurma'**
+  String get practiceTypeSentence;
+
+  /// No description provided for @practiceTypeMinimalPair.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ses Çiftleri'**
+  String get practiceTypeMinimalPair;
+
+  /// No description provided for @practiceTypeUnknown.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilinmeyen'**
+  String get practiceTypeUnknown;
+
+  /// No description provided for @practiceEmptyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika İş Çıkardın!'**
+  String get practiceEmptyTitle;
+
+  /// No description provided for @practiceEmptyMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar etmen gereken hiçbir hatan yok.'**
+  String get practiceEmptyMessage;
 }
 
 class _AppLocalizationsDelegate

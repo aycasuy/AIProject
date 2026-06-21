@@ -640,27 +640,123 @@ async def analyze_listening(request: DictationRequest):
 from sqlalchemy.sql.expression import func # 🌟 Eğer sayfanın en üstünde yoksa bu kütüphaneyi eklemeyi unutma!
 
 @router.get("/fetch_minimal_pairs/{lesson_id}")
-async def fetch_minimal_pairs(lesson_id: int, target_language: str, db: Session = Depends(get_db)):
-    # 🌟 SÜPER DEĞİŞİKLİK: Sadece o derse ait olanlardan RASTGELE 7 tanesini getir!
-    pairs = db.query(models.MinimalPair)\
-        .filter(models.MinimalPair.lesson_id == lesson_id, models.MinimalPair.target_language == target_language)\
-        .order_by(func.random())\
-        .limit(7)\
+async def fetch_minimal_pairs(
+    lesson_id: int,
+    target_language: str,
+    native_language: str = "Turkish",
+    db: Session = Depends(get_db),
+):
+    native_language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+
+        "de": "German",
+        "german": "German",
+        "almanca": "German",
+
+        "fr": "French",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    normalized_native_language = native_language_map.get(
+        native_language.strip().lower(),
+        native_language.strip(),
+    )
+
+    print(
+        "⚖️ MINIMAL PAIRS REQUEST:",
+        {
+            "lesson_id": lesson_id,
+            "target_language": target_language,
+            "native_language": native_language,
+            "normalized_native_language": normalized_native_language,
+        },
+    )
+
+    # İlgili ders ve hedef dil için rastgele kelime çiftlerini getir.
+    pairs = (
+        db.query(models.MinimalPair)
+        .filter(
+            models.MinimalPair.lesson_id == lesson_id,
+            models.MinimalPair.target_language == target_language,
+        )
+        .order_by(func.random())
+        .limit(7)
         .all()
-    
+    )
+
     if not pairs:
         return []
-        
-    # Flutter'ın kolayca okuyabileceği bir liste formatında gönder
-    return [{
-        "id": p.id,
-        "word_1": p.word_1,
-        "ipa_1": p.ipa_1,
-        "translation_1": p.translation_1,
-        "word_2": p.word_2,
-        "ipa_2": p.ipa_2,
-        "translation_2": p.translation_2
-    } for p in pairs]
+
+    translations_by_pair_id = {}
+
+    # Türkçe dışındaki ana diller için ayrı çeviri tablosuna bak.
+    if normalized_native_language != "Turkish":
+        selected_pair_ids = [pair.id for pair in pairs]
+
+        translation_records = (
+            db.query(models.MinimalPairTranslation)
+            .filter(
+                models.MinimalPairTranslation.minimal_pair_id.in_(
+                    selected_pair_ids
+                ),
+                models.MinimalPairTranslation.native_language
+                == normalized_native_language,
+            )
+            .all()
+        )
+
+        translations_by_pair_id = {
+            record.minimal_pair_id: record
+            for record in translation_records
+        }
+
+    response_data = []
+
+    for pair in pairs:
+        # Varsayılan olarak ana tablodaki Türkçe çevirileri kullan.
+        localized_translation_1 = pair.translation_1 or ""
+        localized_translation_2 = pair.translation_2 or ""
+
+        translation_record = translations_by_pair_id.get(pair.id)
+
+        # İstenen dilde kayıt varsa onu kullan.
+        if translation_record is not None:
+            localized_translation_1 = (
+                translation_record.translation_1
+                or pair.translation_1
+                or ""
+            )
+
+            localized_translation_2 = (
+                translation_record.translation_2
+                or pair.translation_2
+                or ""
+            )
+
+        response_data.append(
+            {
+                "id": pair.id,
+                "word_1": pair.word_1,
+                "ipa_1": pair.ipa_1 or "",
+                "translation_1": localized_translation_1,
+                "word_2": pair.word_2,
+                "ipa_2": pair.ipa_2 or "",
+                "translation_2": localized_translation_2,
+            }
+        )
+
+    return response_data
 
 
 @router.post("/get_pronunciation_feedback")
@@ -880,21 +976,98 @@ async def get_pronunciation_feedback(
 
 
     
+
 @router.get("/api/get_single_minimal_pair/{puzzle_id}")
-async def get_single_minimal_pair(puzzle_id: int, db: Session = Depends(get_db)):
-    # 🌟 Sadece tek bir satırı (soruyu) bul
-    p = db.query(models.MinimalPair).filter(models.MinimalPair.id == puzzle_id).first()
-    
-    if not p:
+async def get_single_minimal_pair(
+    puzzle_id: int,
+    native_language: str = "Turkish",
+    db: Session = Depends(get_db),
+):
+    native_language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+
+        "de": "German",
+        "german": "German",
+        "almanca": "German",
+
+        "fr": "French",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    normalized_native_language = native_language_map.get(
+        native_language.strip().lower(),
+        native_language.strip(),
+    )
+
+    print(
+        "⚖️ SINGLE MINIMAL PAIR REQUEST:",
+        {
+            "puzzle_id": puzzle_id,
+            "native_language": native_language,
+            "normalized_native_language": normalized_native_language,
+        },
+    )
+
+    # İstenen minimal pair kaydını bul.
+    pair = (
+        db.query(models.MinimalPair)
+        .filter(models.MinimalPair.id == puzzle_id)
+        .first()
+    )
+
+    if not pair:
         return []
-        
-    # 🌟 Flutter tarafı listeye alışkın olduğu için, tek elemanlı bir liste olarak gönderiyoruz!
-    return [{
-        "id": p.id,
-        "word_1": p.word_1,
-        "ipa_1": p.ipa_1,
-        "translation_1": p.translation_1,
-        "word_2": p.word_2,
-        "ipa_2": p.ipa_2,
-        "translation_2": p.translation_2
-    }]
+
+    # Varsayılan olarak ana tablodaki Türkçe çevirileri kullan.
+    localized_translation_1 = pair.translation_1 or ""
+    localized_translation_2 = pair.translation_2 or ""
+
+    # Ana dil Türkçe değilse çeviri tablosunda kayıt ara.
+    if normalized_native_language != "Turkish":
+        translation_record = (
+            db.query(models.MinimalPairTranslation)
+            .filter(
+                models.MinimalPairTranslation.minimal_pair_id == pair.id,
+                models.MinimalPairTranslation.native_language
+                == normalized_native_language,
+            )
+            .first()
+        )
+
+        if translation_record is not None:
+            localized_translation_1 = (
+                translation_record.translation_1
+                or pair.translation_1
+                or ""
+            )
+
+            localized_translation_2 = (
+                translation_record.translation_2
+                or pair.translation_2
+                or ""
+            )
+
+    # Flutter tek elemanlı liste bekliyor.
+    return [
+        {
+            "id": pair.id,
+            "word_1": pair.word_1,
+            "ipa_1": pair.ipa_1 or "",
+            "translation_1": localized_translation_1,
+            "word_2": pair.word_2,
+            "ipa_2": pair.ipa_2 or "",
+            "translation_2": localized_translation_2,
+        }
+    ]
+

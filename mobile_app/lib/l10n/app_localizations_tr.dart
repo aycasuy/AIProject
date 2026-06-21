@@ -954,4 +954,50 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get speedQuizContinue => 'Devam Et';
+
+  @override
+  String get practiceScreenTitle => 'Zayıf Noktaları Çalış';
+
+  @override
+  String get practiceUnknownQuestion => 'Bilinmeyen Soru';
+
+  @override
+  String practiceQuestionInfo(String type, int count) {
+    return 'Soru Tipi: $type | Hata: $count kez';
+  }
+
+  @override
+  String get practiceSolve => 'Çöz';
+
+  @override
+  String get practiceInvalidQuestion => 'Bu soru geçersiz veya eski bir kayıt.';
+
+  @override
+  String practiceUnknownPuzzleType(String type) {
+    return 'Bilinmeyen soru tipi: $type';
+  }
+
+  @override
+  String get practiceBlankTitle => 'Pratik: Boşluk Doldurma';
+
+  @override
+  String get practiceSentenceTitle => 'Pratik: Cümle Kur';
+
+  @override
+  String get practiceTypeBlank => 'Boşluk Doldurma';
+
+  @override
+  String get practiceTypeSentence => 'Cümle Kurma';
+
+  @override
+  String get practiceTypeMinimalPair => 'Ses Çiftleri';
+
+  @override
+  String get practiceTypeUnknown => 'Bilinmeyen';
+
+  @override
+  String get practiceEmptyTitle => 'Harika İş Çıkardın!';
+
+  @override
+  String get practiceEmptyMessage => 'Tekrar etmen gereken hiçbir hatan yok.';
 }

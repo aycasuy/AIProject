@@ -159,6 +159,7 @@ class SentenceFetchRequest(BaseModel):
     topic: str = "General" 
     # İleride "Cafe", "Seyahat" gibi konulara göre filtrelemek için
     lesson_id: Optional[int] = None
+    native_language: str = "Turkish"
 
 # Python'dan Flutter'a: Veritabanından çekilip gönderilen soru paketi
 class SentenceFetchResponse(BaseModel):
@@ -174,6 +175,14 @@ class AddMistakeRequest(BaseModel):
     puzzle_id: int
     puzzle_type: str
     target_language: str # 🌟 EKLENDİ
+
+# Boşluk doldurma sorularını isterken Flutter'dan gelen bilgiler (20.06.2026)
+class BlankPuzzleFetchRequest(BaseModel):
+    target_language: str
+    lesson_id: int
+    native_language: str = "Turkish"
+
+
 
 
 # 🌟 YENİ EKLENEN: Boşluk Doldurma Yanıt Şablonu

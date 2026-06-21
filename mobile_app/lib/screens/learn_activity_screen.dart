@@ -311,6 +311,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
           await ApiService.fetchSentencePuzzle(
             targetLanguage: widget.targetLanguage,
             lessonId: widget.lessonId,
+            nativeLanguage: widget.nativeLanguage,
           );
 
       if (mounted) {
@@ -344,6 +345,7 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
       final data = await ApiService.fetchBlankPuzzles(
         targetLanguage: widget.targetLanguage,
         lessonId: widget.lessonId,
+        nativeLanguage: widget.nativeLanguage,
       );
 
       if (mounted) {
@@ -466,7 +468,12 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
   }
 
   Future<void> _fetchPracticeSinglePuzzle(int id, String type) async {
-    final data = await ApiService.fetchPracticePuzzle(id, type);
+    final data = await ApiService.fetchPracticePuzzle(
+      puzzleId: id,
+      puzzleType: type,
+      nativeLanguage: widget.nativeLanguage,
+      targetLanguage: widget.targetLanguage,
+    );
     if (mounted && data.isNotEmpty) {
       setState(() {
         if (type == "blank_puzzle") {
