@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:mobile_app/l10n/app_localizations.dart';
 // Kendi api_service.dart dosyanın yolunu buraya doğru girdiğinden emin ol
 //import '../services/api_service.dart';
 
@@ -31,6 +32,23 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
   void initState() {
     super.initState();
     _fetchWords();
+  }
+
+  String _localizedLanguageName(AppLocalizations loc, String language) {
+    switch (language.toLowerCase()) {
+      case 'english':
+        return loc.langEnglish;
+      case 'spanish':
+        return loc.langSpanish;
+      case 'german':
+        return loc.langGerman;
+      case 'french':
+        return loc.langFrench;
+      case 'turkish':
+        return loc.langTurkish;
+      default:
+        return language;
+    }
   }
 
   // --- KELİMELERİ ÇEK ---
@@ -104,37 +122,40 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
   }
 
   // --- SONRAKİ KARTA GEÇİŞ ---
-  void _nextCard(bool learned) {
+  Future<void> _nextCard(bool learned) async {
     if (learned) {
-      _markAsLearned(
-        _words[_currentIndex]['id'],
-      ); // Arka planda sessizce API'ye bildir
+      await _markAsLearned(_words[_currentIndex]['id']);
     }
+
+    if (!mounted) return;
 
     if (_currentIndex < _words.length - 1) {
       setState(() {
-        _isFlipped = false; // Kartı geri çevir
-        _currentIndex++; // Sonraki kelimeye geç
+        _isFlipped = false;
+        _currentIndex++;
       });
     } else {
-      // Kelimeler bitti!
       setState(() {
-        _words.clear(); // Bitti ekranını göstermek için listeyi temizliyoruz
+        _isFlipped = false;
+        _currentIndex = 0;
+        _words.clear();
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FE),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.black87,
-        title: const Text(
-          "Kelime Antrenmanı",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          loc.flashcardPracticeTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -143,13 +164,13 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
               child: CircularProgressIndicator(color: Color(0xFF6C5CE7)),
             )
           : _words.isEmpty
-          ? _buildDoneScreen()
-          : _buildStudyBoard(),
+          ? _buildDoneScreen(loc)
+          : _buildStudyBoard(loc),
     );
   }
 
   // --- ÇALIŞMA MASASI (KARTLAR VE BUTONLAR BURADA) ---
-  Widget _buildStudyBoard() {
+  Widget _buildStudyBoard(AppLocalizations loc) {
     final currentWord = _words[_currentIndex];
 
     return Column(
@@ -161,7 +182,7 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Kelime ${_currentIndex + 1} / ${_words.length}",
+                loc.flashcardPracticeCounter(_currentIndex + 1, _words.length),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.grey,
@@ -208,8 +229,8 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
               ); // Yumuşak bir büyüme-küçülme efekti
             },
             child: _isFlipped
-                ? _buildBackOfCard(currentWord)
-                : _buildFrontOfCard(currentWord),
+                ? _buildBackOfCard(currentWord, loc)
+                : _buildFrontOfCard(currentWord, loc),
           ),
         ),
 
@@ -239,8 +260,8 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
                       ),
                     ),
                     onPressed: _isFlipped ? () => _nextCard(false) : null,
-                    child: const Text(
-                      "Tekrar Sor",
+                    child: Text(
+                      loc.flashcardPracticeReviewAgain,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -260,8 +281,8 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
                       ),
                     ),
                     onPressed: _isFlipped ? () => _nextCard(true) : null,
-                    child: const Text(
-                      "Öğrendim!",
+                    child: Text(
+                      loc.flashcardPracticeLearned,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -280,7 +301,7 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
   }
 
   // --- KARTIN ÖN YÜZÜ (Öğrenilen Dil) ---
-  Widget _buildFrontOfCard(dynamic word) {
+  Widget _buildFrontOfCard(dynamic word, AppLocalizations loc) {
     return Container(
       key: const ValueKey("front"),
       width: MediaQuery.of(context).size.width * 0.85,
@@ -301,7 +322,7 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
         children: [
           // 🌟 Dinamik dil ismi burada (Örn: İngilizce, İspanyolca vb.)
           Text(
-            widget.targetLanguage.toUpperCase(),
+            _localizedLanguageName(loc, widget.targetLanguage).toUpperCase(),
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
@@ -333,7 +354,7 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
               ),
               const SizedBox(width: 8),
               Text(
-                "Çevirmek için karta dokun",
+                loc.flashcardPracticeTapToTranslate,
                 style: TextStyle(
                   color: Colors.grey.shade500,
                   fontWeight: FontWeight.w500,
@@ -347,7 +368,7 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
   }
 
   // --- KARTIN ARKA YÜZÜ (Ana Dil Çevirisi) ---
-  Widget _buildBackOfCard(dynamic word) {
+  Widget _buildBackOfCard(dynamic word, AppLocalizations loc) {
     return Container(
       key: const ValueKey("back"),
       width: MediaQuery.of(context).size.width * 0.85,
@@ -371,8 +392,8 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // 🌟 Evrensel ana dil uyarısı
-          const Text(
-            "ANA DİL ÇEVİRİSİ",
+          Text(
+            loc.flashcardPracticeNativeTranslation,
             style: TextStyle(
               color: Colors.white70,
               fontSize: 14,
@@ -399,7 +420,7 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
   }
 
   // --- BİTİRME EKRANI (Tüm kartlar bittiğinde görünür) ---
-  Widget _buildDoneScreen() {
+  Widget _buildDoneScreen(AppLocalizations loc) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -417,8 +438,8 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
             ),
           ),
           const SizedBox(height: 30),
-          const Text(
-            "Harika İş Çıkardın!",
+          Text(
+            loc.flashcardPracticeDoneTitle,
             style: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
@@ -426,12 +447,16 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
             ),
           ),
           const SizedBox(height: 15),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
-              "Bugün için ayrılan tüm yeni kelimeleri tekrar ettin. Profiline dönüp istatistiklerini kontrol edebilirsin.",
+              loc.flashcardPracticeDoneMessage,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey, fontSize: 16, height: 1.5),
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                height: 1.5,
+              ),
             ),
           ),
           const SizedBox(height: 50),
@@ -445,8 +470,8 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
               ),
             ),
             onPressed: () => Navigator.pop(context),
-            child: const Text(
-              "Profile Dön",
+            child: Text(
+              loc.flashcardPracticeBackToProfile,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,

@@ -60,6 +60,50 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
   late final AnimationController _lottieController;
   bool _isAiSpeaking = false;
 
+  String _getTtsLanguageCode(String language) {
+    switch (language.trim().toLowerCase()) {
+      case 'spanish':
+      case 'español':
+      case 'ispanyolca':
+        return 'es-ES';
+      case 'german':
+      case 'deutsch':
+      case 'almanca':
+        return 'de-DE';
+      case 'french':
+      case 'français':
+      case 'fransızca':
+        return 'fr-FR';
+      case 'turkish':
+      case 'türkçe':
+        return 'tr-TR';
+      case 'english':
+      case 'ingilizce':
+      default:
+        return 'en-US';
+    }
+  }
+
+  String _getSpeechLocaleId(String language) {
+    return _getTtsLanguageCode(language);
+  }
+
+  String _localizedTargetLanguageName(AppLocalizations loc) {
+    switch (widget.targetLanguage.trim().toLowerCase()) {
+      case 'spanish':
+        return loc.langSpanish;
+      case 'german':
+        return loc.langGerman;
+      case 'french':
+        return loc.langFrench;
+      case 'turkish':
+        return loc.langTurkish;
+      case 'english':
+      default:
+        return loc.langEnglish;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -78,32 +122,53 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
     _initAudioTools();
   }
 
-  void _initAudioTools() async {
+  Future<void> _initAudioTools() async {
     _flutterTts = FlutterTts();
     _speech = stt.SpeechToText();
 
     await _speech.initialize();
 
-    await _flutterTts.setLanguage("en-US");
+    await _flutterTts.setLanguage(_getTtsLanguageCode(widget.targetLanguage));
     await _flutterTts.setSpeechRate(0.45);
 
     _flutterTts.setStartHandler(() {
-      if (mounted) {
-        setState(() => _isAiSpeaking = true);
-        _lottieController.repeat();
-      }
+      if (!mounted) return;
+
+      setState(() => _isAiSpeaking = true);
+      _lottieController.repeat();
     });
 
     _flutterTts.setCompletionHandler(() {
-      if (mounted) {
-        setState(() => _isAiSpeaking = false);
-        _lottieController.stop();
-      }
+      if (!mounted) return;
+
+      setState(() => _isAiSpeaking = false);
+      _lottieController.stop();
+    });
+
+    _flutterTts.setCancelHandler(() {
+      if (!mounted) return;
+
+      setState(() => _isAiSpeaking = false);
+      _lottieController.stop();
+    });
+
+    _flutterTts.setErrorHandler((message) {
+      debugPrint('TTS hatası: $message');
+
+      if (!mounted) return;
+
+      setState(() => _isAiSpeaking = false);
+      _lottieController.stop();
     });
   }
 
   Future<void> _speak(String text) async {
-    await _flutterTts.speak(text);
+    final String cleanedText = text.trim();
+    if (cleanedText.isEmpty) return;
+
+    await _flutterTts.stop();
+    await _flutterTts.setLanguage(_getTtsLanguageCode(widget.targetLanguage));
+    await _flutterTts.speak(cleanedText);
   }
 
   Future<void> _checkDailyLock() async {
@@ -122,20 +187,42 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
 
   @override
   void dispose() {
+    _speech.stop();
+    _flutterTts.stop();
     _scrollController.dispose();
     _textController.dispose();
     _lottieController.dispose();
-    _flutterTts.stop();
     super.dispose();
   }
 
-  void _sendTextToAi() async {
-    if (_textController.text.trim().isEmpty) return;
+  Future<void> _sendTextToAi() async {
+    final String userText = _textController.text.trim();
 
-    String userText = _textController.text;
+    if (userText.isEmpty || isLoading) return;
+
+    // Yalnızca önceki konuşmaları hazırla.
+    // Yeni kullanıcı mesajı history içine tekrar eklenmeyecek.
+    final List<Map<String, String>>
+    previousHistory = chatMessages.map<Map<String, String>>((message) {
+      if (message["role"] == "user") {
+        return {"role": "user", "content": message["text"]?.toString() ?? ""};
+      }
+
+      final String aiMessage = message["ai_message"]?.toString().trim() ?? "";
+
+      final String nextStep = message["next_step"]?.toString().trim() ?? "";
+
+      final String combinedContent = [
+        aiMessage,
+        nextStep,
+      ].where((text) => text.isNotEmpty).join("\n");
+
+      return {"role": "model", "content": combinedContent};
+    }).toList();
 
     setState(() {
       chatMessages.add({"role": "user", "text": userText});
+
       isLoading = true;
       _currentHint = null;
     });
@@ -148,41 +235,32 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
         userText,
         widget.minLevel,
         widget.targetWordsStr,
-        chatMessages.map((m) {
-          if (m["role"] == "user") {
-            return {"role": "user", "content": m["text"].toString()};
-          } else {
-            String aiContent = "${m['ai_message']} ${m['next_step'] ?? ''}";
-            return {"role": "model", "content": aiContent.trim()};
-          }
-        }).toList(),
+        previousHistory,
         widget.targetLanguage,
+        widget.nativeLanguage,
       );
+
+      if (!mounted) return;
+
+      final String aiMessage = response["ai_message"]?.toString().trim() ?? "";
+
+      final String nextStep = response["next_step"]?.toString().trim() ?? "";
+
+      final List<dynamic> corrections = response["corrections"] is List
+          ? List<dynamic>.from(response["corrections"])
+          : <dynamic>[];
 
       setState(() {
         isLoading = false;
 
         chatMessages.add({
           "role": "ai",
-          "ai_message": response["ai_message"],
-          "corrections": response["corrections"],
-          "next_step": response["next_step"],
+          "ai_message": aiMessage,
+          "corrections": corrections,
+          "next_step": nextStep,
         });
 
-        _speak(response["ai_message"] ?? "");
-
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (_scrollController.hasClients) {
-            _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          }
-        });
-
-        if (response["corrections"] != null &&
-            (response["corrections"] as List).isEmpty) {
+        if (corrections.isEmpty) {
           successfulAttempts++;
 
           if (successfulAttempts >= requiredAttempts) {
@@ -190,8 +268,30 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
           }
         }
       });
+
+      await _speak(
+        [aiMessage, nextStep].where((text) => text.isNotEmpty).join(" "),
+      );
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (!mounted || !_scrollController.hasClients) {
+          return;
+        }
+
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
     } catch (e) {
-      setState(() => isLoading = false);
+      debugPrint("Roleplay isteği başarısız: $e");
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -338,7 +438,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                 _buildAiMessage(
                   loc.roleplayIntro(
                     widget.lessonTitle,
-                    widget.targetLanguage,
+                    _localizedTargetLanguageName(loc),
                     requiredAttempts,
                   ),
                   isHighlight: true,
@@ -347,15 +447,28 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                   if (msg["role"] == "user") {
                     return _buildUserMessage(msg["text"]);
                   } else {
+                    final String aiMessage =
+                        msg["ai_message"]?.toString().trim() ?? "";
+
+                    final String nextStep =
+                        msg["next_step"]?.toString().trim() ?? "";
+
+                    final String combinedAiMessage = [
+                      aiMessage,
+                      if (!isLessonFinished &&
+                          msg == chatMessages.last &&
+                          nextStep.isNotEmpty)
+                        nextStep,
+                    ].where((text) => text.isNotEmpty).join("\n\n");
+
                     return Column(
                       children: [
-                        _buildAiMessage(msg["ai_message"] ?? loc.aiResults),
-                        _buildCorrectionCard(msg["corrections"] ?? []),
-                        if (!isLessonFinished &&
-                            msg == chatMessages.last &&
-                            msg["next_step"] != null &&
-                            msg["next_step"].toString().trim().isNotEmpty)
-                          _buildAiMessage(msg["next_step"]),
+                        _buildAiMessage(
+                          combinedAiMessage.isNotEmpty
+                              ? combinedAiMessage
+                              : loc.aiResults,
+                        ),
+                        _buildCorrectionCard(msg["corrections"] ?? <dynamic>[]),
                       ],
                     );
                   }
@@ -629,7 +742,7 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
 
             String translation = await ApiService.translateText(
               text,
-              nativeLanguage: widget.targetLanguage,
+              nativeLanguage: widget.nativeLanguage,
             );
 
             if (context.mounted) {
@@ -972,6 +1085,8 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                       widget.nativeLanguage,
                     );
 
+                    if (!mounted) return;
+
                     setState(() {
                       _currentHint = hint;
                       _isHintLoading = false;
@@ -1020,20 +1135,29 @@ class _AiTeacherCorrectionScreenState extends State<AiTeacherCorrectionScreen>
                 GestureDetector(
                   onTap: () async {
                     if (!_isListening) {
-                      bool available = await _speech.initialize();
+                      final bool available = await _speech.initialize();
+
+                      if (!mounted) return;
 
                       if (available) {
                         setState(() => _isListening = true);
 
-                        _speech.listen(
-                          onResult: (val) => setState(() {
-                            _textController.text = val.recognizedWords;
-                          }),
+                        await _speech.listen(
+                          localeId: _getSpeechLocaleId(widget.targetLanguage),
+                          onResult: (val) {
+                            if (!mounted) return;
+
+                            setState(() {
+                              _textController.text = val.recognizedWords;
+                            });
+                          },
                         );
                       }
                     } else {
+                      await _speech.stop();
+
+                      if (!mounted) return;
                       setState(() => _isListening = false);
-                      _speech.stop();
                     }
                   },
                   child: CircleAvatar(

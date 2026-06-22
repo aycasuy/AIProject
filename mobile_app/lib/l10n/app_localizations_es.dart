@@ -1021,32 +1021,34 @@ class AppLocalizationsEs extends AppLocalizations {
   String get practiceEmptyMessage => 'No tienes errores que revisar.';
 
   @override
-  String get flashcardPracticeTitle => 'Kelime Antrenmanı';
+  String get flashcardPracticeTitle => 'Práctica de vocabulario';
 
   @override
   String flashcardPracticeCounter(int current, int total) {
-    return 'Kelime $current / $total';
+    return 'Palabra $current / $total';
   }
 
   @override
-  String get flashcardPracticeReviewAgain => 'Tekrar Sor';
+  String get flashcardPracticeReviewAgain => 'Repetir';
 
   @override
-  String get flashcardPracticeLearned => 'Öğrendim!';
+  String get flashcardPracticeLearned => '¡Aprendida!';
 
   @override
-  String get flashcardPracticeTapToTranslate => 'Çevirmek için karta dokun';
+  String get flashcardPracticeTapToTranslate =>
+      'Toca la tarjeta para ver la traducción';
 
   @override
-  String get flashcardPracticeNativeTranslation => 'ANA DİL ÇEVİRİSİ';
+  String get flashcardPracticeNativeTranslation =>
+      'TRADUCCIÓN A LA LENGUA MATERNA';
 
   @override
-  String get flashcardPracticeDoneTitle => 'Harika İş Çıkardın!';
+  String get flashcardPracticeDoneTitle => '¡Buen trabajo!';
 
   @override
   String get flashcardPracticeDoneMessage =>
-      'Bugün için ayrılan tüm yeni kelimeleri tekrar ettin. Profiline dönüp istatistiklerini kontrol edebilirsin.';
+      'Has repasado todas las palabras nuevas asignadas para hoy. Vuelve a tu perfil para consultar tus estadísticas.';
 
   @override
-  String get flashcardPracticeBackToProfile => 'Profile Dön';
+  String get flashcardPracticeBackToProfile => 'Volver al perfil';
 }

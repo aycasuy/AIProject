@@ -2,6 +2,8 @@ from datetime import date
 import hashlib
 import json
 import os
+import re
+import unicodedata
 from fastapi import APIRouter, Depends, HTTPException, types
 from google import genai
 from google.genai import types as gemini_types
@@ -71,129 +73,684 @@ async def get_smart_ai_response(db: Session, feature_type: str, user_input: str,
     
 
 
-    # --- YARDIMCI FONKSİYON: Şifre (Hash) Üretici ---
+def normalize_language_name(language: str) -> str:
+    """Dil adlarını veritabanında ve promptlarda kullanılan standart ada çevirir."""
+    if not language:
+        return "Turkish"
+
+    normalized = language.strip().casefold()
+    normalized = unicodedata.normalize("NFKD", normalized)
+    normalized = "".join(
+        character
+        for character in normalized
+        if not unicodedata.combining(character)
+    )
+    normalized = normalized.translate(
+        str.maketrans(
+            {
+                "ı": "i",
+                "ş": "s",
+                "ğ": "g",
+                "ü": "u",
+                "ö": "o",
+                "ç": "c",
+            }
+        )
+    )
+
+    language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "turkce": "Turkish",
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "espanol": "Spanish",
+        "ispanyolca": "Spanish",
+        "de": "German",
+        "german": "German",
+        "deutsch": "German",
+        "almanca": "German",
+        "fr": "French",
+        "french": "French",
+        "francais": "French",
+        "fransizca": "French",
+    }
+
+    return language_map.get(normalized, language.strip())
+
+
+def target_expression_is_used(
+    user_text: str,
+    target_expression: str,
+) -> bool:
+    """
+    Bir hedef kelimenin başka bir kelimenin içinde geçmesini eşleşme saymaz.
+    Örnek: "he", "the" kelimesinin içinde geçtiği için kabul edilmez.
+    """
+    if not user_text or not target_expression:
+        return False
+
+    pattern = (
+        r"(?<!\w)"
+        + re.escape(target_expression.strip().casefold())
+        + r"(?!\w)"
+    )
+
+    return (
+        re.search(
+            pattern,
+            user_text.casefold(),
+            flags=re.UNICODE,
+        )
+        is not None
+    )
+
+
+def normalize_minor_writing_differences(text: str) -> str:
+    """
+    Büyük-küçük harf, noktalama ve fazla boşlukları yok sayarak
+    içerik karşılaştırması için sade bir metin döndürür.
+    """
+    if not text:
+        return ""
+
+    normalized = text.casefold().strip()
+    normalized = re.sub(
+        r"[^\w\s]",
+        "",
+        normalized,
+        flags=re.UNICODE,
+    )
+    normalized = re.sub(r"\s+", " ", normalized)
+
+    return normalized.strip()
+
+
+def is_only_minor_writing_difference(
+    wrong_text: str,
+    correct_text: str,
+) -> bool:
+    """
+    İki ifade yalnızca büyük harf, virgül, nokta, kesme işareti veya
+    benzeri küçük yazım farklılıkları taşıyorsa True döndürür.
+    """
+    return (
+        normalize_minor_writing_differences(wrong_text)
+        == normalize_minor_writing_differences(correct_text)
+    )
+
+
+def sanitize_roleplay_corrections(
+    raw_corrections,
+) -> list[dict[str, str]]:
+    """
+    Gemini'den gelen düzeltmeleri doğrular ve yalnızca noktalama/büyük harf
+    farkı içeren gereksiz düzeltmeleri kaldırır.
+    """
+    validated_corrections: list[dict[str, str]] = []
+
+    if not isinstance(raw_corrections, list):
+        return validated_corrections
+
+    for correction in raw_corrections:
+        if not isinstance(correction, dict):
+            continue
+
+        wrong_text = str(
+            correction.get("wrong", "")
+        ).strip()
+
+        correct_text = str(
+            correction.get("correct", "")
+        ).strip()
+
+        explanation = str(
+            correction.get("explanation", "")
+        ).strip()
+
+        if not wrong_text or not correct_text:
+            continue
+
+        if is_only_minor_writing_difference(
+            wrong_text,
+            correct_text,
+        ):
+            print(
+                "🧹 ÖNEMSİZ DÜZELTME FİLTRELENDİ:",
+                {
+                    "wrong": wrong_text,
+                    "correct": correct_text,
+                },
+            )
+            continue
+
+        validated_corrections.append(
+            {
+                "wrong": wrong_text,
+                "correct": correct_text,
+                "explanation": explanation,
+            }
+        )
+
+    return validated_corrections
+
 
 @router.post("/api/ai-teacher/correct")
-async def correct_user_text(request: schemas.CorrectionRequest, db: Session = Depends(get_db)):
-    
-    user_text_lower = request.user_text.lower().strip()
-    words_in_sentence = user_text_lower.split()
-    target_words_list = [w.strip().lower() for w in request.target_words.split(",") if w.strip()]
-    used_words = [w for w in target_words_list if w in user_text_lower]
+async def correct_user_text(
+    request: schemas.CorrectionRequest,
+    db: Session = Depends(get_db),
+):
+    feedback_language = normalize_language_name(
+        request.native_language
+    )
+    target_language = normalize_language_name(
+        request.target_language
+    )
 
-    # 🛡️ DEMİR KUBBE KURAL 1: HİÇ HEDEF KELİME KULLANMAMIŞ!
-    if len(target_words_list) > 0 and len(used_words) == 0:
+    user_text = request.user_text.strip()
+    user_text_lower = user_text.casefold()
+
+    words_in_sentence = re.findall(
+        r"\b[\w'-]+\b",
+        user_text_lower,
+        flags=re.UNICODE,
+    )
+
+    target_words_list = [
+        word.strip()
+        for word in request.target_words.split(",")
+        if word.strip()
+    ]
+
+    used_words = [
+        word
+        for word in target_words_list
+        if target_expression_is_used(
+            user_text_lower,
+            word,
+        )
+    ]
+
+    messages = {
+        "Turkish": {
+            "missing_message":
+                "Cümlen fena değil ama asıl amacımızı unuttuk! 😊",
+            "missing_correct":
+                "Hedef kelime eksik.",
+            "missing_explanation":
+                "Puan kazanmak için şu kelimelerden en az birini "
+                "kullanmalısın: {words}",
+            "missing_next":
+                "Yukarıdaki kelimelerden birini kullanarak yeni bir "
+                "cümle kurmayı dener misin?",
+            "short_message":
+                "Biraz daha çabalamanı istiyorum! 🚀",
+            "short_correct":
+                "Daha uzun bir cümle kurmalısın.",
+            "short_explanation":
+                "En az üç kelimeden oluşan tam bir cümle kurmaya çalış.",
+            "short_next":
+                "Bu ifadeyi tam bir cümle içinde nasıl kullanırsın?",
+            "dump_message":
+                "Kelimeleri fark ettim, ancak tam bir cümle kurmalısın. 😊",
+            "dump_correct":
+                "Lütfen anlamlı ve kurallı bir cümle kur.",
+            "dump_explanation":
+                "Hedef kelimeleri yalnızca arka arkaya sıralamak yerine "
+                "doğal bir cümle içinde kullan.",
+            "dump_next":
+                "Bu kelimelerle gerçek bir cümle kurmayı tekrar dener misin?",
+            "fallback_message":
+                "Şu anda kısa bir teknik sorun yaşıyorum, ancak mesajını "
+                "aldım. Harika gidiyorsun! 🚀",
+            "fallback_next":
+                "Roleplay senaryosuna uygun başka bir cümle kurabilir misin?",
+        },
+        "English": {
+            "missing_message":
+                "Your sentence is not bad, but we missed the main goal! 😊",
+            "missing_correct":
+                "A target word is missing.",
+            "missing_explanation":
+                "Use at least one of these words to earn progress: {words}",
+            "missing_next":
+                "Can you write a new sentence using one of the words above?",
+            "short_message":
+                "I would like you to make a little more effort! 🚀",
+            "short_correct":
+                "You need to write a longer sentence.",
+            "short_explanation":
+                "Try to write a complete sentence containing at least "
+                "three words.",
+            "short_next":
+                "How would you use this expression in a complete sentence?",
+            "dump_message":
+                "I noticed the target words, but you need a complete "
+                "sentence. 😊",
+            "dump_correct":
+                "Please write a meaningful, well-formed sentence.",
+            "dump_explanation":
+                "Do not list the target words one after another. Use them "
+                "naturally in a sentence.",
+            "dump_next":
+                "Can you try again with a natural sentence?",
+            "fallback_message":
+                "I am having a brief technical issue, but I understood "
+                "your message. You are doing great! 🚀",
+            "fallback_next":
+                "Can you write another sentence that fits the roleplay?",
+        },
+        "Spanish": {
+            "missing_message":
+                "Tu frase no está mal, pero olvidamos el objetivo "
+                "principal. 😊",
+            "missing_correct":
+                "Falta una palabra objetivo.",
+            "missing_explanation":
+                "Usa al menos una de estas palabras para progresar: {words}",
+            "missing_next":
+                "¿Puedes escribir una frase nueva usando una de las "
+                "palabras anteriores?",
+            "short_message":
+                "¡Quiero que te esfuerces un poco más! 🚀",
+            "short_correct":
+                "Debes escribir una frase más larga.",
+            "short_explanation":
+                "Intenta escribir una frase completa de al menos tres "
+                "palabras.",
+            "short_next":
+                "¿Cómo usarías esta expresión en una frase completa?",
+            "dump_message":
+                "He visto las palabras objetivo, pero necesitas formar "
+                "una frase completa. 😊",
+            "dump_correct":
+                "Escribe una frase correcta y con sentido.",
+            "dump_explanation":
+                "No enumeres las palabras objetivo. Úsalas de manera "
+                "natural dentro de una frase.",
+            "dump_next":
+                "¿Puedes intentarlo otra vez con una frase natural?",
+            "fallback_message":
+                "Tengo un pequeño problema técnico, pero he entendido tu "
+                "mensaje. ¡Vas muy bien! 🚀",
+            "fallback_next":
+                "¿Puedes escribir otra frase adecuada para este roleplay?",
+        },
+        "German": {
+            "missing_message":
+                "Dein Satz ist nicht schlecht, aber das Hauptziel fehlt. 😊",
+            "missing_correct":
+                "Ein Zielwort fehlt.",
+            "missing_explanation":
+                "Verwende mindestens eines dieser Wörter: {words}",
+            "missing_next":
+                "Kannst du mit einem dieser Wörter einen neuen Satz bilden?",
+            "short_message":
+                "Versuche bitte, einen etwas längeren Satz zu schreiben. 🚀",
+            "short_correct":
+                "Du solltest einen längeren Satz bilden.",
+            "short_explanation":
+                "Schreibe einen vollständigen Satz mit mindestens drei "
+                "Wörtern.",
+            "short_next":
+                "Wie würdest du diesen Ausdruck in einem vollständigen "
+                "Satz verwenden?",
+            "dump_message":
+                "Ich sehe die Zielwörter, aber du brauchst einen "
+                "vollständigen Satz. 😊",
+            "dump_correct":
+                "Bitte bilde einen sinnvollen und korrekten Satz.",
+            "dump_explanation":
+                "Liste die Wörter nicht nur auf, sondern verwende sie "
+                "natürlich in einem Satz.",
+            "dump_next":
+                "Kannst du es noch einmal mit einem natürlichen Satz "
+                "versuchen?",
+            "fallback_message":
+                "Es gibt gerade ein kleines technisches Problem, aber ich "
+                "habe deine Nachricht verstanden. 🚀",
+            "fallback_next":
+                "Kannst du einen weiteren passenden Satz schreiben?",
+        },
+        "French": {
+            "missing_message":
+                "Ta phrase n'est pas mauvaise, mais l'objectif principal "
+                "a été oublié. 😊",
+            "missing_correct":
+                "Un mot cible manque.",
+            "missing_explanation":
+                "Utilise au moins un de ces mots : {words}",
+            "missing_next":
+                "Peux-tu écrire une nouvelle phrase avec l'un de ces mots ?",
+            "short_message":
+                "J'aimerais que tu fasses un petit effort supplémentaire. 🚀",
+            "short_correct":
+                "Tu dois écrire une phrase plus longue.",
+            "short_explanation":
+                "Essaie d'écrire une phrase complète d'au moins trois mots.",
+            "short_next":
+                "Comment utiliserais-tu cette expression dans une phrase "
+                "complète ?",
+            "dump_message":
+                "J'ai vu les mots cibles, mais il faut former une phrase "
+                "complète. 😊",
+            "dump_correct":
+                "Écris une phrase correcte et naturelle.",
+            "dump_explanation":
+                "Ne fais pas seulement une liste. Utilise les mots "
+                "naturellement dans une phrase.",
+            "dump_next":
+                "Peux-tu réessayer avec une phrase naturelle ?",
+            "fallback_message":
+                "Je rencontre un petit problème technique, mais j'ai "
+                "compris ton message. Tu progresses très bien ! 🚀",
+            "fallback_next":
+                "Peux-tu écrire une autre phrase adaptée au jeu de rôle ?",
+        },
+    }
+
+    target_texts = messages.get(
+        target_language,
+        messages["English"],
+    )
+    feedback_texts = messages.get(
+        feedback_language,
+        messages["English"],
+    )
+
+    print(
+        "🎭 ROLEPLAY REQUEST:",
+        {
+            "target_language": target_language,
+            "native_language": request.native_language,
+            "feedback_language": feedback_language,
+            "topic": request.topic,
+        },
+    )
+
+    # KURAL 1: Hedef kelimelerden hiçbiri kullanılmamış.
+    if target_words_list and not used_words:
         return {
-            "ai_message": "Cümlen fena değil ama asıl amacımızı unuttuk! 😊",
-            "corrections": [{
-                "wrong": request.user_text,
-                "correct": "Hedef kelime eksik.",
-                "explanation": f"Puan kazanmak için şu kelimelerden en az birini kullanmalısın: {', '.join(target_words_list)}"
-            }],
-            "next_step": "Yukarıdaki kelimeleri kullanarak yeni bir cümle kurmayı dener misin?"
+            "ai_message": target_texts["missing_message"],
+            "corrections": [
+                {
+                    "wrong": user_text,
+                    "correct": target_texts["missing_correct"],
+                    "explanation": feedback_texts[
+                        "missing_explanation"
+                    ].format(
+                        words=", ".join(target_words_list)
+                    ),
+                }
+            ],
+            "next_step": target_texts["missing_next"],
         }
 
-    # 🛡️ DEMİR KUBBE KURAL 2: ÇOK KISA YAZIP KAÇMAK YOK!
+    # KURAL 2: Cümle çok kısa.
     if len(words_in_sentence) < 3:
         return {
-            "ai_message": "Biraz daha çabalamanı istiyorum! 🚀",
-            "corrections": [{
-                "wrong": request.user_text,
-                "correct": "Daha uzun bir cümle kurmalısın.",
-                "explanation": "Sadece 1-2 kelime yazıp geçemezsin. En az 3 kelimelik tam bir cümle kurmaya çalış."
-            }],
-            "next_step": "Bu ifadeyi tam bir cümle içinde nasıl kullanırsın?"
+            "ai_message": target_texts["short_message"],
+            "corrections": [
+                {
+                    "wrong": user_text,
+                    "correct": target_texts["short_correct"],
+                    "explanation": feedback_texts[
+                        "short_explanation"
+                    ],
+                }
+            ],
+            "next_step": target_texts["short_next"],
         }
 
-    # 🛡️ DEMİR KUBBE KURAL 3: HİLE KONTROLÜ (WORD DUMPING)
-    if len(target_words_list) > 0 and len(used_words) >= 2 and len(words_in_sentence) <= len(used_words) + 2:
+    # KURAL 3: Hedef kelimeleri yalnızca sıralama.
+    if (
+        target_words_list
+        and len(used_words) >= 2
+        and len(words_in_sentence) <= len(used_words) + 2
+    ):
         return {
-            "ai_message": "Kurnazca bir hamle ama bunu kabul edemem! 😊",
-            "corrections": [{
-                "wrong": request.user_text,
-                "correct": "Lütfen kurallı bir cümle kurun.",
-                "explanation": "Kelimeleri sadece boşlukla ayırarak arka arkaya dizemezsin."
-            }],
-            "next_step": "Hadi bu kelimelerle gerçek bir cümle kurmayı tekrar deneyelim!"
+            "ai_message": target_texts["dump_message"],
+            "corrections": [
+                {
+                    "wrong": user_text,
+                    "correct": target_texts["dump_correct"],
+                    "explanation": feedback_texts[
+                        "dump_explanation"
+                    ],
+                }
+            ],
+            "next_step": target_texts["dump_next"],
         }
 
-    # --- EĞER KULLANICI BU 3 KURALI AŞABİLDİYSE GEMİNİ'YE GİTSİN ---
-    
-    # 🌟 GÜNCELLEME 1: Cache Logları Terminale Yazdırılıyor
-    history_str = str(request.history).lower()
-    search_text = f"lang: {request.target_language} | topic: {request.topic.strip()} | history: {history_str} | text: {user_text_lower}"
-    
-    cached_data = db.query(models.AICache).filter(
-        models.AICache.feature_type == "writing_correction", 
-        models.AICache.input_text == search_text            
-    ).first()
-    
-    if cached_data:
-        print(f"🟢 CACHE HIT: Yanıt Veritabanından Çekildi! (Soru: {request.user_text})")
-        return json.loads(cached_data.ai_response)
+    history_str = json.dumps(
+        request.history,
+        ensure_ascii=False,
+        sort_keys=True,
+    ).casefold()
 
-    print(f"🟡 CACHE MISS: Yeni İstek, Gemini'ye Gidiliyor... (Soru: {request.user_text})")
+    # v4 ile eski, gereksiz noktalama düzeltmesi içeren cache kayıtları kullanılmaz.
+    search_text = (
+        "v5 | "
+        f"target_language:{target_language.casefold()} | "
+        f"native_language:{feedback_language.casefold()} | "
+        f"level:{request.level.strip().casefold()} | "
+        f"topic:{request.topic.strip().casefold()} | "
+        f"target_words:{request.target_words.strip().casefold()} | "
+        f"history:{history_str} | "
+        f"text:{user_text_lower}"
+    )
+
+    cached_data = (
+        db.query(models.AICache)
+        .filter(
+            models.AICache.feature_type
+            == "writing_correction_v5",
+            models.AICache.input_text == search_text,
+        )
+        .first()
+    )
+
+    if cached_data:
+        print(
+            "🟢 ROLEPLAY CACHE HIT:",
+            request.user_text,
+        )
+
+        try:
+            cached_json = json.loads(
+                cached_data.ai_response
+            )
+            cached_json["corrections"] = (
+                sanitize_roleplay_corrections(
+                    cached_json.get(
+                        "corrections",
+                        [],
+                    )
+                )
+            )
+            return cached_json
+        except (TypeError, ValueError, json.JSONDecodeError) as error:
+            print(
+                "⚠️ ROLEPLAY CACHE OKUNAMADI:",
+                str(error),
+            )
+
+    print(
+        "🟡 ROLEPLAY CACHE MISS: Gemini çağrılıyor.",
+        request.user_text,
+    )
 
     conversation_context = ""
-    if request.history:
-        for msg in request.history:
-            role = "Öğrenci" if msg.get("role") == "user" else "Sen (AI)"
-            conversation_context += f"{role}: {msg.get('content')}\n"
 
-   # 🤖 GÜNCELLEME: GEMİNİ İÇİN KESİN SINIRLAR (Papağan ve Zoraki Satıcı Engellendi)
-    system_instruction = f"""You are acting in a roleplay scenario to teach the {request.target_language} language.
-    The user is at level: {request.level}.
-    
-    YOUR PERSONA / SCENARIO: {request.topic}
-    
-    Your jobs:
-    1. STAY IN CHARACTER! Respond to the user's message as the character described in the scenario.
-    2. REACTION ONLY: Write your character's reaction/statement in {request.target_language} in the "ai_message" field. DO NOT write any questions in this field. Leave the question for the next step.
-    3. FORGIVING CORRECTIONS: Check the user's text ONLY for MAJOR grammatical or vocabulary mistakes. IGNORE minor punctuation or capitalization. If there are major mistakes, you MUST add them to "corrections" STRICTLY as JSON objects with "wrong", "correct", and "explanation" keys. NEVER put plain strings in the array!
-    4. FOLLOW-UP QUESTION: In the "next_step" field, ask ONE natural follow-up question to keep the roleplay going in {request.target_language}.
-       - CRITICAL RULE 1: NEVER repeat a question you already asked in the previous turns.
-       - CRITICAL RULE 2: If the user indicates they are finished, saying goodbye, or saying "no thank you", DO NOT force a question. Leave "next_step" completely EMPTY ("").
-    
-    EXPECTED JSON FORMAT:
+    for message in request.history:
+        role = (
+            "Student"
+            if message.get("role") == "user"
+            else "AI character"
+        )
+
+        conversation_context += (
+            f"{role}: {message.get('content', '')}\n"
+        )
+
+    system_instruction = f"""
+You are acting in a roleplay scenario to teach
+{target_language}.
+
+Student proficiency level:
+{request.level}
+
+ROLEPLAY PERSONA AND SCENARIO:
+{request.topic}
+
+Student's native language:
+{feedback_language}
+
+Follow all rules strictly:
+
+1. Stay in character throughout the conversation.
+
+2. The "ai_message" field:
+   - Write only the character's natural reaction or statement.
+   - Write it entirely in {target_language}.
+   - Do not include grammatical explanations.
+   - Do not ask a question in this field.
+
+3. The "corrections" field:
+   - Correct only major grammar or vocabulary errors.
+   - Ignore minor capitalization and punctuation issues.
+   - NEVER create a correction if the only differences are capitalization,
+     commas, apostrophes, spacing, or final punctuation.
+   - A grammatically and semantically correct sentence MUST return an empty
+     "corrections" array, even if its writing style could be improved.
+   - Do not rewrite a correct sentence merely to make it more natural or formal.
+   - Each correction must be a JSON object.
+   - "wrong" must contain the student's incorrect
+     {target_language} expression.
+   - "correct" must contain the corrected
+     {target_language} expression.
+   - "explanation" must be written entirely in
+     {feedback_language}.
+   - Never mix languages in the explanation.
+
+4. The "next_step" field:
+   - Ask one natural follow-up question.
+   - Write the question entirely in {target_language}.
+   - Never repeat a previous question.
+   - If the conversation is naturally ending, return an
+     empty string.
+
+5. Return only valid JSON in this exact structure:
+
+{{
+  "ai_message": "Natural response in {target_language}.",
+  "corrections": [
     {{
-      "ai_message": "Only your statement/reaction here (e.g., 'Hello! Yes, of course.' or 'Okay, one coffee with milk.')",
-      "corrections": [
-        {{"wrong": "incorrect word", "correct": "fixed word", "explanation": "Turkish explanation"}}
-      ],
-      "next_step": "Only your question here (e.g., 'What would you like to drink?') OR an empty string '' if the conversation is naturally ending."
-    }}"""
+      "wrong": "Incorrect target-language expression",
+      "correct": "Correct target-language expression",
+      "explanation": "Explanation in {feedback_language}"
+    }}
+  ],
+  "next_step": "Question in {target_language}, or empty string"
+}}
 
-    prompt = f"Previous Conversation:\n{conversation_context}\n\nUser's New Message: {request.user_text}"
+6. CONVERSATION MEMORY:
+   - Treat the previous conversation as authoritative memory.
+   - Remember facts already provided by the student, including their name,
+     preferences, order, answer, and previous choices.
+   - Never ask for information that the student has already provided.
+   - Never repeat a question that already appears in the conversation history.
+   - If the student's name is already known, do not ask for it again.
+
+7. FORGIVING CORRECTION POLICY:
+   - Accept grammatically understandable compound messages.
+   - Do not remove a correct clause merely because the student also asks
+     another valid question in the same message.
+   - For example, "my name is Ayca what is your name" is understandable and
+     must not be treated as a major grammar error.
+   - Missing capitalization, commas, and final punctuation are not errors.
+
+"""
+
+    prompt = f"""
+Previous conversation:
+{conversation_context}
+
+Student's new message:
+{request.user_text}
+"""
 
     try:
         response = client.models.generate_content(
-            model='gemini-2.5-flash-lite',
+            model="gemini-2.5-flash-lite",
             contents=prompt,
             config=gemini_types.GenerateContentConfig(
                 system_instruction=system_instruction,
-                response_mime_type="application/json", 
-                temperature=0.4 
+                response_mime_type="application/json",
+                temperature=0.2,
+            ),
+        )
+
+        raw_response = response.text or "{}"
+        json_data = json.loads(raw_response)
+
+        ai_message = str(
+            json_data.get("ai_message", "")
+        ).strip()
+
+        next_step = str(
+            json_data.get("next_step", "")
+        ).strip()
+
+        validated_corrections = sanitize_roleplay_corrections(
+            json_data.get(
+                "corrections",
+                [],
             )
         )
-        
-        json_data = json.loads(response.text)
-        
-        # 🌟 GÜNCELLEME 3: Kayıt logu
-        new_cache = models.AICache(feature_type="writing_correction", input_text=search_text, ai_response=response.text)
+
+        result_json = {
+            "ai_message": ai_message,
+            "corrections": validated_corrections,
+            "next_step": next_step,
+        }
+
+        new_cache = models.AICache(
+            feature_type="writing_correction_v5",
+            input_text=search_text,
+            ai_response=json.dumps(
+                result_json,
+                ensure_ascii=False,
+            ),
+        )
+
         db.add(new_cache)
         db.commit()
-        print(f"💾 CACHE SAVED: Gemini yanıtı veritabanına kaydedildi.")
-        
-        return json_data
-        
-    except Exception as e:
-        print(f"🚨 AI Hatası: {str(e)}")
-        
+
+        print(
+            "💾 ROLEPLAY CACHE SAVED:",
+            request.user_text,
+        )
+
+        return result_json
+
+    except Exception as error:
+        db.rollback()
+
+        print(
+            "🚨 ROLEPLAY AI HATASI:",
+            str(error),
+        )
+
         return {
-            "ai_message": "Şu an sistemimde ufak bir yoğunluk var ama seni çok iyi anladım. Harika gidiyorsun! 🚀",
-            "corrections": [], # Hata yokmuş gibi boş liste dönüyoruz
-            "next_step": "Şimdi bana başka ne söylemek istersin?" # Sohbet kopmasın diye topu ona atıyoruz
+            "ai_message": target_texts["fallback_message"],
+            "corrections": [],
+            "next_step": target_texts["fallback_next"],
         }
+
     
 
 @router.get("/api/lessons")

@@ -147,8 +147,33 @@ Kurallar:
 
         generated_text = clean_pronunciation_text(response.text or "")
 
+        
         if not generated_text:
-            generated_text = "Please read this sentence clearly and slowly."
+            fallback_texts = {
+                "English": (
+                    "Please read this sentence clearly and slowly."
+                ),
+                "Spanish": (
+                    "Por favor, lee esta oración clara y lentamente."
+                ),
+                "German": (
+                    "Bitte lies diesen Satz klar und langsam."
+                ),
+                "French": (
+                    "Veuillez lire cette phrase clairement et lentement."
+                ),
+            }
+
+            normalized_target_language = (
+                request.target_language.strip().title()
+            )
+
+            generated_text = fallback_texts.get(
+                normalized_target_language,
+                "Please read this sentence clearly and slowly.",
+            )
+
+
 
         result_json = {
             "status": "success",

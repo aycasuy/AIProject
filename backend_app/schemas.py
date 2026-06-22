@@ -79,7 +79,7 @@ class GeneratePronunciationRequest(BaseModel):
     target_words: str
     lesson_id: Optional[int] = None  # 🌟 YENİ: Artık Flutter bize ders numarasını da atabilecek
     round: Optional[int] = 1
-    exclude_texts: Optional[List[str]] = []
+    exclude_texts: List[str] = Field(default_factory=list)
 
 class DictationRequest(BaseModel):
     username: str
@@ -114,8 +114,9 @@ class CorrectionRequest(BaseModel):
     user_text: str
     level: str = "A1"
     target_words: str # 🌟 Hangi kelimelerden sapmayacak?
-    history: List[Dict[str, str]] = [] # 🌟 Sohbet geçmişi
+    history: List[Dict[str, str]] = Field(default_factory=list)
     target_language: str
+    native_language: str = "Turkish"
 
 
 class DecreaseLifeRequest(BaseModel):

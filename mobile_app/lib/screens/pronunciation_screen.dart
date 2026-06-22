@@ -288,13 +288,19 @@ class _PronunciationScreenState extends State<PronunciationScreen> {
       }
 
       if (mounted) {
+        final String validText = newText?.trim() ?? '';
+        final bool hasValidPronunciationText = validText.isNotEmpty;
+
         setState(() {
-          _targetText = (newText != null && newText.isNotEmpty)
-              ? newText
+          _targetText = hasValidPronunciationText
+              ? validText
               : loc.pronunciationNoText;
-          if (!_usedPronunciationTexts.contains(_targetText)) {
-            _usedPronunciationTexts.add(_targetText);
+
+          if (hasValidPronunciationText &&
+              !_usedPronunciationTexts.contains(validText)) {
+            _usedPronunciationTexts.add(validText);
           }
+
           _isLoadingText = false;
         });
       }

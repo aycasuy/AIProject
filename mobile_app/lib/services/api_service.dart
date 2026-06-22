@@ -49,38 +49,57 @@ class ApiService {
     String targetWords,
     List<Map<String, String>> history,
     String targetLanguage,
+    String nativeLanguage,
   ) async {
     try {
+      final url = Uri.parse('$baseUrl/ai-teacher/correct');
+
+      final Map<String, dynamic> requestBody = {
+        'topic': topic,
+        'user_text': userText,
+        'level': level,
+        'target_words': targetWords,
+        'history': history,
+        'target_language': targetLanguage,
+        'native_language': nativeLanguage,
+      };
+
+      debugPrint(
+        'ROLEPLAY REQUEST → '
+        'topic=$topic, '
+        'target=$targetLanguage, '
+        'native=$nativeLanguage',
+      );
+
       final response = await http
           .post(
-            Uri.parse("$baseUrl/ai-teacher/correct"),
-            headers: {"Content-Type": "application/json"},
-            // Python tarafındaki Pydantic modelimize uygun JSON'u gönderiyoruz
-            body: json.encode({
-              "topic": topic,
-              "user_text": userText,
-              "level": level,
-              "target_words": targetWords, // 🌟 Kelimeler AI'a gidiyor
-              "history": history,
-              "target_language": targetLanguage, // 🌟 Hafıza AI'a gidiyor
-            }),
+            url,
+            headers: {'Content-Type': 'application/json; charset=UTF-8'},
+            body: jsonEncode(requestBody),
           )
           .timeout(const Duration(seconds: 45));
 
-      // Terminalde ne olup bittiğini görmek için bu printleri ekle:
-      print("🚀 Gönderilen Metin: $userText");
-      print("📡 Sunucu Yanıt Kodu: ${response.statusCode}");
+      debugPrint('ROLEPLAY RESPONSE → ${response.statusCode}');
 
       if (response.statusCode == 200) {
-        // Python'dan gelen o kusursuz JSON'u dart objesine çeviriyoruz
-        return json.decode(utf8.decode(response.bodyBytes));
-      } else {
-        print("❌ Sunucu Hatası Detayı: ${response.body}");
-        throw Exception("Sunucu hatası: ${response.statusCode}");
+        final dynamic decoded = jsonDecode(utf8.decode(response.bodyBytes));
+
+        if (decoded is Map) {
+          return Map<String, dynamic>.from(decoded);
+        }
+
+        throw Exception('Sunucudan geçersiz roleplay yanıtı geldi.');
       }
+
+      debugPrint(
+        'Roleplay sunucu hatası: '
+        '${response.statusCode} - ${response.body}',
+      );
+
+      throw Exception('Sunucu hatası: ${response.statusCode}');
     } catch (e) {
-      print("🚨 Bağlantı Hatası: $e");
-      throw Exception("Bağlantı hatası: $e");
+      debugPrint('Roleplay bağlantı hatası: $e');
+      throw Exception('Bağlantı hatası: $e');
     }
   }
 
