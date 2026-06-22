@@ -756,12 +756,12 @@
   "roleplayPassportControlTopic": "Usted es un cuidadoso y serio funcionario de control de pasaportes. Pregunte por qué he venido al país, donde me quedaré, y si tengo un billete de vuelta, uno a la vez. Recuerde mis respuestas anteriores y no repita la misma pregunta.",
   "roleplayHotelProblemTitle": "🏨 Problema del Hotel",
   "roleplayHotelProblemTopic": "El personal del hotel es muy amable y atento. Pida los detalles uno a la vez y ofrezca una solución apropiada. No vuelva a pedir la información que ya he proporcionado.",
-  "levelUpTitle": "SEVİYE ATLAMA SINAVI",
-  "levelUpLoading": "Seviye atlama sınavın hazırlanıyor...",
-  "levelUpLoadFailed": "Seviye atlama sınavı yüklenemedi.",
-  "levelUpNoQuestions": "Bu sınav için soru bulunamadı.",
-  "levelUpRetry": "Tekrar Dene",
-  "levelUpQuestionCounter": "Soru {current} / {total}",
+  "levelUpTitle": "EXAM NIVEL-UP",
+  "levelUpLoading": "Tu examen de nivelación está siendo preparado...",
+  "levelUpLoadFailed": "El examen de nivelación no pudo ser cargado.",
+  "levelUpNoQuestions": "No se encontraron preguntas para este examen.",
+  "levelUpRetry": "Inténtalo de nuevo",
+  "levelUpQuestionCounter": "Pregunta {current} / {total}",
   "@levelUpQuestionCounter": {
     "placeholders": {
       "current": {
@@ -772,16 +772,16 @@
       }
     }
   },
-  "levelUpAnswer": "Cevapla",
-  "levelUpAnswerRequired": "Devam etmeden önce cevabını tamamlamalısın.",
-  "levelUpCorrect": "✅ Doğru!",
-  "levelUpWrong": "❌ Yanlış!",
-  "levelUpFillBlank": "Boşluğu Doldur",
-  "levelUpBuildSentence": "Cümleyi Kur",
-  "levelUpListenAndWrite": "Duyduğunu Yaz",
-  "levelUpReadAloud": "Yüksek Sesle Oku",
-  "levelUpAnswerHint": "Cevabını yaz...",
-  "levelUpWriteInLanguage": "{language} dilinde yaz...",
+  "levelUpAnswer": "Respuesta",
+  "levelUpAnswerRequired": "Completa tu respuesta antes de continuar.",
+  "levelUpCorrect": "✅ ¡Correcto!",
+  "levelUpWrong": "❌ ¡Incorrecto!",
+  "levelUpFillBlank": "Rellena el blanco",
+  "levelUpBuildSentence": "Construye la oración",
+  "levelUpListenAndWrite": "Escuchar y escribir",
+  "levelUpReadAloud": "Leer en voz alta",
+  "levelUpAnswerHint": "Escribe tu respuesta...",
+  "levelUpWriteInLanguage": "Escribe en {language}...",
   "@levelUpWriteInLanguage": {
     "placeholders": {
       "language": {
@@ -789,11 +789,11 @@
       }
     }
   },
-  "levelUpMicrophoneHint": "Mikrofona bas...",
-  "levelUpListening": "Dinleniyor...",
-  "levelUpPassedTitle": "SEVİYE ATLANDI!",
-  "levelUpFailedTitle": "SINAVI GEÇEMEDİN",
-  "levelUpScore": "Puanın: {score} / 100",
+  "levelUpMicrophoneHint": "Toca el micrófono...",
+  "levelUpListening": "Escuchando...",
+  "levelUpPassedTitle": "¡NIVEL DESLOQUEADO!",
+  "levelUpFailedTitle": "NO PASAS",
+  "levelUpScore": "Tu puntuación: {score} / 100",
   "@levelUpScore": {
     "placeholders": {
       "score": {
@@ -801,7 +801,7 @@
       }
     }
   },
-  "levelUpPassedMessage": "Harika iş çıkardın! {level} seviyesinin kilidi açıldı.",
+  "levelUpPassedMessage": "¡Buen trabajo! El nivel {level} ha sido desbloqueado.",
   "@levelUpPassedMessage": {
     "placeholders": {
       "level": {
@@ -809,7 +809,7 @@
       }
     }
   },
-  "levelUpFailedMessage": "70 puanı geçemedin. Eksiklerini kapatıp seviye atlama sınavını tekrar denemelisin.",
-  "levelUpNextMap": "Yeni Haritaya Geç 🚀",
-  "levelUpBackToMap": "Haritaya Dön"
+  "levelUpFailedMessage": "No has alcanzado 70 puntos. Revisa tus zonas débiles y vuelve a probar el examen de nivelación.",
+  "levelUpNextMap": "Ir al nuevo mapa 🚀",
+  "levelUpBackToMap": "Volver al mapa"
 }
