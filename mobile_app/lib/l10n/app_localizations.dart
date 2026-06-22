@@ -2241,6 +2241,102 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'İptal'**
   String get settingsCancel;
+
+  /// No description provided for @navMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita'**
+  String get navMap;
+
+  /// No description provided for @navRoleplay.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rol Yapma'**
+  String get navRoleplay;
+
+  /// No description provided for @navWordHunt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime Avı'**
+  String get navWordHunt;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In tr, this message translates to:
+  /// **'Profil'**
+  String get navProfile;
+
+  /// No description provided for @roleplayFirstMeetingTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'👋 İlk Tanışma'**
+  String get roleplayFirstMeetingTitle;
+
+  /// No description provided for @roleplayFirstMeetingTopic.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sen yeni tanıştığım, çok arkadaş canlısı birisin. Bana adımı, nasıl olduğumu ve nereli olduğumu sırayla sor. Çok basit ve kısa cümleler kullan. Daha önce cevapladığım bir soruyu tekrar sorma.'**
+  String get roleplayFirstMeetingTopic;
+
+  /// No description provided for @roleplayCafeOrderTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'☕ Kafede Sipariş'**
+  String get roleplayCafeOrderTitle;
+
+  /// No description provided for @roleplayCafeOrderTopic.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sen bir baristasın ve ben kafeye geldim. Ne içmek ve yemek istediğimi sor, siparişimi onayla ve ödeme biçimimi sor. Basit ve kısa cümleler kullan. Aynı soruyu tekrar sorma.'**
+  String get roleplayCafeOrderTopic;
+
+  /// No description provided for @roleplayTaxiDriverTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'🚕 Taksi Şoförü'**
+  String get roleplayTaxiDriverTitle;
+
+  /// No description provided for @roleplayTaxiDriverTopic.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sen konuşkan bir taksi şoförüsün ve havalimanına gidiyoruz. Bana nereye uçacağımı, mesleğimi ve yolculuğumun nasıl geçtiğini sırayla sor. Daha önce verdiğim bilgileri hatırla ve aynı soruyu tekrar sorma.'**
+  String get roleplayTaxiDriverTopic;
+
+  /// No description provided for @roleplayClothingStoreTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'🛍️ Kıyafet Alışverişi'**
+  String get roleplayClothingStoreTitle;
+
+  /// No description provided for @roleplayClothingStoreTopic.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sen bir mağaza görevlisisin. Bana nasıl yardımcı olabileceğini, hangi ürünü aradığımı, bedenimi ve tercih ettiğim rengi sırayla sor. Verdiğim cevapları hatırla ve aynı soruyu tekrar sorma.'**
+  String get roleplayClothingStoreTopic;
+
+  /// No description provided for @roleplayPassportControlTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'🛂 Pasaport Kontrolü'**
+  String get roleplayPassportControlTitle;
+
+  /// No description provided for @roleplayPassportControlTopic.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sen dikkatli ve ciddi bir pasaport kontrol görevlisisin. Ülkeye neden geldiğimi, nerede kalacağımı ve dönüş biletimin olup olmadığını sırayla sor. Önceki cevaplarımı hatırla ve aynı soruyu tekrar sorma.'**
+  String get roleplayPassportControlTopic;
+
+  /// No description provided for @roleplayHotelProblemTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'🏨 Otelde Sorun'**
+  String get roleplayHotelProblemTitle;
+
+  /// No description provided for @roleplayHotelProblemTopic.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sen bir otel resepsiyonistisin. Odamdaki klima ve sıcak su sorunuyla ilgili şikâyetimi dinle. Ayrıntıları sırayla sor ve uygun bir çözüm öner. Daha önce söylediğim bilgileri tekrar sorma.'**
+  String get roleplayHotelProblemTopic;
 }
 
 class _AppLocalizationsDelegate

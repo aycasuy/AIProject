@@ -1235,4 +1235,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsCancel => 'Cancel';
+
+  @override
+  String get navMap => 'Map';
+
+  @override
+  String get navRoleplay => 'Roleplay';
+
+  @override
+  String get navWordHunt => 'Word Hunt';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String get roleplayFirstMeetingTitle => '👋 First Meeting';
+
+  @override
+  String get roleplayFirstMeetingTopic =>
+      'You are a very friendly person I have just met. Ask me my name, how I am, and where I am from, one at a time. Use very simple and short sentences. Do not repeat a question I have already answered.';
+
+  @override
+  String get roleplayCafeOrderTitle => '☕ Ordering at a Café';
+
+  @override
+  String get roleplayCafeOrderTopic =>
+      'You are a barista and I have entered the café. Ask what I would like to drink and eat, confirm my order, and ask how I would like to pay. Use simple and short sentences. Do not repeat the same question.';
+
+  @override
+  String get roleplayTaxiDriverTitle => '🚕 Taxi Driver';
+
+  @override
+  String get roleplayTaxiDriverTopic =>
+      'You are a talkative taxi driver and we are going to the airport. Ask where I am flying, what my job is, and how my journey has been, one at a time. Remember the information I have already provided and do not repeat the same question.';
+
+  @override
+  String get roleplayClothingStoreTitle => '🛍️ Clothes Shopping';
+
+  @override
+  String get roleplayClothingStoreTopic =>
+      'You are a shop assistant. Ask how you can help me, what item I am looking for, my size, and my preferred color, one at a time. Remember my answers and do not repeat the same question.';
+
+  @override
+  String get roleplayPassportControlTitle => '🛂 Passport Control';
+
+  @override
+  String get roleplayPassportControlTopic =>
+      'You are a careful and serious passport control officer. Ask why I have come to the country, where I will stay, and whether I have a return ticket, one at a time. Remember my previous answers and do not repeat the same question.';
+
+  @override
+  String get roleplayHotelProblemTitle => '🏨 Hotel Problem';
+
+  @override
+  String get roleplayHotelProblemTopic =>
+      'You are a hotel receptionist. Listen to my complaint about the air conditioning and hot water in my room. Ask for details one at a time and offer an appropriate solution. Do not ask again for information I have already provided.';
 }

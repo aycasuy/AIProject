@@ -743,7 +743,66 @@
   "roleplayPassportControlTitle": "🛂 Pasaport Kontrolü",
   "roleplayPassportControlTopic": "Sen dikkatli ve ciddi bir pasaport kontrol görevlisisin. Ülkeye neden geldiğimi, nerede kalacağımı ve dönüş biletimin olup olmadığını sırayla sor. Önceki cevaplarımı hatırla ve aynı soruyu tekrar sorma.",
   "roleplayHotelProblemTitle": "🏨 Otelde Sorun",
-  "roleplayHotelProblemTopic": "Sen bir otel resepsiyonistisin. Odamdaki klima ve sıcak su sorunuyla ilgili şikâyetimi dinle. Ayrıntıları sırayla sor ve uygun bir çözüm öner. Daha önce söylediğim bilgileri tekrar sorma."
+  "roleplayHotelProblemTopic": "Sen bir otel resepsiyonistisin. Odamdaki klima ve sıcak su sorunuyla ilgili şikâyetimi dinle. Ayrıntıları sırayla sor ve uygun bir çözüm öner. Daha önce söylediğim bilgileri tekrar sorma.",
+
+
+
+  "levelUpTitle": "SEVİYE ATLAMA SINAVI",
+  "levelUpLoading": "Seviye atlama sınavın hazırlanıyor...",
+  "levelUpLoadFailed": "Seviye atlama sınavı yüklenemedi.",
+  "levelUpNoQuestions": "Bu sınav için soru bulunamadı.",
+  "levelUpRetry": "Tekrar Dene",
+  "levelUpQuestionCounter": "Soru {current} / {total}",
+  "@levelUpQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "levelUpAnswer": "Cevapla",
+  "levelUpAnswerRequired": "Devam etmeden önce cevabını tamamlamalısın.",
+  "levelUpCorrect": "✅ Doğru!",
+  "levelUpWrong": "❌ Yanlış!",
+  "levelUpFillBlank": "Boşluğu Doldur",
+  "levelUpBuildSentence": "Cümleyi Kur",
+  "levelUpListenAndWrite": "Duyduğunu Yaz",
+  "levelUpReadAloud": "Yüksek Sesle Oku",
+  "levelUpAnswerHint": "Cevabını yaz...",
+  "levelUpWriteInLanguage": "{language} dilinde yaz...",
+  "@levelUpWriteInLanguage": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "levelUpMicrophoneHint": "Mikrofona bas...",
+  "levelUpListening": "Dinleniyor...",
+  "levelUpPassedTitle": "SEVİYE ATLANDI!",
+  "levelUpFailedTitle": "SINAVI GEÇEMEDİN",
+  "levelUpScore": "Puanın: {score} / 100",
+  "@levelUpScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "levelUpPassedMessage": "Harika iş çıkardın! {level} seviyesinin kilidi açıldı.",
+  "@levelUpPassedMessage": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "levelUpFailedMessage": "70 puanı geçemedin. Eksiklerini kapatıp seviye atlama sınavını tekrar denemelisin.",
+  "levelUpNextMap": "Yeni Haritaya Geç 🚀",
+  "levelUpBackToMap": "Haritaya Dön"
 
 
 

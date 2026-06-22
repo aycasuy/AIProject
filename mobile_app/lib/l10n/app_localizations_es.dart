@@ -1249,4 +1249,58 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsCancel => 'Cancelar';
+
+  @override
+  String get navMap => 'Mapa';
+
+  @override
+  String get navRoleplay => 'Juego';
+
+  @override
+  String get navWordHunt => 'Cacería de palabras';
+
+  @override
+  String get navProfile => 'Perfil';
+
+  @override
+  String get roleplayFirstMeetingTitle => '👋 Primera reunión';
+
+  @override
+  String get roleplayFirstMeetingTopic =>
+      'Usted es una persona muy amigable que acabo de conocer. Pregúntanme mi nombre, cómo estoy y de dónde vengo, uno a la vez. Utilice frases muy simples y cortas. No repita una pregunta que ya he respondido.';
+
+  @override
+  String get roleplayCafeOrderTitle => '☕ Ordenar en un Café';
+
+  @override
+  String get roleplayCafeOrderTopic =>
+      'Usted es un barista y yo he entrado en el café. Pregunte lo que me gustaría beber y comer, confirmar mi pedido y preguntar cómo me gustaría pagar. Utilice frases simples y cortas. No repita la misma pregunta.';
+
+  @override
+  String get roleplayTaxiDriverTitle => '🚕 Taxi Driver';
+
+  @override
+  String get roleplayTaxiDriverTopic =>
+      'Usted es un taxista hablativo y vamos al aeropuerto. Pregunte a dónde vuelo, cuál es mi trabajo y cómo ha sido mi viaje, uno a uno. Recuerden la información que ya he proporcionado y no repitan la misma pregunta.';
+
+  @override
+  String get roleplayClothingStoreTitle => '🛍️ Tienda de ropa';
+
+  @override
+  String get roleplayClothingStoreTopic =>
+      'Eres un asistente de tienda. Pregunte cómo puede ayudarme, qué objeto estoy buscando, mi tamaño y mi color preferido, uno a la vez. Recuerden mis respuestas y no repitan la misma pregunta.';
+
+  @override
+  String get roleplayPassportControlTitle => '🛂 Control de pasaporte';
+
+  @override
+  String get roleplayPassportControlTopic =>
+      'Usted es un cuidadoso y serio funcionario de control de pasaportes. Pregunte por qué he venido al país, donde me quedaré, y si tengo un billete de vuelta, uno a la vez. Recuerde mis respuestas anteriores y no repita la misma pregunta.';
+
+  @override
+  String get roleplayHotelProblemTitle => '🏨 Problema del Hotel';
+
+  @override
+  String get roleplayHotelProblemTopic =>
+      'El personal del hotel es muy amable y atento. Pida los detalles uno a la vez y ofrezca una solución apropiada. No vuelva a pedir la información que ya he proporcionado.';
 }

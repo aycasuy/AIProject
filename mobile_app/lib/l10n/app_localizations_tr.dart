@@ -1223,4 +1223,58 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsCancel => 'İptal';
+
+  @override
+  String get navMap => 'Harita';
+
+  @override
+  String get navRoleplay => 'Rol Yapma';
+
+  @override
+  String get navWordHunt => 'Kelime Avı';
+
+  @override
+  String get navProfile => 'Profil';
+
+  @override
+  String get roleplayFirstMeetingTitle => '👋 İlk Tanışma';
+
+  @override
+  String get roleplayFirstMeetingTopic =>
+      'Sen yeni tanıştığım, çok arkadaş canlısı birisin. Bana adımı, nasıl olduğumu ve nereli olduğumu sırayla sor. Çok basit ve kısa cümleler kullan. Daha önce cevapladığım bir soruyu tekrar sorma.';
+
+  @override
+  String get roleplayCafeOrderTitle => '☕ Kafede Sipariş';
+
+  @override
+  String get roleplayCafeOrderTopic =>
+      'Sen bir baristasın ve ben kafeye geldim. Ne içmek ve yemek istediğimi sor, siparişimi onayla ve ödeme biçimimi sor. Basit ve kısa cümleler kullan. Aynı soruyu tekrar sorma.';
+
+  @override
+  String get roleplayTaxiDriverTitle => '🚕 Taksi Şoförü';
+
+  @override
+  String get roleplayTaxiDriverTopic =>
+      'Sen konuşkan bir taksi şoförüsün ve havalimanına gidiyoruz. Bana nereye uçacağımı, mesleğimi ve yolculuğumun nasıl geçtiğini sırayla sor. Daha önce verdiğim bilgileri hatırla ve aynı soruyu tekrar sorma.';
+
+  @override
+  String get roleplayClothingStoreTitle => '🛍️ Kıyafet Alışverişi';
+
+  @override
+  String get roleplayClothingStoreTopic =>
+      'Sen bir mağaza görevlisisin. Bana nasıl yardımcı olabileceğini, hangi ürünü aradığımı, bedenimi ve tercih ettiğim rengi sırayla sor. Verdiğim cevapları hatırla ve aynı soruyu tekrar sorma.';
+
+  @override
+  String get roleplayPassportControlTitle => '🛂 Pasaport Kontrolü';
+
+  @override
+  String get roleplayPassportControlTopic =>
+      'Sen dikkatli ve ciddi bir pasaport kontrol görevlisisin. Ülkeye neden geldiğimi, nerede kalacağımı ve dönüş biletimin olup olmadığını sırayla sor. Önceki cevaplarımı hatırla ve aynı soruyu tekrar sorma.';
+
+  @override
+  String get roleplayHotelProblemTitle => '🏨 Otelde Sorun';
+
+  @override
+  String get roleplayHotelProblemTopic =>
+      'Sen bir otel resepsiyonistisin. Odamdaki klima ve sıcak su sorunuyla ilgili şikâyetimi dinle. Ayrıntıları sırayla sor ve uygun bir çözüm öner. Daha önce söylediğim bilgileri tekrar sorma.';
 }
