@@ -1044,173 +1044,173 @@ class AppLocalizationsEn extends AppLocalizations {
   String get flashcardPracticeBackToProfile => 'Back to Profile';
 
   @override
-  String get wordHuntTitle => 'Kelime Avı';
+  String get wordHuntTitle => 'Word Hunt';
 
   @override
-  String get wordHuntIntroTitle => 'Metnini yapıştır, kelimeleri yakalayalım!';
+  String get wordHuntIntroTitle => 'Paste your text and let’s catch the words!';
 
   @override
   String get wordHuntIntroDescription =>
-      'Zor kelimeleri analiz et, seviyesini gör ve istersen metinden test çöz.';
+      'Analyze difficult words, check their levels, and take a quiz based on the text.';
 
   @override
-  String get wordHuntTextReady => 'Metin hazır';
+  String get wordHuntTextReady => 'Text ready';
 
   @override
-  String get wordHuntTextField => 'Metin alanı';
+  String get wordHuntTextField => 'Text area';
 
   @override
-  String get wordHuntClear => 'Temizle';
+  String get wordHuntClear => 'Clear';
 
   @override
   String wordHuntPasteHint(String language) {
-    return '$language metnini buraya yapıştır...';
+    return 'Paste your $language text here...';
   }
 
   @override
   String wordHuntWordCount(int count) {
-    return '$count kelime';
+    return '$count words';
   }
 
   @override
-  String get wordHuntAnalysisPending => 'Analiz bekleniyor';
+  String get wordHuntAnalysisPending => 'Waiting for analysis';
 
   @override
   String wordHuntLevel(String level) {
-    return 'Seviye: $level';
+    return 'Level: $level';
   }
 
   @override
-  String get wordHuntAnalysisCompleted => 'Analiz tamamlandı';
+  String get wordHuntAnalysisCompleted => 'Analysis completed';
 
   @override
   String wordHuntHighlightedWords(int count) {
-    return '$count kelime vurgulandı';
+    return '$count words highlighted';
   }
 
   @override
-  String get wordHuntTapColoredWords => 'Renkli kelimelere dokun';
+  String get wordHuntTapColoredWords => 'Tap the highlighted words';
 
   @override
-  String get wordHuntAnalyzeButton => 'Kelimeleri Analiz Et';
+  String get wordHuntAnalyzeButton => 'Analyze Words';
 
   @override
-  String get wordHuntQuizButton => 'Bu Metinle Test Çöz';
+  String get wordHuntQuizButton => 'Take a Quiz with This Text';
 
   @override
-  String get wordHuntExampleUsage => 'Örnek kullanım';
+  String get wordHuntExampleUsage => 'Example usage';
 
   @override
-  String get wordHuntAddToBank => 'Kumbarama Ekle';
+  String get wordHuntAddToBank => 'Add to My Word Bank';
 
   @override
-  String get wordHuntAddedToBank => 'Kelime kumbaraya eklendi! 🚀';
+  String get wordHuntAddedToBank => 'Word added to your word bank! 🚀';
 
   @override
   String get wordHuntAnalyzeEmpty =>
-      'Analiz için önce bir metin yapıştırmalısın. 📝';
+      'Paste a text before starting the analysis. 📝';
 
   @override
   String wordHuntAnalyzeFailed(int status) {
-    return 'Analiz başarısız oldu: $status';
+    return 'Analysis failed: $status';
   }
 
   @override
   String wordHuntConnectionError(String error) {
-    return 'Sunucuya bağlanılamadı: $error';
+    return 'Could not connect to the server: $error';
   }
 
   @override
-  String get wordHuntQuizEmpty =>
-      'Test çözmek için önce kutuya metin yapıştırmalısın. 📝';
+  String get wordHuntQuizEmpty => 'Paste a text before creating a quiz. 📝';
 
   @override
   String get wordHuntQuizGenerationFailed =>
-      'Yapay zeka bu metinden soru üretemedi. Daha uzun bir metin dene! 📝';
+      'The AI could not create questions from this text. Try a longer text! 📝';
 
   @override
   String wordHuntQuizCreateFailed(int status) {
-    return 'Sınav oluşturulamadı: $status';
+    return 'Quiz could not be created: $status';
   }
 
   @override
-  String get wordHuntQuizTitle => 'Kelime Avı Testi';
+  String get wordHuntQuizTitle => 'Word Hunt Quiz';
 
   @override
-  String get wordHuntOriginalTextTitle => 'Orijinal Metin';
+  String get wordHuntOriginalTextTitle => 'Original Text';
 
   @override
   String get wordHuntOriginalTextSubtitle =>
-      'Soruları çözerken metne tekrar bakabilirsin.';
+      'You can review the text while answering the questions.';
 
   @override
   String get wordHuntOriginalTextMissing =>
-      'Bu test için gösterilecek metin bulunamadı.';
+      'There is no text available for this quiz.';
 
   @override
   String wordHuntQuestionNumber(int current) {
-    return 'Soru $current';
+    return 'Question $current';
   }
 
   @override
-  String get wordHuntTypeFillBlank => 'Boşluk Doldurma';
+  String get wordHuntTypeFillBlank => 'Fill in the Blank';
 
   @override
-  String get wordHuntTypeMultipleChoice => 'Çoktan Seçmeli';
+  String get wordHuntTypeMultipleChoice => 'Multiple Choice';
 
   @override
   String get wordHuntChooseMissingWord =>
-      'Doğru kelimeyi seç ve boşluğu tamamla';
+      'Choose the correct word and complete the blank';
 
   @override
-  String get wordHuntWordBank => 'Kelime bankası';
+  String get wordHuntWordBank => 'Word bank';
 
   @override
-  String get wordHuntAnswerQuestion => 'Soruyu cevapla';
+  String get wordHuntAnswerQuestion => 'Answer the question';
 
   @override
-  String get wordHuntExplanationMissing => 'Açıklama bulunmuyor.';
+  String get wordHuntExplanationMissing => 'No explanation is available.';
 
   @override
   String wordHuntCorrectFeedback(String explanation) {
-    return 'Harika! Doğru cevap.\n$explanation';
+    return 'Great! Correct answer.\\n$explanation';
   }
 
   @override
   String wordHuntRetryFeedback(String explanation) {
-    return 'Tekrar bakalım.\n$explanation';
+    return 'Let’s review it again.\\n$explanation';
   }
 
   @override
-  String get wordHuntExcellentTitle => 'Mükemmel!';
+  String get wordHuntExcellentTitle => 'Excellent!';
 
   @override
-  String get wordHuntCompletedTitle => 'Test Tamamlandı!';
+  String get wordHuntCompletedTitle => 'Quiz Completed!';
 
   @override
-  String get wordHuntExcellentMessage => 'Kelime avında çok iyi iş çıkardın.';
+  String get wordHuntExcellentMessage =>
+      'You did a great job in the word hunt.';
 
   @override
   String get wordHuntCompletedMessage =>
-      'Pratik yaptıkça daha da hızlanacaksın.';
+      'You will get faster with more practice.';
 
   @override
-  String get wordHuntScore => 'Skor';
+  String get wordHuntScore => 'Score';
 
   @override
   String get wordHuntXp => 'XP';
 
   @override
-  String get wordHuntContinue => 'Devam Et';
+  String get wordHuntContinue => 'Continue';
 
   @override
-  String get wordHuntNoQuestions => 'Soru bulunamadı.';
+  String get wordHuntNoQuestions => 'No questions found.';
 
   @override
-  String get wordHuntSeeResult => 'Sonucu Gör';
+  String get wordHuntSeeResult => 'See Result';
 
   @override
   String wordHuntXpSaveError(String error) {
-    return 'XP kaydedilirken hata oluştu: $error';
+    return 'An error occurred while saving XP: $error';
   }
 }

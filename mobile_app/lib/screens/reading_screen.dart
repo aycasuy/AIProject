@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'analyzequiz_screen.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class ReadingScreen extends StatefulWidget {
   final String username;
@@ -36,6 +37,23 @@ class _ReadingScreenState extends State<ReadingScreen> {
     return text.split(RegExp(r'\s+')).where((w) => w.trim().isNotEmpty).length;
   }
 
+  String _localizedLanguageName(AppLocalizations loc, String language) {
+    switch (language.trim().toLowerCase()) {
+      case 'english':
+        return loc.langEnglish;
+      case 'spanish':
+        return loc.langSpanish;
+      case 'german':
+        return loc.langGerman;
+      case 'french':
+        return loc.langFrench;
+      case 'turkish':
+        return loc.langTurkish;
+      default:
+        return language;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -51,8 +69,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Future<void> _analyzeText() async {
+    final loc = AppLocalizations.of(context)!;
+
     if (_textController.text.trim().isEmpty) {
-      _showError("Analiz için önce bir metin yapıştırmalısın. 📝");
+      _showError(loc.wordHuntAnalyzeEmpty);
       return;
     }
 
@@ -82,20 +102,21 @@ class _ReadingScreenState extends State<ReadingScreen> {
           _analyzedWords = data['words'] ?? [];
         });
       } else {
-        _showError("Analiz başarısız oldu: ${response.statusCode}");
+        _showError(loc.wordHuntAnalyzeFailed(response.statusCode));
       }
     } catch (e) {
-      _showError("Sunucuya bağlanılamadı! Hata: $e");
+      _showError(loc.wordHuntConnectionError(e.toString()));
     } finally {
       if (mounted) setState(() => _isAnalyzing = false);
     }
   }
 
   Future<void> _generateQuiz() async {
-    String currentText = _textController.text.trim();
+    final loc = AppLocalizations.of(context)!;
+    final String currentText = _textController.text.trim();
 
     if (currentText.isEmpty) {
-      _showError("Test çözmek için önce kutuya metin yapıştırmalısın! 📝");
+      _showError(loc.wordHuntQuizEmpty);
       return;
     }
 
@@ -132,25 +153,23 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 questions: data['questions'],
                 username: widget.username,
                 targetLanguage: widget.targetLanguage,
+                nativeLanguage: widget.nativeLanguage,
                 sectionIndex: 999,
                 lessonId: 999,
                 originalText: currentText,
-                nativeLanguage: widget.nativeLanguage,
               ),
             ),
           );
         } else {
-          _showError(
-            "Yapay zeka bu metinden soru üretemedi. Daha uzun bir metin dene! 📝",
-          );
+          _showError(loc.wordHuntQuizGenerationFailed);
         }
       } else {
         print("GENERATE QUIZ ERROR STATUS: ${response.statusCode}");
         print("GENERATE QUIZ ERROR BODY: ${response.body}");
-        _showError("Sınav oluşturulamadı: ${response.statusCode}");
+        _showError(loc.wordHuntQuizCreateFailed(response.statusCode));
       }
     } catch (e) {
-      _showError("Bağlantı hatası: $e");
+      _showError(loc.wordHuntConnectionError(e.toString()));
     } finally {
       if (mounted) setState(() => _isGeneratingQuiz = false);
     }
@@ -206,6 +225,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   void _showWordDetails(Map<String, dynamic> wordData) {
+    final loc = AppLocalizations.of(context)!;
     final String word = (wordData['word'] ?? '').toString();
     final String translation = (wordData['translation'] ?? '').toString();
     final String cefrLevel = (wordData['cefr_level'] ?? '').toString();
@@ -324,7 +344,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Örnek kullanım",
+                        loc.wordHuntExampleUsage,
                         style: TextStyle(
                           color: Colors.grey.shade600,
                           fontSize: 13,
@@ -347,7 +367,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
               ],
               const SizedBox(height: 26),
               DuoButton(
-                text: "Kumbarama Ekle",
+                text: loc.wordHuntAddToBank,
                 icon: Icons.bookmark_add_rounded,
                 mainColor: const Color(0xFFCE82FF),
                 shadowColor: const Color(0xFFA55EEA),
@@ -356,7 +376,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Text("Kelime kumbaraya eklendi! 🚀"),
+                      content: Text(loc.wordHuntAddedToBank),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -430,6 +450,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Widget _buildIntroCard() {
+    final loc = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -468,13 +489,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
             child: const Text("🕵️‍♂️", style: TextStyle(fontSize: 36)),
           ),
           const SizedBox(width: 15),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Metnini yapıştır, kelimeleri yakalayalım!",
-                  style: TextStyle(
+                  loc.wordHuntIntroTitle,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     color: Color(0xFF2D2D2D),
@@ -483,8 +504,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 ),
                 SizedBox(height: 7),
                 Text(
-                  "Zor kelimeleri analiz et, seviyesini gör ve istersen metinden test çöz.",
-                  style: TextStyle(
+                  loc.wordHuntIntroDescription,
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Color(0xFF777777),
                     height: 1.35,
@@ -500,6 +521,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Widget _buildTextInputCard() {
+    final loc = AppLocalizations.of(context)!;
+    final String localizedTargetLanguage = _localizedLanguageName(
+      loc,
+      widget.targetLanguage,
+    );
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -539,7 +565,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    _hasText ? "Metin hazır" : "Metin alanı",
+                    _hasText ? loc.wordHuntTextReady : loc.wordHuntTextField,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w900,
@@ -558,7 +584,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       });
                     },
                     icon: const Icon(Icons.close_rounded, size: 18),
-                    label: const Text("Temizle"),
+                    label: Text(loc.wordHuntClear),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.grey.shade600,
                     ),
@@ -577,7 +603,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
               height: 1.45,
             ),
             decoration: InputDecoration(
-              hintText: "${widget.targetLanguage} metnini buraya yapıştır...",
+              hintText: loc.wordHuntPasteHint(localizedTargetLanguage),
               hintStyle: const TextStyle(
                 color: Color(0xFFAFAFAF),
                 fontWeight: FontWeight.w600,
@@ -605,7 +631,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 ),
                 const SizedBox(width: 7),
                 Text(
-                  "$_wordCount kelime",
+                  loc.wordHuntWordCount(_wordCount),
                   style: TextStyle(
                     color: Colors.grey.shade700,
                     fontSize: 13,
@@ -615,8 +641,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 const Spacer(),
                 Text(
                   _overallLevel == null
-                      ? "Analiz bekleniyor"
-                      : "Seviye: $_overallLevel",
+                      ? loc.wordHuntAnalysisPending
+                      : loc.wordHuntLevel(_overallLevel!),
                   style: TextStyle(
                     color: _overallLevel == null
                         ? Colors.grey.shade600
@@ -634,6 +660,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Widget _buildAnalysisResult() {
+    final loc = AppLocalizations.of(context)!;
+
     if (_overallLevel == null) return const SizedBox.shrink();
 
     final Color levelColor = _getLevelColor(_overallLevel);
@@ -675,8 +703,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Analiz tamamlandı",
+                    Text(
+                      loc.wordHuntAnalysisCompleted,
                       style: TextStyle(
                         color: Color(0xFF2D2D2D),
                         fontSize: 17,
@@ -685,7 +713,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "$foundCount kelime vurgulandı",
+                      loc.wordHuntHighlightedWords(foundCount),
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontSize: 13,
@@ -739,9 +767,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 children: [
                   Icon(Icons.touch_app_rounded, color: levelColor, size: 20),
                   const SizedBox(width: 7),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      "Renkli kelimelere dokun",
+                      loc.wordHuntTapColoredWords,
                       style: TextStyle(
                         color: Color(0xFF2D2D2D),
                         fontSize: 15,
@@ -762,11 +790,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
       appBar: AppBar(
-        title: const Text(
-          "Kelime Avı",
+        title: Text(
+          loc.wordHuntTitle,
           style: TextStyle(
             color: Color(0xFF2D2D2D),
             fontWeight: FontWeight.w900,
@@ -814,7 +844,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 DuoButton(
-                  text: "Kelimeleri Analiz Et",
+                  text: loc.wordHuntAnalyzeButton,
                   icon: Icons.search_rounded,
                   mainColor: const Color(0xFF1CB0F6),
                   shadowColor: const Color(0xFF1899D6),
@@ -824,7 +854,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 ),
                 const SizedBox(height: 14),
                 DuoButton(
-                  text: "Bu Metinle Test Çöz",
+                  text: loc.wordHuntQuizButton,
                   icon: Icons.auto_awesome_rounded,
                   mainColor: const Color(0xFF58CC02),
                   shadowColor: const Color(0xFF58A700),

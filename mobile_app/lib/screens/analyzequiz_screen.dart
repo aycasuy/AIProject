@@ -2,25 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/services/api_service.dart';
 import 'package:lottie/lottie.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class QuizScreen extends StatefulWidget {
   final List<dynamic> questions;
   final String username;
   final String targetLanguage;
+  final String nativeLanguage;
   final int sectionIndex;
   final int lessonId;
   final String originalText;
-  final String nativeLanguage;
 
   const QuizScreen({
     super.key,
     required this.questions,
     required this.username,
     required this.targetLanguage,
+    required this.nativeLanguage,
     required this.sectionIndex,
     required this.lessonId,
     this.originalText = "",
-    required this.nativeLanguage,
   });
 
   @override
@@ -88,6 +89,8 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   Future<void> _finishQuiz() async {
+    final loc = AppLocalizations.of(context)!;
+
     if (_isFinishing) return;
 
     setState(() => _isFinishing = true);
@@ -110,7 +113,7 @@ class _QuizScreenState extends State<QuizScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("XP kaydedilirken hata oluştu: $e"),
+            content: Text(loc.wordHuntXpSaveError(e.toString())),
             backgroundColor: _dangerColor,
             behavior: SnackBarBehavior.floating,
           ),
@@ -130,6 +133,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _showOriginalTextSheet() {
+    final loc = AppLocalizations.of(context)!;
     final String text = widget.originalText.trim();
 
     showModalBottomSheet(
@@ -173,12 +177,12 @@ class _QuizScreenState extends State<QuizScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Orijinal Metin",
+                          loc.wordHuntOriginalTextTitle,
                           style: TextStyle(
                             color: _darkText,
                             fontSize: 22,
@@ -187,7 +191,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          "Soruları çözerken metne tekrar bakabilirsin.",
+                          loc.wordHuntOriginalTextSubtitle,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 13,
@@ -215,9 +219,9 @@ class _QuizScreenState extends State<QuizScreen> {
                     border: Border.all(color: Colors.grey.shade200),
                   ),
                   child: text.isEmpty
-                      ? const Center(
+                      ? Center(
                           child: Text(
-                            "Bu test için gösterilecek metin bulunamadı.",
+                            loc.wordHuntOriginalTextMissing,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.grey,
@@ -248,6 +252,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   Widget _buildProgressHeader() {
+    final loc = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
       decoration: BoxDecoration(
@@ -272,7 +277,7 @@ class _QuizScreenState extends State<QuizScreen> {
               ),
               Expanded(
                 child: Text(
-                  "Kelime Avı Testi",
+                  loc.wordHuntQuizTitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: _darkText,
@@ -327,7 +332,7 @@ class _QuizScreenState extends State<QuizScreen> {
           Row(
             children: [
               Text(
-                "Soru ${_currentIndex + 1}",
+                loc.wordHuntQuestionNumber(_currentIndex + 1),
                 style: TextStyle(
                   color: Colors.grey.shade600,
                   fontWeight: FontWeight.w800,
@@ -365,6 +370,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   Widget _buildQuestionTypePill(String qType) {
+    final loc = AppLocalizations.of(context)!;
     final bool isBlank = qType == 'fill_in_the_blank';
 
     return Container(
@@ -390,7 +396,9 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
           const SizedBox(width: 7),
           Text(
-            isBlank ? "Boşluk Doldurma" : "Çoktan Seçmeli",
+            isBlank
+                ? loc.wordHuntTypeFillBlank
+                : loc.wordHuntTypeMultipleChoice,
             style: TextStyle(
               color: isBlank ? _secondaryColor : _primaryColor,
               fontSize: 13,
@@ -450,6 +458,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   // --- BOŞLUK DOLDURMA ARAYÜZÜ ---
   Widget _buildFillInTheBlank(Map<String, dynamic> question) {
+    final loc = AppLocalizations.of(context)!;
     final String sentence = (question['question'] ?? '').toString();
     final List<String> parts = sentence.split("___");
     final List<dynamic> wordBank = question['word_bank'] ?? [];
@@ -459,7 +468,7 @@ class _QuizScreenState extends State<QuizScreen> {
       children: [
         _buildQuestionCard(
           icon: Icons.draw_rounded,
-          title: "Doğru kelimeyi seç ve boşluğu tamamla",
+          title: loc.wordHuntChooseMissingWord,
           child: Wrap(
             alignment: WrapAlignment.center,
             crossAxisAlignment: WrapCrossAlignment.center,
@@ -532,7 +541,7 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              "Kelime bankası",
+              loc.wordHuntWordBank,
               style: TextStyle(
                 color: Colors.grey.shade800,
                 fontSize: 16,
@@ -610,6 +619,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   // --- ÇOKTAN SEÇMELİ ARAYÜZÜ ---
   Widget _buildMultipleChoice(Map<String, dynamic> question) {
+    final loc = AppLocalizations.of(context)!;
     final List<dynamic> options = question['options'] ?? [];
     final String questionText = (question['question'] ?? '').toString();
     final String translation = (question['question_translation'] ?? '')
@@ -621,7 +631,7 @@ class _QuizScreenState extends State<QuizScreen> {
       children: [
         _buildQuestionCard(
           icon: Icons.help_rounded,
-          title: "Soruyu cevapla",
+          title: loc.wordHuntAnswerQuestion,
           child: Column(
             children: [
               Text(
@@ -740,9 +750,10 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   Widget _buildFeedbackCard(Map<String, dynamic> question) {
+    final loc = AppLocalizations.of(context)!;
     final bool isCorrect = _isCorrectAnswer(_selectedOption, question);
     final String explanation =
-        (question['explanation'] ?? 'Açıklama bulunmuyor.').toString();
+        (question['explanation'] ?? loc.wordHuntExplanationMissing).toString();
 
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 250),
@@ -774,8 +785,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   Expanded(
                     child: Text(
                       isCorrect
-                          ? "Harika! Doğru cevap.\n$explanation"
-                          : "Tekrar bakalım.\n$explanation",
+                          ? loc.wordHuntCorrectFeedback(explanation)
+                          : loc.wordHuntRetryFeedback(explanation),
                       style: TextStyle(
                         color: isCorrect
                             ? Colors.green.shade800
@@ -793,6 +804,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _showResultDialog({required int earnedXp}) {
+    final loc = AppLocalizations.of(context)!;
     final double successRate = widget.questions.isEmpty
         ? 0
         : _score / widget.questions.length;
@@ -854,7 +866,9 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          excellent ? "Mükemmel!" : "Test Tamamlandı!",
+                          excellent
+                              ? loc.wordHuntExcellentTitle
+                              : loc.wordHuntCompletedTitle,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 30,
@@ -865,8 +879,8 @@ class _QuizScreenState extends State<QuizScreen> {
                         const SizedBox(height: 8),
                         Text(
                           excellent
-                              ? "Kelime avında çok iyi iş çıkardın."
-                              : "Pratik yaptıkça daha da hızlanacaksın.",
+                              ? loc.wordHuntExcellentMessage
+                              : loc.wordHuntCompletedMessage,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.grey.shade600,
@@ -881,7 +895,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             Expanded(
                               child: _buildResultStatCard(
                                 icon: Icons.check_circle_rounded,
-                                title: "Skor",
+                                title: loc.wordHuntScore,
                                 value: "$_score/${widget.questions.length}",
                                 color: _successColor,
                               ),
@@ -890,7 +904,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             Expanded(
                               child: _buildResultStatCard(
                                 icon: Icons.bolt_rounded,
-                                title: "XP",
+                                title: loc.wordHuntXp,
                                 value: "+$earnedXp",
                                 color: Colors.amber,
                               ),
@@ -914,8 +928,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               Navigator.pop(context);
                               Navigator.pop(context, true);
                             },
-                            child: const Text(
-                              "Devam Et",
+                            child: Text(
+                              loc.wordHuntContinue,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -983,12 +997,14 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     if (widget.questions.isEmpty) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: _softBackground,
         body: Center(
           child: Text(
-            "Soru bulunamadı.",
+            loc.wordHuntNoQuestions,
             style: TextStyle(
               color: _darkText,
               fontSize: 18,
@@ -1074,8 +1090,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                 )
                               : Text(
                                   _currentIndex < widget.questions.length - 1
-                                      ? "Devam Et"
-                                      : "Sonucu Gör",
+                                      ? loc.wordHuntContinue
+                                      : loc.wordHuntSeeResult,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
