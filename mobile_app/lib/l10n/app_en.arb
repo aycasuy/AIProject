@@ -584,8 +584,8 @@
   "practiceTypeUnknown": "Unknown",
   "practiceEmptyTitle": "Great Job!",
   "practiceEmptyMessage": "You have no mistakes to review.",
-  "flashcardPracticeTitle": "Kelime Antrenmanı",
-  "flashcardPracticeCounter": "Kelime {current} / {total}",
+  "flashcardPracticeTitle": "Word Practice",
+  "flashcardPracticeCounter": "Word {current} / {total}",
   "@flashcardPracticeCounter": {
     "placeholders": {
       "current": {
@@ -596,11 +596,11 @@
       }
     }
   },
-  "flashcardPracticeReviewAgain": "Tekrar Sor",
-  "flashcardPracticeLearned": "Öğrendim!",
-  "flashcardPracticeTapToTranslate": "Çevirmek için karta dokun",
-  "flashcardPracticeNativeTranslation": "ANA DİL ÇEVİRİSİ",
-  "flashcardPracticeDoneTitle": "Harika İş Çıkardın!",
-  "flashcardPracticeDoneMessage": "Bugün için ayrılan tüm yeni kelimeleri tekrar ettin. Profiline dönüp istatistiklerini kontrol edebilirsin.",
-  "flashcardPracticeBackToProfile": "Profile Dön"
+  "flashcardPracticeReviewAgain": "Review Again",
+  "flashcardPracticeLearned": "I Learned It!",
+  "flashcardPracticeTapToTranslate": "Tap the card to see the translation",
+  "flashcardPracticeNativeTranslation": "NATIVE LANGUAGE TRANSLATION",
+  "flashcardPracticeDoneTitle": "Great Job!",
+  "flashcardPracticeDoneMessage": "You reviewed all the new words assigned for today. Return to your profile to check your statistics.",
+  "flashcardPracticeBackToProfile": "Back to Profile"
 }
