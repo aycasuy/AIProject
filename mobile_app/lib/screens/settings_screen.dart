@@ -32,6 +32,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // Tüm CEFR seviyeleri (Sıralamayı bilmek için)
   final List<String> _allCEFRLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
+  String _localizedLanguageName(AppLocalizations l10n, String language) {
+    switch (language.trim().toLowerCase()) {
+      case "english":
+        return l10n.langEnglish;
+      case "spanish":
+        return l10n.langSpanish;
+      case "german":
+        return l10n.langGerman;
+      case "french":
+        return l10n.langFrench;
+      case "turkish":
+        return l10n.langTurkish;
+      default:
+        return language;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -67,6 +84,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _saveSettings() async {
+    final l10n = AppLocalizations.of(context)!;
+
     setState(() => _isLoading = true);
 
     try {
@@ -78,8 +97,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Ayarlar başarıyla kaydedildi! 🎉"),
+          SnackBar(
+            content: Text(l10n.settingsSavedMessage),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
           ),
@@ -95,7 +114,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Hata: $e"), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text(l10n.settingsSaveError(e.toString())),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     } finally {
@@ -158,11 +181,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onChanged: (val) => setState(() => _selectedLevel = val!),
                 ),
 
-                const Padding(
-                  padding: EdgeInsets.only(top: 8, left: 10),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, left: 10),
                   child: Text(
-                    "Geçmiş seviyelere dönüp pratik yapabilirsin. Maksimum ulaştığın seviye kilitlidir.",
-                    style: TextStyle(
+                    l10n.settingsPracticeLevelHint,
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
                       fontStyle: FontStyle.italic,
@@ -217,18 +240,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        title: const Text(
-                          "Çıkış Yap",
-                        ), // Demo olduğu için popup'ı sabit bıraktık
-                        content: const Text(
-                          "Hesabınızdan çıkmak istediğinize emin misiniz?",
-                        ),
+                        title: Text(l10n.settingsLogoutTitle),
+                        content: Text(l10n.settingsLogoutConfirmMessage),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text(
-                              "İptal",
-                              style: TextStyle(color: Colors.grey),
+                            child: Text(
+                              l10n.settingsCancel,
+                              style: const TextStyle(color: Colors.grey),
                             ),
                           ),
                           TextButton(
@@ -294,6 +313,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required Color iconColor,
     required Function(String?) onChanged,
   }) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
@@ -335,7 +356,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: Text(
-                value,
+                _localizedLanguageName(l10n, value),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -345,32 +366,48 @@ class _SettingsScreenState extends State<SettingsScreen> {
             )
           else
             // 🌟 EĞER LİSTEDE BİRDEN FAZLA SEÇENEK VARSA (Örn: İspanyolca eklendiyse) MENÜYÜ AÇ!
-            DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: value,
-                isDense: true,
-                dropdownColor: Colors
-                    .white, // 🌟 O garip pembe/gri tonu siler, kutuyu bembeyaz yapar
-                borderRadius: BorderRadius.circular(
-                  16,
-                ), // 🌟 Menü köşelerini modern bir şekilde yuvarlatır
-                elevation: 4, // Şık bir gölge ekler
-                icon: const Icon(
-                  Icons.arrow_drop_down_rounded,
-                  color: Colors.grey,
+            Flexible(
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: value,
+                  isDense: true,
+                  isExpanded: true,
+                  dropdownColor: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  elevation: 4,
+                  icon: const Icon(
+                    Icons.arrow_drop_down_rounded,
+                    color: Colors.grey,
+                  ),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: iconColor,
+                  ),
+                  selectedItemBuilder: (context) {
+                    return items.map((String item) {
+                      return Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          _localizedLanguageName(l10n, item),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    }).toList();
+                  },
+                  items: items.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(
+                        _localizedLanguageName(l10n, item),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: onChanged,
                 ),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: iconColor,
-                ),
-                items: items.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
-                  );
-                }).toList(),
-                onChanged: onChanged,
               ),
             ),
         ],

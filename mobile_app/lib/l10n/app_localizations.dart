@@ -2205,6 +2205,42 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'XP kaydedilirken hata oluştu: {error}'**
   String wordHuntXpSaveError(String error);
+
+  /// No description provided for @settingsPracticeLevelHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş seviyelere dönüp pratik yapabilirsin. Ulaşmadığın seviyeler kilitli kalır.'**
+  String get settingsPracticeLevelHint;
+
+  /// No description provided for @settingsSavedMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayarlar başarıyla kaydedildi! 🎉'**
+  String get settingsSavedMessage;
+
+  /// No description provided for @settingsSaveError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayarlar kaydedilemedi: {error}'**
+  String settingsSaveError(String error);
+
+  /// No description provided for @settingsLogoutTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çıkış Yap'**
+  String get settingsLogoutTitle;
+
+  /// No description provided for @settingsLogoutConfirmMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabından çıkmak istediğine emin misin?'**
+  String get settingsLogoutConfirmMessage;
+
+  /// No description provided for @settingsCancel.
+  ///
+  /// In tr, this message translates to:
+  /// **'İptal'**
+  String get settingsCancel;
 }
 
 class _AppLocalizationsDelegate

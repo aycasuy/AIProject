@@ -1226,4 +1226,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String wordHuntXpSaveError(String error) {
     return 'Se produjo un error al guardar los XP: $error';
   }
+
+  @override
+  String get settingsPracticeLevelHint =>
+      'Puedes volver a niveles anteriores para practicar. Los niveles que aún no has alcanzado permanecerán bloqueados.';
+
+  @override
+  String get settingsSavedMessage =>
+      '¡Los ajustes se guardaron correctamente! 🎉';
+
+  @override
+  String settingsSaveError(String error) {
+    return 'No se pudieron guardar los ajustes: $error';
+  }
+
+  @override
+  String get settingsLogoutTitle => 'Cerrar sesión';
+
+  @override
+  String get settingsLogoutConfirmMessage =>
+      '¿Seguro que quieres cerrar sesión en tu cuenta?';
+
+  @override
+  String get settingsCancel => 'Cancelar';
 }

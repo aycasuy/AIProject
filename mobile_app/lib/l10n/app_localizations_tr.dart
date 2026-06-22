@@ -1201,4 +1201,26 @@ class AppLocalizationsTr extends AppLocalizations {
   String wordHuntXpSaveError(String error) {
     return 'XP kaydedilirken hata oluştu: $error';
   }
+
+  @override
+  String get settingsPracticeLevelHint =>
+      'Geçmiş seviyelere dönüp pratik yapabilirsin. Ulaşmadığın seviyeler kilitli kalır.';
+
+  @override
+  String get settingsSavedMessage => 'Ayarlar başarıyla kaydedildi! 🎉';
+
+  @override
+  String settingsSaveError(String error) {
+    return 'Ayarlar kaydedilemedi: $error';
+  }
+
+  @override
+  String get settingsLogoutTitle => 'Çıkış Yap';
+
+  @override
+  String get settingsLogoutConfirmMessage =>
+      'Hesabından çıkmak istediğine emin misin?';
+
+  @override
+  String get settingsCancel => 'İptal';
 }

@@ -1213,4 +1213,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String wordHuntXpSaveError(String error) {
     return 'An error occurred while saving XP: $error';
   }
+
+  @override
+  String get settingsPracticeLevelHint =>
+      'You can return to earlier levels for practice. Levels you have not reached remain locked.';
+
+  @override
+  String get settingsSavedMessage => 'Settings saved successfully! 🎉';
+
+  @override
+  String settingsSaveError(String error) {
+    return 'Settings could not be saved: $error';
+  }
+
+  @override
+  String get settingsLogoutTitle => 'Log out';
+
+  @override
+  String get settingsLogoutConfirmMessage =>
+      'Are you sure you want to log out of your account?';
+
+  @override
+  String get settingsCancel => 'Cancel';
 }
