@@ -1869,6 +1869,60 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Tekrar etmen gereken hiçbir hatan yok.'**
   String get practiceEmptyMessage;
+
+  /// No description provided for @flashcardPracticeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime Antrenmanı'**
+  String get flashcardPracticeTitle;
+
+  /// No description provided for @flashcardPracticeCounter.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime {current} / {total}'**
+  String flashcardPracticeCounter(int current, int total);
+
+  /// No description provided for @flashcardPracticeReviewAgain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Sor'**
+  String get flashcardPracticeReviewAgain;
+
+  /// No description provided for @flashcardPracticeLearned.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öğrendim!'**
+  String get flashcardPracticeLearned;
+
+  /// No description provided for @flashcardPracticeTapToTranslate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çevirmek için karta dokun'**
+  String get flashcardPracticeTapToTranslate;
+
+  /// No description provided for @flashcardPracticeNativeTranslation.
+  ///
+  /// In tr, this message translates to:
+  /// **'ANA DİL ÇEVİRİSİ'**
+  String get flashcardPracticeNativeTranslation;
+
+  /// No description provided for @flashcardPracticeDoneTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika İş Çıkardın!'**
+  String get flashcardPracticeDoneTitle;
+
+  /// No description provided for @flashcardPracticeDoneMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün için ayrılan tüm yeni kelimeleri tekrar ettin. Profiline dönüp istatistiklerini kontrol edebilirsin.'**
+  String get flashcardPracticeDoneMessage;
+
+  /// No description provided for @flashcardPracticeBackToProfile.
+  ///
+  /// In tr, this message translates to:
+  /// **'Profile Dön'**
+  String get flashcardPracticeBackToProfile;
 }
 
 class _AppLocalizationsDelegate

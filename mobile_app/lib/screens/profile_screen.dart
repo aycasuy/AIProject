@@ -721,6 +721,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     username: widget.username,
                     targetLanguage: widget
                         .targetLanguage, // 🌟 Hedef dili buradan yolluyoruz!
+                    nativeLanguage: widget.nativeLanguage,
                   ),
                 ),
               ).then((_) {

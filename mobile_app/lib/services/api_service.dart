@@ -272,21 +272,49 @@ class ApiService {
     }
   }
 
-  static Future<List<Map<String, dynamic>>> fetchFlashcards(
-    int lessonId,
-    String targetLanguage,
-  ) async {
-    final response = await http.get(
-      Uri.parse(
-        "http://10.0.2.2:8000/fetch_flashcards/$lessonId?target_language=$targetLanguage",
-      ),
-    );
-    if (response.statusCode == 200) {
-      return List<Map<String, dynamic>>.from(
-        json.decode(utf8.decode(response.bodyBytes)),
+  static Future<List<Map<String, dynamic>>> fetchFlashcards({
+    required int lessonId,
+    required String targetLanguage,
+    required String nativeLanguage,
+  }) async {
+    try {
+      final url = Uri.parse('http://10.0.2.2:8000/fetch_flashcards/$lessonId')
+          .replace(
+            queryParameters: {
+              'target_language': targetLanguage,
+              'native_language': nativeLanguage,
+            },
+          );
+
+      debugPrint(
+        'FLASHCARD REQUEST → '
+        'lesson=$lessonId, '
+        'target=$targetLanguage, '
+        'native=$nativeLanguage, '
+        'url=$url',
       );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final dynamic decoded = jsonDecode(utf8.decode(response.bodyBytes));
+
+        if (decoded is List) {
+          return decoded
+              .map((item) => Map<String, dynamic>.from(item as Map))
+              .toList();
+        }
+      } else {
+        debugPrint(
+          'Flashcard API hatası: '
+          '${response.statusCode} - ${response.body}',
+        );
+      }
+    } catch (e) {
+      debugPrint('Flashcardlar çekilemedi: $e');
     }
-    return [];
+
+    return <Map<String, dynamic>>[];
   }
 
   // ApiService içindeki fonksiyon:

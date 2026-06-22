@@ -433,8 +433,9 @@ class _LearnActivityScreenState extends State<LearnActivityScreen> {
   Future<void> _loadFlashcards() async {
     try {
       final cards = await ApiService.fetchFlashcards(
-        widget.lessonId,
-        widget.targetLanguage,
+        lessonId: widget.lessonId,
+        targetLanguage: widget.targetLanguage,
+        nativeLanguage: widget.nativeLanguage,
       );
       setState(() {
         _flashcards = cards;

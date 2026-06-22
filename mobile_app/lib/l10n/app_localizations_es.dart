@@ -974,48 +974,79 @@ class AppLocalizationsEs extends AppLocalizations {
   String get speedQuizContinue => 'Continuar';
 
   @override
-  String get practiceScreenTitle => 'Zayıf Noktaları Çalış';
+  String get practiceScreenTitle => 'Puntos débiles prácticos';
 
   @override
-  String get practiceUnknownQuestion => 'Bilinmeyen Soru';
+  String get practiceUnknownQuestion => 'Pregunta desconocida';
 
   @override
   String practiceQuestionInfo(String type, int count) {
-    return 'Soru Tipi: $type | Hata: $count kez';
+    return 'Tipo de pregunta: $type | Errores: $count';
   }
 
   @override
-  String get practiceSolve => 'Çöz';
+  String get practiceSolve => 'Resolver';
 
   @override
-  String get practiceInvalidQuestion => 'Bu soru geçersiz veya eski bir kayıt.';
+  String get practiceInvalidQuestion =>
+      'Esta pregunta no es válida o está obsoleta.';
 
   @override
   String practiceUnknownPuzzleType(String type) {
-    return 'Bilinmeyen soru tipi: $type';
+    return 'Tipo de pregunta desconocida: $type';
   }
 
   @override
-  String get practiceBlankTitle => 'Pratik: Boşluk Doldurma';
+  String get practiceBlankTitle => 'Práctica: Rellena los espacios vacíos';
 
   @override
-  String get practiceSentenceTitle => 'Pratik: Cümle Kur';
+  String get practiceSentenceTitle => 'Práctica: Construye una oración';
 
   @override
-  String get practiceTypeBlank => 'Boşluk Doldurma';
+  String get practiceTypeBlank => 'Rellena los espacios en blanco';
 
   @override
-  String get practiceTypeSentence => 'Cümle Kurma';
+  String get practiceTypeSentence => 'Construir una sentencia';
 
   @override
-  String get practiceTypeMinimalPair => 'Ses Çiftleri';
+  String get practiceTypeMinimalPair => 'Minimal Pairs';
 
   @override
-  String get practiceTypeUnknown => 'Bilinmeyen';
+  String get practiceTypeUnknown => 'Desconocido';
 
   @override
-  String get practiceEmptyTitle => 'Harika İş Çıkardın!';
+  String get practiceEmptyTitle => '¡Buen trabajo!';
 
   @override
-  String get practiceEmptyMessage => 'Tekrar etmen gereken hiçbir hatan yok.';
+  String get practiceEmptyMessage => 'No tienes errores que revisar.';
+
+  @override
+  String get flashcardPracticeTitle => 'Kelime Antrenmanı';
+
+  @override
+  String flashcardPracticeCounter(int current, int total) {
+    return 'Kelime $current / $total';
+  }
+
+  @override
+  String get flashcardPracticeReviewAgain => 'Tekrar Sor';
+
+  @override
+  String get flashcardPracticeLearned => 'Öğrendim!';
+
+  @override
+  String get flashcardPracticeTapToTranslate => 'Çevirmek için karta dokun';
+
+  @override
+  String get flashcardPracticeNativeTranslation => 'ANA DİL ÇEVİRİSİ';
+
+  @override
+  String get flashcardPracticeDoneTitle => 'Harika İş Çıkardın!';
+
+  @override
+  String get flashcardPracticeDoneMessage =>
+      'Bugün için ayrılan tüm yeni kelimeleri tekrar ettin. Profiline dönüp istatistiklerini kontrol edebilirsin.';
+
+  @override
+  String get flashcardPracticeBackToProfile => 'Profile Dön';
 }

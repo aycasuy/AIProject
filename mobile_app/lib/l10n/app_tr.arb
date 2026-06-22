@@ -557,7 +557,34 @@
   "practiceTypeUnknown": "Bilinmeyen",
 
   "practiceEmptyTitle": "Harika İş Çıkardın!",
-  "practiceEmptyMessage": "Tekrar etmen gereken hiçbir hatan yok."
+  "practiceEmptyMessage": "Tekrar etmen gereken hiçbir hatan yok.",
+
+
+  
+  "flashcardPracticeTitle": "Kelime Antrenmanı",
+
+  "flashcardPracticeCounter": "Kelime {current} / {total}",
+  "@flashcardPracticeCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+
+  "flashcardPracticeReviewAgain": "Tekrar Sor",
+  "flashcardPracticeLearned": "Öğrendim!",
+  "flashcardPracticeTapToTranslate": "Çevirmek için karta dokun",
+  "flashcardPracticeNativeTranslation": "ANA DİL ÇEVİRİSİ",
+
+  "flashcardPracticeDoneTitle": "Harika İş Çıkardın!",
+  "flashcardPracticeDoneMessage": "Bugün için ayrılan tüm yeni kelimeleri tekrar ettin. Profiline dönüp istatistiklerini kontrol edebilirsin.",
+  "flashcardPracticeBackToProfile": "Profile Dön"
+
+
 
 
 

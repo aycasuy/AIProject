@@ -7,11 +7,13 @@ import 'package:http/http.dart' as http;
 class FlashcardPracticeScreen extends StatefulWidget {
   final String username;
   final String targetLanguage; // 🌟 Öğrenilen dil (Örn: İngilizce, İspanyolca)
+  final String nativeLanguage;
 
   const FlashcardPracticeScreen({
     Key? key,
     required this.username,
     required this.targetLanguage,
+    required this.nativeLanguage,
   }) : super(key: key);
 
   @override
@@ -34,25 +36,56 @@ class _FlashcardPracticeScreenState extends State<FlashcardPracticeScreen> {
   // --- KELİMELERİ ÇEK ---
   Future<void> _fetchWords() async {
     try {
-      final url = Uri.parse(
-        'http://10.0.2.2:8000/get_flashcard_practice/${widget.username}?target_language=${widget.targetLanguage}',
+      final url =
+          Uri.parse(
+            'http://10.0.2.2:8000/get_flashcard_practice/'
+            '${widget.username}',
+          ).replace(
+            queryParameters: {
+              'target_language': widget.targetLanguage,
+              'native_language': widget.nativeLanguage,
+            },
+          );
+
+      debugPrint(
+        'FLASHCARD PRACTICE REQUEST → '
+        'target=${widget.targetLanguage}, '
+        'native=${widget.nativeLanguage}, '
+        'url=$url',
       );
+
       final response = await http.get(url);
 
+      if (!mounted) return;
+
       if (response.statusCode == 200) {
-        if (mounted) {
-          setState(() {
-            _words = json.decode(response.body);
-            _isLoading = false;
-          });
-        }
+        final dynamic decoded = jsonDecode(utf8.decode(response.bodyBytes));
+
+        setState(() {
+          _words = decoded is List ? List<dynamic>.from(decoded) : <dynamic>[];
+
+          _currentIndex = 0;
+          _isFlipped = false;
+          _isLoading = false;
+        });
       } else {
-        print("Kelime çekme başarısız: ${response.statusCode}");
-        if (mounted) setState(() => _isLoading = false);
+        debugPrint(
+          'Kelime çekme başarısız: '
+          '${response.statusCode} - ${response.body}',
+        );
+
+        setState(() {
+          _isLoading = false;
+        });
       }
     } catch (e) {
-      print("Kelime çekme hatası: $e");
-      if (mounted) setState(() => _isLoading = false);
+      debugPrint('Kelime çekme hatası: $e');
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 

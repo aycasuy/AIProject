@@ -466,15 +466,115 @@ async def fetch_sentence_puzzle(
 
 
 
+
 @router.get("/fetch_flashcards/{lesson_id}")
-async def fetch_flashcards(lesson_id: int,target_language: str, db: Session = Depends(get_db)):
-    cards = db.query(Flashcard).filter(Flashcard.lesson_id == lesson_id , Flashcard.target_language == target_language).all()
-    
-    # Eğer o derse ait kart yoksa boş liste dönmesin, uygulama çökmesin
+async def fetch_flashcards(
+    lesson_id: int,
+    target_language: str,
+    native_language: str = "Turkish",
+    db: Session = Depends(get_db),
+):
+    native_language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+
+        "de": "German",
+        "german": "German",
+        "almanca": "German",
+
+        "fr": "French",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    normalized_native_language = native_language_map.get(
+        native_language.strip().lower(),
+        native_language.strip(),
+    )
+
+    print(
+        "📚 FLASHCARD REQUEST:",
+        {
+            "lesson_id": lesson_id,
+            "target_language": target_language,
+            "native_language": native_language,
+            "normalized_native_language": normalized_native_language,
+        },
+    )
+
+    cards = (
+        db.query(models.Flashcard)
+        .filter(
+            models.Flashcard.lesson_id == lesson_id,
+            models.Flashcard.target_language == target_language,
+        )
+        .all()
+    )
+
     if not cards:
         return []
-        
-    return [{"word": c.word, "translation": c.translation, "image": c.image} for c in cards]
+
+    translations_by_flashcard_id = {}
+
+    # Türkçe dışındaki ana dillerde ayrı çeviri tablosuna bak.
+    if normalized_native_language != "Turkish":
+        flashcard_ids = [card.id for card in cards]
+
+        translation_records = (
+            db.query(models.FlashcardTranslation)
+            .filter(
+                models.FlashcardTranslation.flashcard_id.in_(
+                    flashcard_ids
+                ),
+                models.FlashcardTranslation.native_language
+                == normalized_native_language,
+            )
+            .all()
+        )
+
+        translations_by_flashcard_id = {
+            record.flashcard_id: record
+            for record in translation_records
+        }
+
+    response_data = []
+
+    for card in cards:
+        # Varsayılan olarak ana tablodaki Türkçe çeviriyi kullan.
+        localized_translation = card.translation
+
+        translation_record = translations_by_flashcard_id.get(
+            card.id
+        )
+
+        # İstenen ana dilde çeviri bulunduysa onu kullan.
+        if translation_record is not None:
+            localized_translation = (
+                translation_record.translation
+                or card.translation
+            )
+
+        response_data.append(
+            {
+                "id": card.id,
+                "word": card.word,
+                "translation": localized_translation,
+                "image": card.image,
+            }
+        )
+
+    return response_data
+
+
 
 
 @router.post("/log_mistake")
@@ -886,22 +986,184 @@ def get_mistake_details(
 
 
 # 1. Sadece öğrenilmemiş kelimeleri çeken GET endpoint'i
+
 @router.get("/get_flashcard_practice/{username}")
-def get_flashcard_practice(username: str,
-                           target_language: str = "English",
-                            db: Session = Depends(get_db)):
-    user = db.query(models.UserDB).filter(models.UserDB.username == username).first()
+def get_flashcard_practice(
+    username: str,
+    target_language: str = "English",
+    native_language: str = "Turkish",
+    db: Session = Depends(get_db),
+):
+    language_key = (
+        native_language
+        .strip()
+        .casefold()
+        .replace("i̇", "i")
+    )
+
+    native_language_map = {
+        "tr": "Turkish",
+        "turkish": "Turkish",
+        "türkçe": "Turkish",
+
+        "en": "English",
+        "english": "English",
+        "ingilizce": "English",
+
+        "es": "Spanish",
+        "spanish": "Spanish",
+        "ispanyolca": "Spanish",
+
+        "de": "German",
+        "german": "German",
+        "almanca": "German",
+
+        "fr": "French",
+        "french": "French",
+        "fransızca": "French",
+    }
+
+    normalized_native_language = native_language_map.get(
+        language_key,
+        native_language.strip(),
+    )
+
+    print(
+        "📖 FLASHCARD PRACTICE REQUEST:",
+        {
+            "username": username,
+            "target_language": target_language,
+            "native_language": native_language,
+            "normalized_native_language": normalized_native_language,
+        },
+    )
+
+    user = (
+        db.query(models.UserDB)
+        .filter(models.UserDB.username == username)
+        .first()
+    )
+
     if not user:
-        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
-        
-    # Kullanıcıyı boğmamak için tek seferde en fazla 15 kelime getir
-    unlearned_words = db.query(models.VocabularyDB).filter(
-        models.VocabularyDB.user_id == user.id,
-        models.VocabularyDB.is_learned == False,
-        models.VocabularyDB.target_language == target_language
-    ).limit(15).all()
-    
-    return unlearned_words
+        raise HTTPException(
+            status_code=404,
+            detail="Kullanıcı bulunamadı",
+        )
+
+    unlearned_words = (
+        db.query(models.VocabularyDB)
+        .filter(
+            models.VocabularyDB.user_id == user.id,
+            models.VocabularyDB.is_learned == False,
+            models.VocabularyDB.target_language == target_language,
+        )
+        .limit(15)
+        .all()
+    )
+
+    if not unlearned_words:
+        return []
+
+    # VocabularyDB içindeki kelimelerin flashcard karşılıklarını bul.
+    vocabulary_word_values = [
+        item.word
+        for item in unlearned_words
+        if item.word
+    ]
+
+    flashcards = (
+        db.query(models.Flashcard)
+        .filter(
+            models.Flashcard.target_language == target_language,
+            models.Flashcard.word.in_(vocabulary_word_values),
+        )
+        .all()
+    )
+
+    # Aynı kelime birden fazla derste bulunuyorsa ilk eşleşmeyi kullan.
+    flashcard_by_word = {}
+
+    for card in flashcards:
+        word_key = card.word.strip().casefold()
+
+        if word_key not in flashcard_by_word:
+            flashcard_by_word[word_key] = card
+
+    translation_by_flashcard_id = {}
+
+    if normalized_native_language != "Turkish" and flashcards:
+        flashcard_ids = [card.id for card in flashcards]
+
+        translation_records = (
+            db.query(models.FlashcardTranslation)
+            .filter(
+                models.FlashcardTranslation.flashcard_id.in_(
+                    flashcard_ids
+                ),
+                models.FlashcardTranslation.native_language
+                == normalized_native_language,
+            )
+            .all()
+        )
+
+        translation_by_flashcard_id = {
+            record.flashcard_id: record
+            for record in translation_records
+        }
+
+    response_data = []
+
+    for vocabulary_item in unlearned_words:
+        localized_translation = (
+            vocabulary_item.translation or ""
+        )
+
+        word_key = (
+            vocabulary_item.word.strip().casefold()
+            if vocabulary_item.word
+            else ""
+        )
+
+        matching_flashcard = flashcard_by_word.get(word_key)
+
+        if (
+            normalized_native_language != "Turkish"
+            and matching_flashcard is not None
+        ):
+            translation_record = (
+                translation_by_flashcard_id.get(
+                    matching_flashcard.id
+                )
+            )
+
+            if translation_record is not None:
+                localized_translation = (
+                    translation_record.translation
+                    or vocabulary_item.translation
+                    or ""
+                )
+
+        response_data.append(
+            {
+                "id": vocabulary_item.id,
+                "word": vocabulary_item.word,
+                "translation": localized_translation,
+                "cefr_level": (
+                    getattr(
+                        vocabulary_item,
+                        "cefr_level",
+                        "A1",
+                    )
+                    or "A1"
+                ),
+                "target_language": (
+                    vocabulary_item.target_language
+                ),
+            }
+        )
+
+    return response_data
+
 
 
 # 3. Kelimeyi "Öğrenildi" yapan POST endpoint'i

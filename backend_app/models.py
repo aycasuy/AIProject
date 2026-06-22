@@ -207,6 +207,44 @@ class Flashcard(Base):
     lesson = relationship("Lesson")
 
 
+
+class FlashcardTranslation(Base):
+    __tablename__ = "flashcard_translations"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    flashcard_id = Column(
+        Integer,
+        ForeignKey("flashcards.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    native_language = Column(
+        String(30),
+        nullable=False,
+    )
+
+    translation = Column(
+        Text,
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime,
+        server_default=func.now(),
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "flashcard_id",
+            "native_language",
+            name="uq_flashcard_translation",
+        ),
+    )
+
+
+
+
 #bilemedikleri cümleleri tutma tablosu
 class MistakeDB(Base):
     __tablename__ = "mistakes"

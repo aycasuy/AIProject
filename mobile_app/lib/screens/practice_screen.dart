@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/learn_activity_screen.dart';
 import 'package:mobile_app/services/api_service.dart';
-import "minimal_pairs_screen.dart";
+
+import 'minimal_pairs_screen.dart';
 
 class PracticeScreen extends StatefulWidget {
   final String username;
-  final String targetLanguage; // 🌟 YENİ
-  final String nativeLanguage; // 🌟 YENİ
+  final String targetLanguage;
+  final String nativeLanguage;
 
   const PracticeScreen({
-    Key? key,
+    super.key,
     required this.username,
     required this.targetLanguage,
     required this.nativeLanguage,
-  }) : super(key: key);
+  });
 
   @override
   State<PracticeScreen> createState() => _PracticeScreenState();
@@ -35,21 +37,40 @@ class _PracticeScreenState extends State<PracticeScreen> {
       widget.targetLanguage,
       nativeLanguage: widget.nativeLanguage,
     );
-    if (mounted) {
-      setState(() {
-        _mistakes = data;
-        _isLoading = false;
-      });
+
+    if (!mounted) return;
+
+    setState(() {
+      _mistakes = data;
+      _isLoading = false;
+    });
+  }
+
+  String _localizedPuzzleType(AppLocalizations loc, String puzzleType) {
+    switch (puzzleType) {
+      case 'blank_puzzle':
+        return loc.practiceTypeBlank;
+
+      case 'sentence_puzzle':
+        return loc.practiceTypeSentence;
+
+      case 'minimal_pair':
+        return loc.practiceTypeMinimalPair;
+
+      default:
+        return loc.practiceTypeUnknown;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        title: const Text("Zayıf Noktaları Çalış"),
-        backgroundColor: const Color(0xFFFF6B6B), // Kırmızı temalı
+        title: Text(loc.practiceScreenTitle),
+        backgroundColor: const Color(0xFFFF6B6B),
         elevation: 0,
         foregroundColor: Colors.white,
       ),
@@ -58,19 +79,26 @@ class _PracticeScreenState extends State<PracticeScreen> {
               child: CircularProgressIndicator(color: Color(0xFFFF6B6B)),
             )
           : _mistakes.isEmpty
-          ? _buildEmptyState()
+          ? _buildEmptyState(loc)
           : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: _mistakes.length,
               itemBuilder: (context, index) {
-                final item = _mistakes[index];
-                return _buildMistakeCard(item);
+                return _buildMistakeCard(_mistakes[index], loc);
               },
             ),
     );
   }
 
-  Widget _buildMistakeCard(dynamic item) {
+  Widget _buildMistakeCard(dynamic item, AppLocalizations loc) {
+    final String puzzleType = item['puzzle_type']?.toString() ?? '';
+
+    final String localizedType = _localizedPuzzleType(loc, puzzleType);
+
+    final int mistakeCount = (item['mistake_count'] as num?)?.toInt() ?? 0;
+
+    final String questionText = item['question_text']?.toString().trim() ?? '';
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -102,13 +130,13 @@ class _PracticeScreenState extends State<PracticeScreen> {
           ),
         ),
         title: Text(
-          item['question_text'] ?? "Bilinmeyen Soru",
+          questionText.isNotEmpty ? questionText : loc.practiceUnknownQuestion,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
+          padding: const EdgeInsets.only(top: 8),
           child: Text(
-            "Soru Tipi: ${item['puzzle_type']} | Hata: ${item['mistake_count']} kez",
+            loc.practiceQuestionInfo(localizedType, mistakeCount),
             style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
           ),
         ),
@@ -120,36 +148,38 @@ class _PracticeScreenState extends State<PracticeScreen> {
             ),
           ),
           onPressed: () {
-            // 🚀 Buradan ilgili sorunun çözüm ekranına yönlendireceğiz!
-            _navigateToPuzzle(context, item);
+            _navigateToPuzzle(context, item, loc);
           },
-          child: const Text("Çöz", style: TextStyle(color: Colors.white)),
+          child: Text(
+            loc.practiceSolve,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       ),
     );
   }
 
-  // --- 🚀 HANGİ SORUYSA O EKRANI AÇAN FONKSİYON ---
-  void _navigateToPuzzle(BuildContext context, dynamic item) {
-    final String puzzleType = item['puzzle_type'] ?? "null";
-    final int puzzleId = item['puzzle_id'];
+  void _navigateToPuzzle(
+    BuildContext context,
+    dynamic item,
+    AppLocalizations loc,
+  ) {
+    final String puzzleType = item['puzzle_type']?.toString() ?? '';
 
-    // 1. Güvenlik Duvarı: Bozuk/Null kayıtlar için çökmesini engelle
-    if (puzzleType == "null" || puzzleType.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Bu soru geçersiz veya eski bir kayıt.")),
-      );
+    final int? puzzleId = (item['puzzle_id'] as num?)?.toInt();
+
+    if (puzzleType.isEmpty || puzzleId == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(loc.practiceInvalidQuestion)));
       return;
     }
 
-    Widget? targetScreen;
+    late final Widget targetScreen;
 
-    // 2. Soru Tipine Göre İlgili Ekranı Seç
     switch (puzzleType) {
-      case "minimal_pair":
-        // 🌟 Kendi Minimal Pair ekranının adını ve parametresini buraya yazmalısın!
+      case 'minimal_pair':
         targetScreen = MinimalPairsScreen(
-          //lessonId: puzzleId,
           id: puzzleId,
           isPracticeMode: true,
           username: widget.username,
@@ -157,64 +187,58 @@ class _PracticeScreenState extends State<PracticeScreen> {
           nativeLanguage: widget.nativeLanguage,
           themeColor: const Color(0xFFFF6B6B),
         );
-        print("Minimal Pair Ekranı açılacak: ID $puzzleId");
+
+        debugPrint('Minimal Pair ekranı açılacak: ID $puzzleId');
         break;
 
-      case "blank_puzzle":
+      case 'blank_puzzle':
         targetScreen = LearnActivityScreen(
-          activityType: "learn_blank",
-          lessonTitle: "Pratik: Boşluk Doldurma",
+          activityType: 'learn_blank',
+          lessonTitle: loc.practiceBlankTitle,
           themeColor: const Color(0xFFFF6B6B),
           username: widget.username,
-          minLevel: "A1", // İsteğe bağlı dinamik alabilirsin
+          minLevel: 'A1',
           targetLanguage: widget.targetLanguage,
-          lessonId: 0, // Pratik modunda olduğumuz için bunun bir önemi yok
-          // 🌟 İŞTE SİHİR BURADA: ŞALTERİ AÇIYORUZ!
+          nativeLanguage: widget.nativeLanguage,
+          lessonId: 0,
+          sectionIndex: 0,
           isPracticeMode: true,
           practicePuzzleId: puzzleId,
-          sectionIndex: 0,
-          nativeLanguage: widget.nativeLanguage,
         );
         break;
 
-      case "sentence_puzzle":
+      case 'sentence_puzzle':
         targetScreen = LearnActivityScreen(
-          activityType: "learn_order",
-          lessonTitle: "Pratik: Cümle Kur",
+          activityType: 'learn_order',
+          lessonTitle: loc.practiceSentenceTitle,
           themeColor: const Color(0xFFFF6B6B),
           username: widget.username,
-          minLevel: "A1",
+          minLevel: 'A1',
           targetLanguage: widget.targetLanguage,
+          nativeLanguage: widget.nativeLanguage,
           lessonId: 0,
-
-          // 🌟 ŞALTER AÇIK!
+          sectionIndex: 0,
           isPracticeMode: true,
           practicePuzzleId: puzzleId,
-          sectionIndex: 0,
-          nativeLanguage: widget.nativeLanguage,
         );
         break;
 
       default:
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Bilinmeyen soru tipi: $puzzleType")),
+          SnackBar(content: Text(loc.practiceUnknownPuzzleType(puzzleType))),
         );
         return;
     }
 
-    // 3. Eğer ekran atandıysa Oraya Git!
-
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => targetScreen!),
+      MaterialPageRoute(builder: (context) => targetScreen),
     ).then((_) {
-      // 🌟 KULLANICI SORUYU ÇÖZÜP GERİ DÖNDÜĞÜNDE LİSTEYİ YENİLE!
-      // Belki soruyu doğru bildi ve o hata veritabanından silindi.
       _loadMistakes();
     });
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(AppLocalizations loc) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -225,14 +249,16 @@ class _PracticeScreenState extends State<PracticeScreen> {
             color: Colors.green.shade300,
           ),
           const SizedBox(height: 16),
-          const Text(
-            "Harika İş Çıkardın!",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          Text(
+            loc.practiceEmptyTitle,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          const Text(
-            "Tekrar etmen gereken hiçbir hatan yok.",
-            style: TextStyle(color: Colors.grey),
+          Text(
+            loc.practiceEmptyMessage,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),
