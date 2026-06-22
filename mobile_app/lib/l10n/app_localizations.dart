@@ -1923,6 +1923,288 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Profile Dön'**
   String get flashcardPracticeBackToProfile;
+
+  /// No description provided for @wordHuntTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime Avı'**
+  String get wordHuntTitle;
+
+  /// No description provided for @wordHuntIntroTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Metnini yapıştır, kelimeleri yakalayalım!'**
+  String get wordHuntIntroTitle;
+
+  /// No description provided for @wordHuntIntroDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zor kelimeleri analiz et, seviyesini gör ve istersen metinden test çöz.'**
+  String get wordHuntIntroDescription;
+
+  /// No description provided for @wordHuntTextReady.
+  ///
+  /// In tr, this message translates to:
+  /// **'Metin hazır'**
+  String get wordHuntTextReady;
+
+  /// No description provided for @wordHuntTextField.
+  ///
+  /// In tr, this message translates to:
+  /// **'Metin alanı'**
+  String get wordHuntTextField;
+
+  /// No description provided for @wordHuntClear.
+  ///
+  /// In tr, this message translates to:
+  /// **'Temizle'**
+  String get wordHuntClear;
+
+  /// No description provided for @wordHuntPasteHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'{language} metnini buraya yapıştır...'**
+  String wordHuntPasteHint(String language);
+
+  /// No description provided for @wordHuntWordCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} kelime'**
+  String wordHuntWordCount(int count);
+
+  /// No description provided for @wordHuntAnalysisPending.
+  ///
+  /// In tr, this message translates to:
+  /// **'Analiz bekleniyor'**
+  String get wordHuntAnalysisPending;
+
+  /// No description provided for @wordHuntLevel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seviye: {level}'**
+  String wordHuntLevel(String level);
+
+  /// No description provided for @wordHuntAnalysisCompleted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Analiz tamamlandı'**
+  String get wordHuntAnalysisCompleted;
+
+  /// No description provided for @wordHuntHighlightedWords.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} kelime vurgulandı'**
+  String wordHuntHighlightedWords(int count);
+
+  /// No description provided for @wordHuntTapColoredWords.
+  ///
+  /// In tr, this message translates to:
+  /// **'Renkli kelimelere dokun'**
+  String get wordHuntTapColoredWords;
+
+  /// No description provided for @wordHuntAnalyzeButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelimeleri Analiz Et'**
+  String get wordHuntAnalyzeButton;
+
+  /// No description provided for @wordHuntQuizButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu Metinle Test Çöz'**
+  String get wordHuntQuizButton;
+
+  /// No description provided for @wordHuntExampleUsage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örnek kullanım'**
+  String get wordHuntExampleUsage;
+
+  /// No description provided for @wordHuntAddToBank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kumbarama Ekle'**
+  String get wordHuntAddToBank;
+
+  /// No description provided for @wordHuntAddedToBank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime kumbaraya eklendi! 🚀'**
+  String get wordHuntAddedToBank;
+
+  /// No description provided for @wordHuntAnalyzeEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Analiz için önce bir metin yapıştırmalısın. 📝'**
+  String get wordHuntAnalyzeEmpty;
+
+  /// No description provided for @wordHuntAnalyzeFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Analiz başarısız oldu: {status}'**
+  String wordHuntAnalyzeFailed(int status);
+
+  /// No description provided for @wordHuntConnectionError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sunucuya bağlanılamadı: {error}'**
+  String wordHuntConnectionError(String error);
+
+  /// No description provided for @wordHuntQuizEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Test çözmek için önce kutuya metin yapıştırmalısın. 📝'**
+  String get wordHuntQuizEmpty;
+
+  /// No description provided for @wordHuntQuizGenerationFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yapay zeka bu metinden soru üretemedi. Daha uzun bir metin dene! 📝'**
+  String get wordHuntQuizGenerationFailed;
+
+  /// No description provided for @wordHuntQuizCreateFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınav oluşturulamadı: {status}'**
+  String wordHuntQuizCreateFailed(int status);
+
+  /// No description provided for @wordHuntQuizTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime Avı Testi'**
+  String get wordHuntQuizTitle;
+
+  /// No description provided for @wordHuntOriginalTextTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orijinal Metin'**
+  String get wordHuntOriginalTextTitle;
+
+  /// No description provided for @wordHuntOriginalTextSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soruları çözerken metne tekrar bakabilirsin.'**
+  String get wordHuntOriginalTextSubtitle;
+
+  /// No description provided for @wordHuntOriginalTextMissing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu test için gösterilecek metin bulunamadı.'**
+  String get wordHuntOriginalTextMissing;
+
+  /// No description provided for @wordHuntQuestionNumber.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soru {current}'**
+  String wordHuntQuestionNumber(int current);
+
+  /// No description provided for @wordHuntTypeFillBlank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boşluk Doldurma'**
+  String get wordHuntTypeFillBlank;
+
+  /// No description provided for @wordHuntTypeMultipleChoice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çoktan Seçmeli'**
+  String get wordHuntTypeMultipleChoice;
+
+  /// No description provided for @wordHuntChooseMissingWord.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğru kelimeyi seç ve boşluğu tamamla'**
+  String get wordHuntChooseMissingWord;
+
+  /// No description provided for @wordHuntWordBank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime bankası'**
+  String get wordHuntWordBank;
+
+  /// No description provided for @wordHuntAnswerQuestion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soruyu cevapla'**
+  String get wordHuntAnswerQuestion;
+
+  /// No description provided for @wordHuntExplanationMissing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açıklama bulunmuyor.'**
+  String get wordHuntExplanationMissing;
+
+  /// No description provided for @wordHuntCorrectFeedback.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika! Doğru cevap.\n{explanation}'**
+  String wordHuntCorrectFeedback(String explanation);
+
+  /// No description provided for @wordHuntRetryFeedback.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar bakalım.\n{explanation}'**
+  String wordHuntRetryFeedback(String explanation);
+
+  /// No description provided for @wordHuntExcellentTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mükemmel!'**
+  String get wordHuntExcellentTitle;
+
+  /// No description provided for @wordHuntCompletedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Test Tamamlandı!'**
+  String get wordHuntCompletedTitle;
+
+  /// No description provided for @wordHuntExcellentMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime avında çok iyi iş çıkardın.'**
+  String get wordHuntExcellentMessage;
+
+  /// No description provided for @wordHuntCompletedMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pratik yaptıkça daha da hızlanacaksın.'**
+  String get wordHuntCompletedMessage;
+
+  /// No description provided for @wordHuntScore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Skor'**
+  String get wordHuntScore;
+
+  /// No description provided for @wordHuntXp.
+  ///
+  /// In tr, this message translates to:
+  /// **'XP'**
+  String get wordHuntXp;
+
+  /// No description provided for @wordHuntContinue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam Et'**
+  String get wordHuntContinue;
+
+  /// No description provided for @wordHuntNoQuestions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soru bulunamadı.'**
+  String get wordHuntNoQuestions;
+
+  /// No description provided for @wordHuntSeeResult.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonucu Gör'**
+  String get wordHuntSeeResult;
+
+  /// No description provided for @wordHuntXpSaveError.
+  ///
+  /// In tr, this message translates to:
+  /// **'XP kaydedilirken hata oluştu: {error}'**
+  String wordHuntXpSaveError(String error);
 }
 
 class _AppLocalizationsDelegate

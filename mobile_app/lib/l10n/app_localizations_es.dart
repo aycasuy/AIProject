@@ -1051,4 +1051,175 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get flashcardPracticeBackToProfile => 'Volver al perfil';
+
+  @override
+  String get wordHuntTitle => 'Kelime Avı';
+
+  @override
+  String get wordHuntIntroTitle => 'Metnini yapıştır, kelimeleri yakalayalım!';
+
+  @override
+  String get wordHuntIntroDescription =>
+      'Zor kelimeleri analiz et, seviyesini gör ve istersen metinden test çöz.';
+
+  @override
+  String get wordHuntTextReady => 'Metin hazır';
+
+  @override
+  String get wordHuntTextField => 'Metin alanı';
+
+  @override
+  String get wordHuntClear => 'Temizle';
+
+  @override
+  String wordHuntPasteHint(String language) {
+    return '$language metnini buraya yapıştır...';
+  }
+
+  @override
+  String wordHuntWordCount(int count) {
+    return '$count kelime';
+  }
+
+  @override
+  String get wordHuntAnalysisPending => 'Analiz bekleniyor';
+
+  @override
+  String wordHuntLevel(String level) {
+    return 'Seviye: $level';
+  }
+
+  @override
+  String get wordHuntAnalysisCompleted => 'Analiz tamamlandı';
+
+  @override
+  String wordHuntHighlightedWords(int count) {
+    return '$count kelime vurgulandı';
+  }
+
+  @override
+  String get wordHuntTapColoredWords => 'Renkli kelimelere dokun';
+
+  @override
+  String get wordHuntAnalyzeButton => 'Kelimeleri Analiz Et';
+
+  @override
+  String get wordHuntQuizButton => 'Bu Metinle Test Çöz';
+
+  @override
+  String get wordHuntExampleUsage => 'Örnek kullanım';
+
+  @override
+  String get wordHuntAddToBank => 'Kumbarama Ekle';
+
+  @override
+  String get wordHuntAddedToBank => 'Kelime kumbaraya eklendi! 🚀';
+
+  @override
+  String get wordHuntAnalyzeEmpty =>
+      'Analiz için önce bir metin yapıştırmalısın. 📝';
+
+  @override
+  String wordHuntAnalyzeFailed(int status) {
+    return 'Analiz başarısız oldu: $status';
+  }
+
+  @override
+  String wordHuntConnectionError(String error) {
+    return 'Sunucuya bağlanılamadı: $error';
+  }
+
+  @override
+  String get wordHuntQuizEmpty =>
+      'Test çözmek için önce kutuya metin yapıştırmalısın. 📝';
+
+  @override
+  String get wordHuntQuizGenerationFailed =>
+      'Yapay zeka bu metinden soru üretemedi. Daha uzun bir metin dene! 📝';
+
+  @override
+  String wordHuntQuizCreateFailed(int status) {
+    return 'Sınav oluşturulamadı: $status';
+  }
+
+  @override
+  String get wordHuntQuizTitle => 'Kelime Avı Testi';
+
+  @override
+  String get wordHuntOriginalTextTitle => 'Orijinal Metin';
+
+  @override
+  String get wordHuntOriginalTextSubtitle =>
+      'Soruları çözerken metne tekrar bakabilirsin.';
+
+  @override
+  String get wordHuntOriginalTextMissing =>
+      'Bu test için gösterilecek metin bulunamadı.';
+
+  @override
+  String wordHuntQuestionNumber(int current) {
+    return 'Soru $current';
+  }
+
+  @override
+  String get wordHuntTypeFillBlank => 'Boşluk Doldurma';
+
+  @override
+  String get wordHuntTypeMultipleChoice => 'Çoktan Seçmeli';
+
+  @override
+  String get wordHuntChooseMissingWord =>
+      'Doğru kelimeyi seç ve boşluğu tamamla';
+
+  @override
+  String get wordHuntWordBank => 'Kelime bankası';
+
+  @override
+  String get wordHuntAnswerQuestion => 'Soruyu cevapla';
+
+  @override
+  String get wordHuntExplanationMissing => 'Açıklama bulunmuyor.';
+
+  @override
+  String wordHuntCorrectFeedback(String explanation) {
+    return 'Harika! Doğru cevap.\n$explanation';
+  }
+
+  @override
+  String wordHuntRetryFeedback(String explanation) {
+    return 'Tekrar bakalım.\n$explanation';
+  }
+
+  @override
+  String get wordHuntExcellentTitle => 'Mükemmel!';
+
+  @override
+  String get wordHuntCompletedTitle => 'Test Tamamlandı!';
+
+  @override
+  String get wordHuntExcellentMessage => 'Kelime avında çok iyi iş çıkardın.';
+
+  @override
+  String get wordHuntCompletedMessage =>
+      'Pratik yaptıkça daha da hızlanacaksın.';
+
+  @override
+  String get wordHuntScore => 'Skor';
+
+  @override
+  String get wordHuntXp => 'XP';
+
+  @override
+  String get wordHuntContinue => 'Devam Et';
+
+  @override
+  String get wordHuntNoQuestions => 'Soru bulunamadı.';
+
+  @override
+  String get wordHuntSeeResult => 'Sonucu Gör';
+
+  @override
+  String wordHuntXpSaveError(String error) {
+    return 'XP kaydedilirken hata oluştu: $error';
+  }
 }

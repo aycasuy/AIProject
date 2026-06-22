@@ -600,70 +600,70 @@
         }
       }
     },
-    "wordHuntWordCount": "{count} kelime",
-    "@wordHuntWordCount": {
+  "wordHuntWordCount": "{count} kelime",
+  "@wordHuntWordCount": {
       "placeholders": {
         "count": {
           "type": "int"
         }
       }
     },
-    "wordHuntAnalysisPending": "Analiz bekleniyor",
-    "wordHuntLevel": "Seviye: {level}",
-    "@wordHuntLevel": {
+  "wordHuntAnalysisPending": "Analiz bekleniyor",
+  "wordHuntLevel": "Seviye: {level}",
+  "@wordHuntLevel": {
       "placeholders": {
         "level": {
           "type": "String"
         }
       }
     },
-    "wordHuntAnalysisCompleted": "Analiz tamamlandı",
-    "wordHuntHighlightedWords": "{count} kelime vurgulandı",
-    "@wordHuntHighlightedWords": {
+  "wordHuntAnalysisCompleted": "Analiz tamamlandı",
+  "wordHuntHighlightedWords": "{count} kelime vurgulandı",
+  "@wordHuntHighlightedWords": {
       "placeholders": {
         "count": {
           "type": "int"
         }
       }
     },
-    "wordHuntTapColoredWords": "Renkli kelimelere dokun",
-    "wordHuntAnalyzeButton": "Kelimeleri Analiz Et",
-    "wordHuntQuizButton": "Bu Metinle Test Çöz",
-    "wordHuntExampleUsage": "Örnek kullanım",
-    "wordHuntAddToBank": "Kumbarama Ekle",
-    "wordHuntAddedToBank": "Kelime kumbaraya eklendi! 🚀",
-    "wordHuntAnalyzeEmpty": "Analiz için önce bir metin yapıştırmalısın. 📝",
-    "wordHuntAnalyzeFailed": "Analiz başarısız oldu: {status}",
-    "@wordHuntAnalyzeFailed": {
+  "wordHuntTapColoredWords": "Renkli kelimelere dokun",
+  "wordHuntAnalyzeButton": "Kelimeleri Analiz Et",
+  "wordHuntQuizButton": "Bu Metinle Test Çöz",
+  "wordHuntExampleUsage": "Örnek kullanım",
+  "wordHuntAddToBank": "Kumbarama Ekle",
+  "wordHuntAddedToBank": "Kelime kumbaraya eklendi! 🚀",
+  "wordHuntAnalyzeEmpty": "Analiz için önce bir metin yapıştırmalısın. 📝",
+  "wordHuntAnalyzeFailed": "Analiz başarısız oldu: {status}",
+  "@wordHuntAnalyzeFailed": {
       "placeholders": {
         "status": {
           "type": "int"
         }
       }
     },
-    "wordHuntConnectionError": "Sunucuya bağlanılamadı: {error}",
-    "@wordHuntConnectionError": {
+  "wordHuntConnectionError": "Sunucuya bağlanılamadı: {error}",
+  "@wordHuntConnectionError": {
       "placeholders": {
         "error": {
           "type": "String"
         }
       }
     },
-    "wordHuntQuizEmpty": "Test çözmek için önce kutuya metin yapıştırmalısın. 📝",
-    "wordHuntQuizGenerationFailed": "Yapay zeka bu metinden soru üretemedi. Daha uzun bir metin dene! 📝",
-    "wordHuntQuizCreateFailed": "Sınav oluşturulamadı: {status}",
-    "@wordHuntQuizCreateFailed": {
+  "wordHuntQuizEmpty": "Test çözmek için önce kutuya metin yapıştırmalısın. 📝",
+  "wordHuntQuizGenerationFailed": "Yapay zeka bu metinden soru üretemedi. Daha uzun bir metin dene! 📝",
+  "wordHuntQuizCreateFailed": "Sınav oluşturulamadı: {status}",
+  "@wordHuntQuizCreateFailed": {
       "placeholders": {
         "status": {
           "type": "int"
         }
       }
     },
-    "wordHuntQuizTitle": "Kelime Avı Testi",
-    "wordHuntOriginalTextTitle": "Orijinal Metin",
-    "wordHuntOriginalTextSubtitle": "Soruları çözerken metne tekrar bakabilirsin.",
-    "wordHuntOriginalTextMissing": "Bu test için gösterilecek metin bulunamadı.",
-    "wordHuntQuestionNumber": "Soru {current}",
+  "wordHuntQuizTitle": "Kelime Avı Testi",
+  "wordHuntOriginalTextTitle": "Orijinal Metin",
+  "wordHuntOriginalTextSubtitle": "Soruları çözerken metne tekrar bakabilirsin.",
+  "wordHuntOriginalTextMissing": "Bu test için gösterilecek metin bulunamadı.",
+  "wordHuntQuestionNumber": "Soru {current}",
     "@wordHuntQuestionNumber": {
       "placeholders": {
         "current": {
@@ -671,38 +671,38 @@
         }
       }
     },
-    "wordHuntTypeFillBlank": "Boşluk Doldurma",
-    "wordHuntTypeMultipleChoice": "Çoktan Seçmeli",
-    "wordHuntChooseMissingWord": "Doğru kelimeyi seç ve boşluğu tamamla",
-    "wordHuntWordBank": "Kelime bankası",
-    "wordHuntAnswerQuestion": "Soruyu cevapla",
-    "wordHuntExplanationMissing": "Açıklama bulunmuyor.",
-    "wordHuntCorrectFeedback": "Harika! Doğru cevap.\n{explanation}",
-    "@wordHuntCorrectFeedback": {
+  "wordHuntTypeFillBlank": "Boşluk Doldurma",
+  "wordHuntTypeMultipleChoice": "Çoktan Seçmeli",
+  "wordHuntChooseMissingWord": "Doğru kelimeyi seç ve boşluğu tamamla",
+  "wordHuntWordBank": "Kelime bankası",
+  "wordHuntAnswerQuestion": "Soruyu cevapla",
+  "wordHuntExplanationMissing": "Açıklama bulunmuyor.",
+  "wordHuntCorrectFeedback": "Harika! Doğru cevap.\n{explanation}",
+  "@wordHuntCorrectFeedback": {
       "placeholders": {
         "explanation": {
           "type": "String"
         }
       }
     },
-    "wordHuntRetryFeedback": "Tekrar bakalım.\n{explanation}",
-    "@wordHuntRetryFeedback": {
+  "wordHuntRetryFeedback": "Tekrar bakalım.\n{explanation}",
+  "@wordHuntRetryFeedback": {
       "placeholders": {
         "explanation": {
           "type": "String"
         }
       }
     },
-    "wordHuntExcellentTitle": "Mükemmel!",
-    "wordHuntCompletedTitle": "Test Tamamlandı!",
-    "wordHuntExcellentMessage": "Kelime avında çok iyi iş çıkardın.",
-    "wordHuntCompletedMessage": "Pratik yaptıkça daha da hızlanacaksın.",
-    "wordHuntScore": "Skor",
-    "wordHuntXp": "XP",
-    "wordHuntContinue": "Devam Et",
-    "wordHuntNoQuestions": "Soru bulunamadı.",
-    "wordHuntSeeResult": "Sonucu Gör",
-    "wordHuntXpSaveError": "XP kaydedilirken hata oluştu: {error}",
+  "wordHuntExcellentTitle": "Mükemmel!",
+  "wordHuntCompletedTitle": "Test Tamamlandı!",
+  "wordHuntExcellentMessage": "Kelime avında çok iyi iş çıkardın.",
+  "wordHuntCompletedMessage": "Pratik yaptıkça daha da hızlanacaksın.",
+  "wordHuntScore": "Skor",
+  "wordHuntXp": "XP",
+  "wordHuntContinue": "Devam Et",
+  "wordHuntNoQuestions": "Soru bulunamadı.",
+  "wordHuntSeeResult": "Sonucu Gör",
+  "wordHuntXpSaveError": "XP kaydedilirken hata oluştu: {error}",
     "@wordHuntXpSaveError": {
       "placeholders": {
         "error": {
@@ -715,5 +715,4 @@
 
 
 
-
-  }
+ }
