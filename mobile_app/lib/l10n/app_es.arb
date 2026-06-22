@@ -726,5 +726,18 @@
         "type": "String"
       }
     }
-  }
+  },
+  "settingsPracticeLevelHint": "Puedes volver a niveles anteriores para practicar. Los niveles que aún no has alcanzado permanecerán bloqueados.",
+  "settingsSavedMessage": "¡Los ajustes se guardaron correctamente! 🎉",
+  "settingsSaveError": "No se pudieron guardar los ajustes: {error}",
+  "@settingsSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsLogoutTitle": "Cerrar sesión",
+  "settingsLogoutConfirmMessage": "¿Seguro que quieres cerrar sesión en tu cuenta?",
+  "settingsCancel": "Cancelar"
 }

@@ -726,5 +726,18 @@
         "type": "String"
       }
     }
-  }
+  },
+  "settingsPracticeLevelHint": "You can return to earlier levels for practice. Levels you have not reached remain locked.",
+  "settingsSavedMessage": "Settings saved successfully! 🎉",
+  "settingsSaveError": "Settings could not be saved: {error}",
+  "@settingsSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsLogoutTitle": "Log out",
+  "settingsLogoutConfirmMessage": "Are you sure you want to log out of your account?",
+  "settingsCancel": "Cancel"
 }
