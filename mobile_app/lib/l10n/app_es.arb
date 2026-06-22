@@ -726,5 +726,18 @@
         "type": "String"
       }
     }
-  }
+  },
+  "settingsPracticeLevelHint": "Geçmiş seviyelere dönüp pratik yapabilirsin. Ulaşmadığın seviyeler kilitli kalır.",
+  "settingsSavedMessage": "Ayarlar başarıyla kaydedildi! 🎉",
+  "settingsSaveError": "Ayarlar kaydedilemedi: {error}",
+  "@settingsSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsLogoutTitle": "Çıkış Yap",
+  "settingsLogoutConfirmMessage": "Hesabından çıkmak istediğine emin misin?",
+  "settingsCancel": "İptal"
 }
