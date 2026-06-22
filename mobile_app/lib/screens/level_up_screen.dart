@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+
+import '../l10n/app_localizations.dart';
 import '../services/api_service.dart';
 
 class LevelUpScreen extends StatefulWidget {
   final String username;
   final String targetLanguage;
+  final String nativeLanguage;
   final String currentLevel;
   final int lessonId;
 
@@ -15,6 +19,7 @@ class LevelUpScreen extends StatefulWidget {
     super.key,
     required this.username,
     required this.targetLanguage,
+    required this.nativeLanguage,
     required this.currentLevel,
     required this.lessonId,
   });
@@ -25,17 +30,23 @@ class LevelUpScreen extends StatefulWidget {
 
 class _LevelUpScreenState extends State<LevelUpScreen> {
   bool _isLoading = true;
+  bool _isSubmitting = false;
+  bool _isTestFinished = false;
+  bool _isListening = false;
+
+  String? _loadError;
+
   List<dynamic> _questions = [];
   int _currentIndex = 0;
   int _score = 0;
   int _correctAnswers = 0;
-  bool _isTestFinished = false;
 
   final TextEditingController _textController = TextEditingController();
-  late FlutterTts _flutterTts;
-  late stt.SpeechToText _speech;
-  bool _isListening = false;
-  String _recognizedText = "";
+
+  final FlutterTts _flutterTts = FlutterTts();
+  final stt.SpeechToText _speech = stt.SpeechToText();
+
+  String _recognizedText = '';
 
   List<String> _availableWords = [];
   List<String> _selectedWords = [];
@@ -43,273 +54,460 @@ class _LevelUpScreenState extends State<LevelUpScreen> {
   @override
   void initState() {
     super.initState();
-    _initTools();
+    _configureLanguageTools();
     _fetchLevelUpQuestions();
-  }
-
-  void _initTools() async {
-    _flutterTts = FlutterTts();
-    _speech = stt.SpeechToText();
-    await _speech.initialize();
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    _speech.stop();
     _flutterTts.stop();
     super.dispose();
   }
 
-  // 🌟 Sonraki Seviye Hesaplayıcı
   String _getNextLevel(String current) {
-    if (current == "A1") return "A2";
-    if (current == "A2") return "B1";
-    if (current == "B1") return "B2";
-    if (current == "B2") return "C1";
-    if (current == "C1") return "C2";
-    return "MAX";
+    switch (current.trim().toUpperCase()) {
+      case 'A1':
+        return 'A2';
+      case 'A2':
+        return 'B1';
+      case 'B1':
+        return 'B2';
+      case 'B2':
+        return 'C1';
+      case 'C1':
+        return 'C2';
+      default:
+        return 'MAX';
+    }
+  }
+
+  String _targetLocale() {
+    switch (widget.targetLanguage.trim().toLowerCase()) {
+      case 'spanish':
+        return 'es-ES';
+      case 'german':
+        return 'de-DE';
+      case 'french':
+        return 'fr-FR';
+      case 'turkish':
+        return 'tr-TR';
+      case 'english':
+      default:
+        return 'en-US';
+    }
+  }
+
+  String _localizedTargetLanguage(AppLocalizations loc) {
+    switch (widget.targetLanguage.trim().toLowerCase()) {
+      case 'spanish':
+        return loc.langSpanish;
+      case 'german':
+        return loc.langGerman;
+      case 'french':
+        return loc.langFrench;
+      case 'turkish':
+        return loc.langTurkish;
+      case 'english':
+      default:
+        return loc.langEnglish;
+    }
+  }
+
+  Future<void> _configureLanguageTools() async {
+    await _flutterTts.setLanguage(_targetLocale());
+    await _flutterTts.setSpeechRate(0.45);
+    await _flutterTts.setPitch(1.0);
+    await _speech.initialize();
   }
 
   Future<void> _fetchLevelUpQuestions() async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+        _loadError = null;
+      });
+    }
+
     try {
-      final url = Uri.parse('http://10.0.2.2:8000/generate_level_up_test');
-      final response = await http.post(
+      final Uri url = Uri.parse('http://10.0.2.2:8000/generate_level_up_test');
+
+      final http.Response response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+        },
         body: jsonEncode({
-          "lesson_id": widget
-              .lessonId, // Kullanılmıyor ama pydantic modeli istiyor olabilir
-          "level": widget.currentLevel,
-          "target_language": widget.targetLanguage,
+          'lesson_id': widget.lessonId,
+          'level': widget.currentLevel,
+          'target_language': widget.targetLanguage,
+          'native_language': widget.nativeLanguage,
         }),
       );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(utf8.decode(response.bodyBytes));
-        setState(() {
-          _questions = data['questions'];
-          _isLoading = false;
-          _prepareQuestionData();
-        });
+      final dynamic decoded = jsonDecode(utf8.decode(response.bodyBytes));
+
+      if (response.statusCode != 200) {
+        throw Exception(
+          decoded is Map && decoded['detail'] != null
+              ? decoded['detail'].toString()
+              : 'HTTP ${response.statusCode}',
+        );
       }
-    } catch (e) {
-      print("Büyük sınav yüklenemedi: $e");
+
+      if (decoded is! Map ||
+          decoded['status'] != 'success' ||
+          decoded['questions'] is! List) {
+        throw Exception(
+          decoded is Map && decoded['message'] != null
+              ? decoded['message'].toString()
+              : 'Invalid response',
+        );
+      }
+
+      final List<dynamic> questions = List<dynamic>.from(decoded['questions']);
+
+      if (!mounted) return;
+
+      setState(() {
+        _questions = questions;
+        _currentIndex = 0;
+        _score = 0;
+        _correctAnswers = 0;
+        _isTestFinished = false;
+        _isLoading = false;
+      });
+
+      _prepareQuestionData();
+    } catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        _isLoading = false;
+        _loadError = error.toString();
+      });
     }
   }
 
   void _prepareQuestionData() {
     if (_currentIndex >= _questions.length) return;
-    final q = _questions[_currentIndex];
-    _textController.clear();
-    _recognizedText = "";
 
-    if (q['type'] == 'order') {
-      _availableWords = List<String>.from(q['scrambled']);
+    _textController.clear();
+    _recognizedText = '';
+
+    if (_isListening) {
+      _speech.stop();
+      _isListening = false;
+    }
+
+    final Map<String, dynamic> question = Map<String, dynamic>.from(
+      _questions[_currentIndex],
+    );
+
+    if (question['type'] == 'order') {
+      _availableWords = List<String>.from(question['scrambled'] ?? <String>[]);
+      _selectedWords = [];
+    } else {
+      _availableWords = [];
       _selectedWords = [];
     }
   }
 
-  ///////////
-  // 🌟 YENİ EKLENEN NORMALİZASYON FONKSİYONU
-  String _normalizeSpokenText(String text) {
-    if (text.isEmpty) return "";
-
-    // Önce noktalama işaretlerini sil ve küçük harfe çevir
-    String normalized = text
+  String _normalizeAnswer(String text) {
+    return text
         .toLowerCase()
-        .replaceAll(RegExp(r'[^\w\s]'), '')
+        .replaceAll(RegExp(r'[^\w\s]', unicode: true), '')
+        .replaceAll(RegExp(r'\s+'), ' ')
         .trim();
-
-    // En yaygın sayıları kelimeye çeviren basit bir sözlük (Demo kurtarıcı!)
-    Map<String, String> numberWords = {
-      '0': 'zero',
-      '1': 'one',
-      '2': 'two',
-      '3': 'three',
-      '4': 'four',
-      '5': 'five',
-      '6': 'six',
-      '7': 'seven',
-      '8': 'eight',
-      '9': 'nine',
-      '10': 'ten',
-      '11': 'eleven',
-      '12': 'twelve',
-      '20': 'twenty',
-      '30': 'thirty',
-      '40': 'forty',
-      '50': 'fifty',
-      '100': 'one hundred',
-      '1000': 'one thousand',
-    };
-
-    // Cümleyi kelimelere böl
-    List<String> words = normalized.split(' ');
-
-    for (int i = 0; i < words.length; i++) {
-      // Eğer kelime bir rakamsa (Örn: "100") ve sözlüğümüzde varsa kelimeye ("one hundred") çevir
-      if (RegExp(r'^[0-9]+$').hasMatch(words[i]) &&
-          numberWords.containsKey(words[i])) {
-        words[i] = numberWords[words[i]]!;
-      }
-    }
-
-    return words.join(' ');
   }
 
-  void _submitAnswer() {
-    final q = _questions[_currentIndex];
+  bool _isAnswerProvided(Map<String, dynamic> question) {
+    switch (question['type']) {
+      case 'blank':
+      case 'listen':
+        return _textController.text.trim().isNotEmpty;
+      case 'order':
+        return _selectedWords.isNotEmpty;
+      case 'speak':
+        return _recognizedText.trim().isNotEmpty;
+      default:
+        return false;
+    }
+  }
+
+  Future<void> _submitAnswer() async {
+    if (_isSubmitting || _currentIndex >= _questions.length) {
+      return;
+    }
+
+    final AppLocalizations loc = AppLocalizations.of(context)!;
+
+    final Map<String, dynamic> question = Map<String, dynamic>.from(
+      _questions[_currentIndex],
+    );
+
+    if (!_isAnswerProvided(question)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc.levelUpAnswerRequired),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
     bool isCorrect = false;
 
-    if (q['type'] == 'blank' || q['type'] == 'listen') {
-      String answer = q['type'] == 'blank' ? q['answer'] : q['text'];
-      String userAnswer = _textController.text.trim().toLowerCase().replaceAll(
-        RegExp(r'[^\w\s]'),
-        '',
-      );
-      String correctAnswer = answer.toLowerCase().replaceAll(
-        RegExp(r'[^\w\s]'),
-        '',
-      );
-      isCorrect = userAnswer == correctAnswer;
-    } else if (q['type'] == 'order') {
-      String userAnswer = _selectedWords.join(" ");
-      isCorrect = userAnswer.toLowerCase() == q['correct'].toLowerCase();
-    } else if (q['type'] == 'speak') {
-      String userAnswer = _normalizeSpokenText(_recognizedText);
-      String correctAnswer = _normalizeSpokenText(q['text']);
+    if (question['type'] == 'blank' || question['type'] == 'listen') {
+      final String correctAnswer = question['type'] == 'blank'
+          ? (question['answer'] ?? '').toString()
+          : (question['text'] ?? '').toString();
+
       isCorrect =
+          _normalizeAnswer(_textController.text) ==
+          _normalizeAnswer(correctAnswer);
+    } else if (question['type'] == 'order') {
+      isCorrect =
+          _normalizeAnswer(_selectedWords.join(' ')) ==
+          _normalizeAnswer((question['correct'] ?? '').toString());
+    } else if (question['type'] == 'speak') {
+      final String userAnswer = _normalizeAnswer(_recognizedText);
+      final String correctAnswer = _normalizeAnswer(
+        (question['text'] ?? '').toString(),
+      );
+
+      isCorrect =
+          userAnswer == correctAnswer ||
           userAnswer.contains(correctAnswer) ||
-          (correctAnswer.contains(userAnswer) && userAnswer.length > 5);
+          (correctAnswer.contains(userAnswer) && userAnswer.length >= 6);
     }
 
     if (isCorrect) {
       _correctAnswers++;
-      _showFeedback(true);
-    } else {
-      _showFeedback(false);
     }
 
-    Future.delayed(const Duration(seconds: 1), () {
-      if (!mounted) return;
+    _showFeedback(isCorrect);
+
+    await Future<void>.delayed(const Duration(milliseconds: 850));
+
+    if (!mounted) return;
+
+    if (_currentIndex < _questions.length - 1) {
       setState(() {
-        if (_currentIndex < _questions.length - 1) {
-          _currentIndex++;
-          _prepareQuestionData();
-        } else {
-          _finishTest();
-        }
+        _currentIndex++;
+        _isSubmitting = false;
+        _prepareQuestionData();
       });
-    });
+    } else {
+      setState(() => _isSubmitting = false);
+      await _finishTest();
+    }
   }
 
   void _showFeedback(bool isCorrect) {
+    final AppLocalizations loc = AppLocalizations.of(context)!;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          isCorrect ? "✅ Kusursuz!" : "❌ Yanlış!",
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          isCorrect ? loc.levelUpCorrect : loc.levelUpWrong,
+          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         backgroundColor: isCorrect
             ? const Color(0xFF06D6A0)
             : const Color(0xFFFF6B6B),
-        duration: const Duration(milliseconds: 800),
+        duration: const Duration(milliseconds: 700),
         behavior: SnackBarBehavior.floating,
       ),
     );
   }
 
-  void _finishTest() async {
-    setState(() {
-      _score = ((_correctAnswers / _questions.length) * 100).round();
-      _isTestFinished = true;
-    });
+  Future<void> _finishTest() async {
+    if (_questions.isEmpty) return;
 
-    // 🌟 EĞER GEÇTİYSE ARKA PLANDA SEVİYEYİ YÜKSELT!
-    if (_score >= 70) {
-      String nextLevel = _getNextLevel(widget.currentLevel);
-      if (nextLevel != "MAX") {
-        await ApiService.upgradeLevel(
-          username: widget.username,
-          targetLanguage: widget.targetLanguage,
-          newLevel: nextLevel,
-        );
+    final int calculatedScore = ((_correctAnswers / _questions.length) * 100)
+        .round();
+
+    if (mounted) {
+      setState(() {
+        _score = calculatedScore;
+        _isTestFinished = true;
+      });
+    }
+
+    if (calculatedScore >= 70) {
+      final String nextLevel = _getNextLevel(widget.currentLevel);
+
+      if (nextLevel != 'MAX') {
+        try {
+          await ApiService.upgradeLevel(
+            username: widget.username,
+            targetLanguage: widget.targetLanguage,
+            newLevel: nextLevel,
+          );
+        } catch (error) {
+          debugPrint('Seviye güncellenemedi: $error');
+        }
       }
     }
   }
 
+  Future<void> _speakText(String text) async {
+    await _flutterTts.stop();
+    await _flutterTts.setLanguage(_targetLocale());
+    await _flutterTts.speak(text);
+  }
+
+  Future<void> _toggleListening() async {
+    if (_isListening) {
+      await _speech.stop();
+
+      if (mounted) {
+        setState(() => _isListening = false);
+      }
+      return;
+    }
+
+    final bool available = await _speech.initialize();
+
+    if (!available || !mounted) return;
+
+    setState(() {
+      _isListening = true;
+      _recognizedText = '';
+    });
+
+    await _speech.listen(
+      localeId: _targetLocale(),
+      onResult: (result) {
+        if (!mounted) return;
+
+        setState(() {
+          _recognizedText = result.recognizedWords;
+
+          if (result.finalResult) {
+            _isListening = false;
+          }
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations loc = AppLocalizations.of(context)!;
+
     if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Color(0xFF130F24),
+      return Scaffold(
+        backgroundColor: const Color(0xFFF6F7FB),
         body: Center(
-          child: CircularProgressIndicator(color: Colors.deepPurpleAccent),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator(color: Colors.deepPurpleAccent),
+              const SizedBox(height: 16),
+              Text(
+                loc.levelUpLoading,
+                style: const TextStyle(
+                  color: Color(0xFF4B4B4B),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
 
-    if (_isTestFinished) return _buildReportCard();
+    if (_loadError != null) {
+      return _buildLoadError(loc);
+    }
 
-    final q = _questions[_currentIndex];
+    if (_questions.isEmpty) {
+      return _buildEmptyState(loc);
+    }
+
+    if (_isTestFinished) {
+      return _buildReportCard(loc);
+    }
+
+    final Map<String, dynamic> question = Map<String, dynamic>.from(
+      _questions[_currentIndex],
+    );
 
     return Scaffold(
-      backgroundColor: const Color(0xFF130F24), // Epik karanlık tema
+      backgroundColor: const Color(0xFFF6F7FB),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color(0xFFF6F7FB),
         elevation: 0,
-        title: const Text(
-          "BOSS: SEVİYE ATLAMA SINAVI",
-          style: TextStyle(
-            color: Colors.deepPurpleAccent,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1,
-          ),
-        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        title: Text(
+          loc.levelUpTitle,
+          style: const TextStyle(
+            color: Color(0xFF2D2D2D),
+            fontWeight: FontWeight.w900,
+            fontSize: 20,
+          ),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
+      body: SafeArea(
         child: Column(
           children: [
-            LinearProgressIndicator(
-              value: (_currentIndex + 1) / _questions.length,
-              backgroundColor: Colors.white12,
-              color: Colors.deepPurpleAccent,
-              minHeight: 12,
-              borderRadius: BorderRadius.circular(10),
+            _buildProgressHeader(loc),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(22, 24, 22, 24),
+                child: _buildQuestion(question, loc),
+              ),
             ),
-            const SizedBox(height: 10),
-            Text(
-              "Soru ${_currentIndex + 1} / ${_questions.length}",
-              style: const TextStyle(color: Colors.white54),
-            ),
-            const Spacer(),
-            if (q['type'] == 'blank') _buildBlankQuestion(q),
-            if (q['type'] == 'order') _buildOrderQuestion(q),
-            if (q['type'] == 'listen') _buildListenQuestion(q),
-            if (q['type'] == 'speak') _buildSpeakQuestion(q),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _submitAnswer,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurpleAccent,
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+            Container(
+              padding: const EdgeInsets.fromLTRB(22, 12, 22, 22),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 18,
+                    offset: const Offset(0, -8),
                   ),
-                ),
-                child: const Text(
-                  "CEVAPLA",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                ],
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                height: 58,
+                child: ElevatedButton(
+                  onPressed: _isSubmitting ? null : _submitAnswer,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurpleAccent,
+                    disabledBackgroundColor: Colors.grey.shade300,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
+                  child: _isSubmitting
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 3,
+                          ),
+                        )
+                      : Text(
+                          loc.levelUpAnswer,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -319,312 +517,518 @@ class _LevelUpScreenState extends State<LevelUpScreen> {
     );
   }
 
-  // ---- WIDGET KISIMLARI (Tasarım aynı ama renkleri deepPurple) ----
-  Widget _buildBlankQuestion(Map<String, dynamic> q) {
-    return Column(
-      children: [
-        const Text(
-          "Boşluğu Doldur",
-          style: TextStyle(color: Colors.white54, fontSize: 16),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          q['question'].replaceAll('____', '________'),
-          style: const TextStyle(
-            fontSize: 24,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+  Widget _buildProgressHeader(AppLocalizations loc) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(22, 10, 22, 18),
+      color: const Color(0xFFF6F7FB),
+      child: Column(
+        children: [
+          LinearProgressIndicator(
+            value: (_currentIndex + 1) / _questions.length,
+            backgroundColor: Colors.grey.shade200,
+            color: Colors.deepPurpleAccent,
+            minHeight: 10,
+            borderRadius: BorderRadius.circular(999),
           ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 10),
-        Text(
-          q['translation'],
-          style: const TextStyle(color: Colors.deepPurpleAccent),
-        ),
-        const SizedBox(height: 30),
-        TextField(
-          controller: _textController,
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.white, fontSize: 20),
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white10,
-            hintText: "Cevabını yaz...",
-            hintStyle: const TextStyle(color: Colors.white24),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+          const SizedBox(height: 10),
+          Text(
+            loc.levelUpQuestionCounter(_currentIndex + 1, _questions.length),
+            style: TextStyle(
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _buildOrderQuestion(Map<String, dynamic> q) {
-    return Column(
-      children: [
-        const Text(
-          "Cümleyi Kur",
-          style: TextStyle(color: Colors.white54, fontSize: 16),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          q['original'],
-          style: const TextStyle(
-            fontSize: 22,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+  Widget _buildQuestion(Map<String, dynamic> question, AppLocalizations loc) {
+    switch (question['type']) {
+      case 'blank':
+        return _buildBlankQuestion(question, loc);
+      case 'order':
+        return _buildOrderQuestion(question, loc);
+      case 'listen':
+        return _buildListenQuestion(question, loc);
+      case 'speak':
+        return _buildSpeakQuestion(question, loc);
+      default:
+        return _buildEmptyState(loc);
+    }
+  }
+
+  Widget _questionCard({
+    required IconData icon,
+    required String title,
+    required Widget child,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: Colors.deepPurpleAccent.withOpacity(0.14)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.deepPurpleAccent.withOpacity(0.09),
+            blurRadius: 25,
+            offset: const Offset(0, 14),
           ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 30),
-        Container(
-          width: double.infinity,
-          height: 80,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white10,
-            borderRadius: BorderRadius.circular(15),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(13),
+            decoration: BoxDecoration(
+              color: Colors.deepPurpleAccent.withOpacity(0.10),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: Colors.deepPurpleAccent, size: 28),
           ),
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: _selectedWords
-                .map(
-                  (w) => GestureDetector(
-                    onTap: () => setState(() {
-                      _selectedWords.remove(w);
-                      _availableWords.add(w);
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurpleAccent,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        w,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            style: TextStyle(
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w800,
+              fontSize: 15,
+            ),
+          ),
+          const SizedBox(height: 20),
+          child,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBlankQuestion(
+    Map<String, dynamic> question,
+    AppLocalizations loc,
+  ) {
+    return _questionCard(
+      icon: Icons.edit_note_rounded,
+      title: loc.levelUpFillBlank,
+      child: Column(
+        children: [
+          Text(
+            (question['question'] ?? '').toString().replaceAll(
+              '____',
+              '________',
+            ),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 23,
+              color: Color(0xFF2D2D2D),
+              fontWeight: FontWeight.w900,
+              height: 1.35,
+            ),
+          ),
+          if ((question['translation'] ?? '').toString().trim().isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text(
+              question['translation'].toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.deepPurpleAccent,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+          const SizedBox(height: 26),
+          TextField(
+            controller: _textController,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF2D2D2D),
+              fontSize: 19,
+              fontWeight: FontWeight.w700,
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: const Color(0xFFF6F7FB),
+              hintText: loc.levelUpAnswerHint,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOrderQuestion(
+    Map<String, dynamic> question,
+    AppLocalizations loc,
+  ) {
+    return _questionCard(
+      icon: Icons.reorder_rounded,
+      title: loc.levelUpBuildSentence,
+      child: Column(
+        children: [
+          Text(
+            (question['original'] ?? '').toString(),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 22,
+              color: Color(0xFF2D2D2D),
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Container(
+            width: double.infinity,
+            constraints: const BoxConstraints(minHeight: 80),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF6F7FB),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Wrap(
+              spacing: 9,
+              runSpacing: 9,
+              children: _selectedWords
+                  .map(
+                    (word) => _wordChip(
+                      word: word,
+                      selected: true,
+                      onTap: () {
+                        setState(() {
+                          _selectedWords.remove(word);
+                          _availableWords.add(word);
+                        });
+                      },
                     ),
+                  )
+                  .toList(),
+            ),
+          ),
+          const SizedBox(height: 22),
+          Wrap(
+            spacing: 9,
+            runSpacing: 9,
+            alignment: WrapAlignment.center,
+            children: _availableWords
+                .map(
+                  (word) => _wordChip(
+                    word: word,
+                    selected: false,
+                    onTap: () {
+                      setState(() {
+                        _availableWords.remove(word);
+                        _selectedWords.add(word);
+                      });
+                    },
                   ),
                 )
                 .toList(),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _wordChip({
+    required String word,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(18),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        decoration: BoxDecoration(
+          color: selected ? Colors.deepPurpleAccent : Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.deepPurpleAccent, width: 1.6),
         ),
-        const SizedBox(height: 30),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: _availableWords
-              .map(
-                (w) => GestureDetector(
-                  onTap: () => setState(() {
-                    _availableWords.remove(w);
-                    _selectedWords.add(w);
-                  }),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
+        child: Text(
+          word,
+          style: TextStyle(
+            color: selected ? Colors.white : Colors.deepPurpleAccent,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListenQuestion(
+    Map<String, dynamic> question,
+    AppLocalizations loc,
+  ) {
+    return _questionCard(
+      icon: Icons.headphones_rounded,
+      title: loc.levelUpListenAndWrite,
+      child: Column(
+        children: [
+          InkWell(
+            borderRadius: BorderRadius.circular(999),
+            onTap: () => _speakText((question['text'] ?? '').toString()),
+            child: const CircleAvatar(
+              radius: 48,
+              backgroundColor: Colors.deepPurpleAccent,
+              child: Icon(
+                Icons.volume_up_rounded,
+                size: 46,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(height: 28),
+          TextField(
+            controller: _textController,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF2D2D2D),
+              fontSize: 19,
+              fontWeight: FontWeight.w700,
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: const Color(0xFFF6F7FB),
+              hintText: loc.levelUpWriteInLanguage(
+                _localizedTargetLanguage(loc),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSpeakQuestion(
+    Map<String, dynamic> question,
+    AppLocalizations loc,
+  ) {
+    return _questionCard(
+      icon: Icons.record_voice_over_rounded,
+      title: loc.levelUpReadAloud,
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF6F7FB),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: Colors.deepPurpleAccent.withOpacity(0.25),
+              ),
+            ),
+            child: Text(
+              (question['text'] ?? '').toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 22,
+                color: Color(0xFF2D2D2D),
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            _recognizedText.isEmpty
+                ? (_isListening
+                      ? loc.levelUpListening
+                      : loc.levelUpMicrophoneHint)
+                : _recognizedText,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.deepPurpleAccent,
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 22),
+          InkWell(
+            borderRadius: BorderRadius.circular(999),
+            onTap: _toggleListening,
+            child: CircleAvatar(
+              radius: 40,
+              backgroundColor: _isListening
+                  ? Colors.redAccent
+                  : Colors.deepPurpleAccent,
+              child: Icon(
+                _isListening ? Icons.stop_rounded : Icons.mic_rounded,
+                size: 38,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadError(AppLocalizations loc) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF6F7FB),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.error_outline_rounded,
+                size: 70,
+                color: Colors.redAccent,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                loc.levelUpLoadFailed,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFF2D2D2D),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _loadError ?? '',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey.shade600),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: _fetchLevelUpQuestions,
+                child: Text(loc.levelUpRetry),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(AppLocalizations loc) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF6F7FB),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(28),
+          child: Text(
+            loc.levelUpNoQuestions,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF2D2D2D),
+              fontSize: 19,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReportCard(AppLocalizations loc) {
+    final bool passed = _score >= 70;
+    final String nextLevel = _getNextLevel(widget.currentLevel);
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF6F7FB),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(28),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(32),
+                boxShadow: [
+                  BoxShadow(
+                    color:
+                        (passed
+                                ? const Color(0xFF06D6A0)
+                                : const Color(0xFFFF6B6B))
+                            .withOpacity(0.18),
+                    blurRadius: 30,
+                    offset: const Offset(0, 16),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    passed ? '🏆' : '💔',
+                    style: const TextStyle(fontSize: 86),
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    passed ? loc.levelUpPassedTitle : loc.levelUpFailedTitle,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                      color: passed
+                          ? const Color(0xFF06D6A0)
+                          : const Color(0xFFFF6B6B),
                     ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.deepPurpleAccent,
-                        width: 2,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    loc.levelUpScore(_score),
+                    style: const TextStyle(
+                      fontSize: 22,
+                      color: Color(0xFF2D2D2D),
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    passed
+                        ? loc.levelUpPassedMessage(nextLevel)
+                        : loc.levelUpFailedMessage,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontSize: 16,
+                      height: 1.45,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context, passed),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: passed
+                            ? const Color(0xFF06D6A0)
+                            : Colors.deepPurpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      w,
-                      style: const TextStyle(
-                        color: Colors.deepPurpleAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                      child: Text(
+                        passed ? loc.levelUpNextMap : loc.levelUpBackToMap,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
-              .toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildListenQuestion(Map<String, dynamic> q) {
-    return Column(
-      children: [
-        const Text(
-          "Duyduğunu Yaz",
-          style: TextStyle(color: Colors.white54, fontSize: 16),
-        ),
-        const SizedBox(height: 30),
-        GestureDetector(
-          onTap: () => _flutterTts.speak(q['text']),
-          child: const CircleAvatar(
-            radius: 50,
-            backgroundColor: Colors.deepPurpleAccent,
-            child: Icon(Icons.volume_up, size: 50, color: Colors.white),
-          ),
-        ),
-        const SizedBox(height: 40),
-        TextField(
-          controller: _textController,
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.white, fontSize: 20),
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white10,
-            hintText: "İngilizce yaz...",
-            hintStyle: const TextStyle(color: Colors.white24),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSpeakQuestion(Map<String, dynamic> q) {
-    return Column(
-      children: [
-        const Text(
-          "Yüksek Sesle Oku",
-          style: TextStyle(color: Colors.white54, fontSize: 16),
-        ),
-        const SizedBox(height: 20),
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.deepPurpleAccent),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Text(
-            q['text'],
-            style: const TextStyle(
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        const SizedBox(height: 40),
-        Text(
-          _recognizedText.isEmpty ? "Mikrofona bas..." : _recognizedText,
-          style: const TextStyle(color: Colors.deepPurpleAccent, fontSize: 18),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 30),
-        GestureDetector(
-          onTap: () async {
-            if (!_isListening) {
-              bool available = await _speech.initialize();
-              if (available) {
-                setState(() => _isListening = true);
-                _speech.listen(
-                  onResult: (val) =>
-                      setState(() => _recognizedText = val.recognizedWords),
-                );
-              }
-            } else {
-              setState(() => _isListening = false);
-              _speech.stop();
-            }
-          },
-          child: CircleAvatar(
-            radius: 40,
-            backgroundColor: _isListening
-                ? Colors.red
-                : Colors.deepPurpleAccent,
-            child: Icon(
-              _isListening ? Icons.mic_off : Icons.mic,
-              size: 40,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildReportCard() {
-    bool passed = _score >= 70;
-    String nextLvl = _getNextLevel(widget.currentLevel);
-
-    return Scaffold(
-      backgroundColor: const Color(0xFF130F24),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(passed ? "🏆" : "💔", style: const TextStyle(fontSize: 100)),
-            const SizedBox(height: 20),
-            Text(
-              passed ? "SEVİYE ATLANDI!" : "BÜYÜK SINAVI GEÇEMEDİN",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w900,
-                color: passed
-                    ? const Color(0xFF06D6A0)
-                    : const Color(0xFFFF6B6B),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "Puanın: $_score / 100",
-              style: const TextStyle(fontSize: 24, color: Colors.white),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Text(
-                passed
-                    ? "Harika iş çıkardın! Tüm konularda ustalaştın. Yeni seviyene ($nextLvl) hoş geldin!"
-                    : "70 puanı geçemedin. Eksiklerini kapatıp seviye atlama sınavını tekrar denemelisin.",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
-                  height: 1.5,
-                ),
+                ],
               ),
             ),
-            const SizedBox(height: 50),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(
-                context,
-                passed,
-              ), // true dönerse harita yenilenecek
-              style: ElevatedButton.styleFrom(
-                backgroundColor: passed
-                    ? const Color(0xFF06D6A0)
-                    : Colors.white24,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 16,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              child: Text(
-                passed ? "YENİ HARİTAYA GEÇ 🚀" : "HARİTAYA DÖN",
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

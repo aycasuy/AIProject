@@ -690,6 +690,7 @@ class _PathScreenState extends State<PathScreen> {
             targetLanguage: widget.selectedLanguage,
             currentLevel: progress.currentLevel,
             lessonId: lesson['id'] ?? (lessonIndex + 1),
+            nativeLanguage: widget.nativeLanguage,
           ),
         ),
       );

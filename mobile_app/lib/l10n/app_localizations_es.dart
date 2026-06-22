@@ -1303,4 +1303,92 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get roleplayHotelProblemTopic =>
       'El personal del hotel es muy amable y atento. Pida los detalles uno a la vez y ofrezca una solución apropiada. No vuelva a pedir la información que ya he proporcionado.';
+
+  @override
+  String get levelUpTitle => 'EXAM NIVEL-UP';
+
+  @override
+  String get levelUpLoading =>
+      'Tu examen de nivelación está siendo preparado...';
+
+  @override
+  String get levelUpLoadFailed =>
+      'El examen de nivelación no pudo ser cargado.';
+
+  @override
+  String get levelUpNoQuestions =>
+      'No se encontraron preguntas para este examen.';
+
+  @override
+  String get levelUpRetry => 'Inténtalo de nuevo';
+
+  @override
+  String levelUpQuestionCounter(int current, int total) {
+    return 'Pregunta $current / $total';
+  }
+
+  @override
+  String get levelUpAnswer => 'Respuesta';
+
+  @override
+  String get levelUpAnswerRequired =>
+      'Completa tu respuesta antes de continuar.';
+
+  @override
+  String get levelUpCorrect => '✅ ¡Correcto!';
+
+  @override
+  String get levelUpWrong => '❌ ¡Incorrecto!';
+
+  @override
+  String get levelUpFillBlank => 'Rellena el blanco';
+
+  @override
+  String get levelUpBuildSentence => 'Construye la oración';
+
+  @override
+  String get levelUpListenAndWrite => 'Escuchar y escribir';
+
+  @override
+  String get levelUpReadAloud => 'Leer en voz alta';
+
+  @override
+  String get levelUpAnswerHint => 'Escribe tu respuesta...';
+
+  @override
+  String levelUpWriteInLanguage(String language) {
+    return 'Escribe en $language...';
+  }
+
+  @override
+  String get levelUpMicrophoneHint => 'Toca el micrófono...';
+
+  @override
+  String get levelUpListening => 'Escuchando...';
+
+  @override
+  String get levelUpPassedTitle => '¡NIVEL DESLOQUEADO!';
+
+  @override
+  String get levelUpFailedTitle => 'NO PASAS';
+
+  @override
+  String levelUpScore(int score) {
+    return 'Tu puntuación: $score / 100';
+  }
+
+  @override
+  String levelUpPassedMessage(String level) {
+    return '¡Buen trabajo! El nivel $level ha sido desbloqueado.';
+  }
+
+  @override
+  String get levelUpFailedMessage =>
+      'No has alcanzado 70 puntos. Revisa tus zonas débiles y vuelve a probar el examen de nivelación.';
+
+  @override
+  String get levelUpNextMap => 'Ir al nuevo mapa 🚀';
+
+  @override
+  String get levelUpBackToMap => 'Volver al mapa';
 }

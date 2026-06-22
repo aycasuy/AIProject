@@ -1277,4 +1277,89 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get roleplayHotelProblemTopic =>
       'Sen bir otel resepsiyonistisin. Odamdaki klima ve sıcak su sorunuyla ilgili şikâyetimi dinle. Ayrıntıları sırayla sor ve uygun bir çözüm öner. Daha önce söylediğim bilgileri tekrar sorma.';
+
+  @override
+  String get levelUpTitle => 'SEVİYE ATLAMA SINAVI';
+
+  @override
+  String get levelUpLoading => 'Seviye atlama sınavın hazırlanıyor...';
+
+  @override
+  String get levelUpLoadFailed => 'Seviye atlama sınavı yüklenemedi.';
+
+  @override
+  String get levelUpNoQuestions => 'Bu sınav için soru bulunamadı.';
+
+  @override
+  String get levelUpRetry => 'Tekrar Dene';
+
+  @override
+  String levelUpQuestionCounter(int current, int total) {
+    return 'Soru $current / $total';
+  }
+
+  @override
+  String get levelUpAnswer => 'Cevapla';
+
+  @override
+  String get levelUpAnswerRequired =>
+      'Devam etmeden önce cevabını tamamlamalısın.';
+
+  @override
+  String get levelUpCorrect => '✅ Doğru!';
+
+  @override
+  String get levelUpWrong => '❌ Yanlış!';
+
+  @override
+  String get levelUpFillBlank => 'Boşluğu Doldur';
+
+  @override
+  String get levelUpBuildSentence => 'Cümleyi Kur';
+
+  @override
+  String get levelUpListenAndWrite => 'Duyduğunu Yaz';
+
+  @override
+  String get levelUpReadAloud => 'Yüksek Sesle Oku';
+
+  @override
+  String get levelUpAnswerHint => 'Cevabını yaz...';
+
+  @override
+  String levelUpWriteInLanguage(String language) {
+    return '$language dilinde yaz...';
+  }
+
+  @override
+  String get levelUpMicrophoneHint => 'Mikrofona bas...';
+
+  @override
+  String get levelUpListening => 'Dinleniyor...';
+
+  @override
+  String get levelUpPassedTitle => 'SEVİYE ATLANDI!';
+
+  @override
+  String get levelUpFailedTitle => 'SINAVI GEÇEMEDİN';
+
+  @override
+  String levelUpScore(int score) {
+    return 'Puanın: $score / 100';
+  }
+
+  @override
+  String levelUpPassedMessage(String level) {
+    return 'Harika iş çıkardın! $level seviyesinin kilidi açıldı.';
+  }
+
+  @override
+  String get levelUpFailedMessage =>
+      '70 puanı geçemedin. Eksiklerini kapatıp seviye atlama sınavını tekrar denemelisin.';
+
+  @override
+  String get levelUpNextMap => 'Yeni Haritaya Geç 🚀';
+
+  @override
+  String get levelUpBackToMap => 'Haritaya Dön';
 }

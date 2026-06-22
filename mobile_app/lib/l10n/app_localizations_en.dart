@@ -1289,4 +1289,88 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get roleplayHotelProblemTopic =>
       'You are a hotel receptionist. Listen to my complaint about the air conditioning and hot water in my room. Ask for details one at a time and offer an appropriate solution. Do not ask again for information I have already provided.';
+
+  @override
+  String get levelUpTitle => 'LEVEL-UP EXAM';
+
+  @override
+  String get levelUpLoading => 'Your level-up exam is being prepared...';
+
+  @override
+  String get levelUpLoadFailed => 'The level-up exam could not be loaded.';
+
+  @override
+  String get levelUpNoQuestions => 'No questions were found for this exam.';
+
+  @override
+  String get levelUpRetry => 'Try Again';
+
+  @override
+  String levelUpQuestionCounter(int current, int total) {
+    return 'Question $current / $total';
+  }
+
+  @override
+  String get levelUpAnswer => 'Answer';
+
+  @override
+  String get levelUpAnswerRequired => 'Complete your answer before continuing.';
+
+  @override
+  String get levelUpCorrect => '✅ Correct!';
+
+  @override
+  String get levelUpWrong => '❌ Incorrect!';
+
+  @override
+  String get levelUpFillBlank => 'Fill in the Blank';
+
+  @override
+  String get levelUpBuildSentence => 'Build the Sentence';
+
+  @override
+  String get levelUpListenAndWrite => 'Listen and Write';
+
+  @override
+  String get levelUpReadAloud => 'Read Aloud';
+
+  @override
+  String get levelUpAnswerHint => 'Write your answer...';
+
+  @override
+  String levelUpWriteInLanguage(String language) {
+    return 'Write in $language...';
+  }
+
+  @override
+  String get levelUpMicrophoneHint => 'Tap the microphone...';
+
+  @override
+  String get levelUpListening => 'Listening...';
+
+  @override
+  String get levelUpPassedTitle => 'LEVEL UNLOCKED!';
+
+  @override
+  String get levelUpFailedTitle => 'YOU DID NOT PASS';
+
+  @override
+  String levelUpScore(int score) {
+    return 'Your score: $score / 100';
+  }
+
+  @override
+  String levelUpPassedMessage(String level) {
+    return 'Great job! Level $level is now unlocked.';
+  }
+
+  @override
+  String get levelUpFailedMessage =>
+      'You did not reach 70 points. Review your weak areas and try the level-up exam again.';
+
+  @override
+  String get levelUpNextMap => 'Go to the New Map 🚀';
+
+  @override
+  String get levelUpBackToMap => 'Return to Map';
 }

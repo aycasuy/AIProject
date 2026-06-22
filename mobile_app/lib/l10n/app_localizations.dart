@@ -2337,6 +2337,156 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Sen bir otel resepsiyonistisin. Odamdaki klima ve sıcak su sorunuyla ilgili şikâyetimi dinle. Ayrıntıları sırayla sor ve uygun bir çözüm öner. Daha önce söylediğim bilgileri tekrar sorma.'**
   String get roleplayHotelProblemTopic;
+
+  /// No description provided for @levelUpTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'SEVİYE ATLAMA SINAVI'**
+  String get levelUpTitle;
+
+  /// No description provided for @levelUpLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seviye atlama sınavın hazırlanıyor...'**
+  String get levelUpLoading;
+
+  /// No description provided for @levelUpLoadFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seviye atlama sınavı yüklenemedi.'**
+  String get levelUpLoadFailed;
+
+  /// No description provided for @levelUpNoQuestions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu sınav için soru bulunamadı.'**
+  String get levelUpNoQuestions;
+
+  /// No description provided for @levelUpRetry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Dene'**
+  String get levelUpRetry;
+
+  /// No description provided for @levelUpQuestionCounter.
+  ///
+  /// In tr, this message translates to:
+  /// **'Soru {current} / {total}'**
+  String levelUpQuestionCounter(int current, int total);
+
+  /// No description provided for @levelUpAnswer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cevapla'**
+  String get levelUpAnswer;
+
+  /// No description provided for @levelUpAnswerRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam etmeden önce cevabını tamamlamalısın.'**
+  String get levelUpAnswerRequired;
+
+  /// No description provided for @levelUpCorrect.
+  ///
+  /// In tr, this message translates to:
+  /// **'✅ Doğru!'**
+  String get levelUpCorrect;
+
+  /// No description provided for @levelUpWrong.
+  ///
+  /// In tr, this message translates to:
+  /// **'❌ Yanlış!'**
+  String get levelUpWrong;
+
+  /// No description provided for @levelUpFillBlank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boşluğu Doldur'**
+  String get levelUpFillBlank;
+
+  /// No description provided for @levelUpBuildSentence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cümleyi Kur'**
+  String get levelUpBuildSentence;
+
+  /// No description provided for @levelUpListenAndWrite.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duyduğunu Yaz'**
+  String get levelUpListenAndWrite;
+
+  /// No description provided for @levelUpReadAloud.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek Sesle Oku'**
+  String get levelUpReadAloud;
+
+  /// No description provided for @levelUpAnswerHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cevabını yaz...'**
+  String get levelUpAnswerHint;
+
+  /// No description provided for @levelUpWriteInLanguage.
+  ///
+  /// In tr, this message translates to:
+  /// **'{language} dilinde yaz...'**
+  String levelUpWriteInLanguage(String language);
+
+  /// No description provided for @levelUpMicrophoneHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mikrofona bas...'**
+  String get levelUpMicrophoneHint;
+
+  /// No description provided for @levelUpListening.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dinleniyor...'**
+  String get levelUpListening;
+
+  /// No description provided for @levelUpPassedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'SEVİYE ATLANDI!'**
+  String get levelUpPassedTitle;
+
+  /// No description provided for @levelUpFailedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'SINAVI GEÇEMEDİN'**
+  String get levelUpFailedTitle;
+
+  /// No description provided for @levelUpScore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puanın: {score} / 100'**
+  String levelUpScore(int score);
+
+  /// No description provided for @levelUpPassedMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika iş çıkardın! {level} seviyesinin kilidi açıldı.'**
+  String levelUpPassedMessage(String level);
+
+  /// No description provided for @levelUpFailedMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'70 puanı geçemedin. Eksiklerini kapatıp seviye atlama sınavını tekrar denemelisin.'**
+  String get levelUpFailedMessage;
+
+  /// No description provided for @levelUpNextMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni Haritaya Geç 🚀'**
+  String get levelUpNextMap;
+
+  /// No description provided for @levelUpBackToMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritaya Dön'**
+  String get levelUpBackToMap;
 }
 
 class _AppLocalizationsDelegate

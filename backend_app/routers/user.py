@@ -687,67 +687,222 @@ def upgrade_level(request: schemas.UpgradeLevelRequest, db: Session = Depends(ge
 
 
 @router.post("/generate_level_up_test")
-async def generate_level_up_test(request: schemas.TestRequest, db: Session = Depends(get_db)):
+async def generate_level_up_test(
+    request: schemas.TestRequest,
+    db: Session = Depends(get_db),
+):
     exam_questions = []
 
-    # 🌟 1. ADIM: Sadece kullanıcının ŞU ANKİ seviyesine ait derslerin ID'lerini bul!
-    # Örneğin kullanıcı "A1" ise, valid_lesson_ids = [1, 2, 3, 4, 5, 6, 7, 8] dönecek.
-    valid_lessons = db.query(models.Lesson.id).filter(
-        models.Lesson.min_level == request.level
-    ).all()
-    
-    # SQLAlchemy'den dönen tuple listesini düz bir listeye çeviriyoruz
-    valid_lesson_ids = [lesson[0] for lesson in valid_lessons]
+   
+    valid_lessons = (
+        db.query(models.Lesson.id)
+        .filter(
+            func.upper(
+                func.trim(models.Lesson.min_level)
+            ) == request.level.strip().upper()
+        )
+        .all()
+    )
 
-    # Eğer o seviyeye ait ders yoksa boş dönmemek için güvenlik önlemi
+    valid_lesson_ids = [
+        lesson_id
+        for (lesson_id,) in valid_lessons
+    ]
+
+    print(
+        "🎓 LEVEL UP TEST REQUEST:",
+        {
+            "level": request.level,
+            "target_language": request.target_language,
+            "native_language": request.native_language,
+            "lesson_ids": valid_lesson_ids,
+        },
+    )
+
     if not valid_lesson_ids:
-        return {"status": "error", "message": "Bu seviyeye ait ders bulunamadı."}
+        raise HTTPException(
+            status_code=404,
+            detail="Bu seviyeye ait ders bulunamadı.",
+        )
 
-    # 🌟 2. BOŞLUK DOLDURMA (Sadece bu seviyenin derslerinden 10 tane)
-    blank_records = db.query(models.BlankPuzzle).filter(
-        models.BlankPuzzle.target_language == request.target_language,
-        models.BlankPuzzle.lesson_id.in_(valid_lesson_ids) # 🎯 SİHİRLİ DOKUNUŞ BURASI!
-    ).order_by(func.random()).limit(10).all()
-    
-    for b in blank_records:
-        full_question = f"{b.before_text} ____ {b.after_text}".strip()
-        exam_questions.append({
-            "type": "blank", "question": full_question, 
-            "answer": b.correct_answer, "translation": b.translation
-        })
 
-    # 🌟 3. CÜMLE KURMA (Sadece bu seviyenin derslerinden 10 tane)
-    order_records = db.query(models.SentencePuzzle).filter(
-        models.SentencePuzzle.target_language == request.target_language,
-        models.SentencePuzzle.lesson_id.in_(valid_lesson_ids) # 🎯 SİHİRLİ DOKUNUŞ BURASI!
-    ).order_by(func.random()).limit(10).all()
-    
-    for o in order_records:
-        words = o.correct_sentence.split()
-        scrambled_words = random.sample(words, len(words))
-        exam_questions.append({
-            "type": "order", "original": o.original_sentence, 
-            "scrambled": scrambled_words, "correct": o.correct_sentence
-        })
 
-    # 🌟 4. DİNLEME VE TELAFFUZ (Zaten request.level filtresi vardı, ona dokunmuyoruz)
-    text_records = db.query(models.PronunciationText).filter(
-        models.PronunciationText.level == request.level, 
-        models.PronunciationText.target_language == request.target_language
-    ).order_by(func.random()).limit(10).all()
-    
-    for i, t in enumerate(text_records):
-        q_type = "listen" if i < 5 else "speak"
-        exam_questions.append({"type": q_type, "text": t.text})
+    blank_records = (
+        db.query(models.BlankPuzzle)
+        .filter(
+            models.BlankPuzzle.target_language
+            == request.target_language,
+            models.BlankPuzzle.lesson_id.in_(
+                valid_lesson_ids
+            ),
+        )
+        .order_by(func.random())
+        .limit(10)
+        .all()
+    )
 
-    # Soruları iyice karıştır ki sıkıcı olmasın
+    blank_translation_map = {}
+
+    if blank_records:
+        blank_ids = [
+            record.id
+            for record in blank_records
+        ]
+
+        blank_translations = (
+            db.query(
+                models.BlankPuzzleTranslation
+            )
+            .filter(
+                models.BlankPuzzleTranslation
+                .puzzle_id.in_(blank_ids),
+                models.BlankPuzzleTranslation
+                .native_language
+                == request.native_language,
+            )
+            .all()
+        )
+
+        blank_translation_map = {
+            translation.puzzle_id:
+                translation.translation
+            for translation in blank_translations
+        }
+
+    for record in blank_records:
+        full_question = (
+            f"{record.before_text} ____ "
+            f"{record.after_text}"
+        ).strip()
+
+        localized_translation = (
+            blank_translation_map.get(record.id)
+            or record.translation
+            or ""
+        )
+
+        exam_questions.append(
+            {
+                "type": "blank",
+                "question": full_question,
+                "answer": record.correct_answer,
+                "translation":
+                    localized_translation,
+            }
+        )
+
+    order_records = (
+        db.query(models.SentencePuzzle)
+        .filter(
+            models.SentencePuzzle.target_language
+            == request.target_language,
+            models.SentencePuzzle.lesson_id.in_(
+                valid_lesson_ids
+            ),
+        )
+        .order_by(func.random())
+        .limit(10)
+        .all()
+    )
+
+    sentence_translation_map = {}
+
+    if order_records:
+        sentence_ids = [
+            record.id
+            for record in order_records
+        ]
+
+        sentence_translations = (
+            db.query(
+                models.SentencePuzzleTranslation
+            )
+            .filter(
+                models.SentencePuzzleTranslation
+                .puzzle_id.in_(sentence_ids),
+                models.SentencePuzzleTranslation
+                .native_language
+                == request.native_language,
+            )
+            .all()
+        )
+
+        sentence_translation_map = {
+            translation.puzzle_id:
+                translation.original_sentence
+            for translation in sentence_translations
+        }
+
+    for record in order_records:
+        words = record.correct_sentence.split()
+
+        scrambled_words = random.sample(
+            words,
+            len(words),
+        )
+
+        localized_original = (
+            sentence_translation_map.get(record.id)
+            or record.original_sentence
+            or ""
+        )
+
+        exam_questions.append(
+            {
+                "type": "order",
+                "original": localized_original,
+                "scrambled": scrambled_words,
+                "correct": record.correct_sentence,
+            }
+        )
+
+    text_records = (
+        db.query(models.PronunciationText)
+        .filter(
+            models.PronunciationText.level
+            == request.level,
+            models.PronunciationText.target_language
+            == request.target_language,
+        )
+        .order_by(func.random())
+        .limit(10)
+        .all()
+    )
+
+    for index, record in enumerate(text_records):
+        question_type = (
+            "listen"
+            if index < 5
+            else "speak"
+        )
+
+        exam_questions.append(
+            {
+                "type": question_type,
+                "text": record.text,
+            }
+        )
+
     random.shuffle(exam_questions)
-    
+
+    if not exam_questions:
+        return {
+            "status": "error",
+            "message":
+                "No questions were found for this exam.",
+            "questions": [],
+        }
+
     return {
         "status": "success",
         "total_questions": len(exam_questions),
-        "questions": exam_questions
+        "target_language":
+            request.target_language,
+        "native_language":
+            request.native_language,
+        "questions": exam_questions,
     }
+
 
 
 # 🌟 YENİ: CAN SATIN ALMA APİ'Sİ
