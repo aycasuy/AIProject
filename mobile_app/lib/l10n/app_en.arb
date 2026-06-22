@@ -583,5 +583,24 @@
   "practiceTypeMinimalPair": "Minimal Pairs",
   "practiceTypeUnknown": "Unknown",
   "practiceEmptyTitle": "Great Job!",
-  "practiceEmptyMessage": "You have no mistakes to review."
+  "practiceEmptyMessage": "You have no mistakes to review.",
+  "flashcardPracticeTitle": "Kelime Antrenmanı",
+  "flashcardPracticeCounter": "Kelime {current} / {total}",
+  "@flashcardPracticeCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardPracticeReviewAgain": "Tekrar Sor",
+  "flashcardPracticeLearned": "Öğrendim!",
+  "flashcardPracticeTapToTranslate": "Çevirmek için karta dokun",
+  "flashcardPracticeNativeTranslation": "ANA DİL ÇEVİRİSİ",
+  "flashcardPracticeDoneTitle": "Harika İş Çıkardın!",
+  "flashcardPracticeDoneMessage": "Bugün için ayrılan tüm yeni kelimeleri tekrar ettin. Profiline dönüp istatistiklerini kontrol edebilirsin.",
+  "flashcardPracticeBackToProfile": "Profile Dön"
 }
