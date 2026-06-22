@@ -583,5 +583,24 @@
   "practiceTypeMinimalPair": "Minimal Pairs",
   "practiceTypeUnknown": "Unknown",
   "practiceEmptyTitle": "Great Job!",
-  "practiceEmptyMessage": "You have no mistakes to review."
+  "practiceEmptyMessage": "You have no mistakes to review.",
+  "flashcardPracticeTitle": "Word Practice",
+  "flashcardPracticeCounter": "Word {current} / {total}",
+  "@flashcardPracticeCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardPracticeReviewAgain": "Review Again",
+  "flashcardPracticeLearned": "I Learned It!",
+  "flashcardPracticeTapToTranslate": "Tap the card to see the translation",
+  "flashcardPracticeNativeTranslation": "NATIVE LANGUAGE TRANSLATION",
+  "flashcardPracticeDoneTitle": "Great Job!",
+  "flashcardPracticeDoneMessage": "You reviewed all the new words assigned for today. Return to your profile to check your statistics.",
+  "flashcardPracticeBackToProfile": "Back to Profile"
 }

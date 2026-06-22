@@ -583,5 +583,24 @@
   "practiceTypeMinimalPair": "Minimal Pairs",
   "practiceTypeUnknown": "Desconocido",
   "practiceEmptyTitle": "¡Buen trabajo!",
-  "practiceEmptyMessage": "No tienes errores que revisar."
+  "practiceEmptyMessage": "No tienes errores que revisar.",
+  "flashcardPracticeTitle": "Práctica de vocabulario",
+  "flashcardPracticeCounter": "Palabra {current} / {total}",
+  "@flashcardPracticeCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardPracticeReviewAgain": "Repetir",
+  "flashcardPracticeLearned": "¡Aprendida!",
+  "flashcardPracticeTapToTranslate": "Toca la tarjeta para ver la traducción",
+  "flashcardPracticeNativeTranslation": "TRADUCCIÓN A LA LENGUA MATERNA",
+  "flashcardPracticeDoneTitle": "¡Buen trabajo!",
+  "flashcardPracticeDoneMessage": "Has repasado todas las palabras nuevas asignadas para hoy. Vuelve a tu perfil para consultar tus estadísticas.",
+  "flashcardPracticeBackToProfile": "Volver al perfil"
 }
