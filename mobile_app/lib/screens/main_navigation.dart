@@ -120,6 +120,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ReadingScreen(
         username: widget.username,
         targetLanguage: widget.targetLanguage,
+        nativeLanguage: widget.nativeLanguage,
       ),
 
       ProfileScreen(

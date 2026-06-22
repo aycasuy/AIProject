@@ -10,6 +10,7 @@ class QuizScreen extends StatefulWidget {
   final int sectionIndex;
   final int lessonId;
   final String originalText;
+  final String nativeLanguage;
 
   const QuizScreen({
     super.key,
@@ -19,6 +20,7 @@ class QuizScreen extends StatefulWidget {
     required this.sectionIndex,
     required this.lessonId,
     this.originalText = "",
+    required this.nativeLanguage,
   });
 
   @override

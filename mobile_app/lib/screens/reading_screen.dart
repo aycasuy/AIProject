@@ -6,11 +6,13 @@ import 'analyzequiz_screen.dart';
 class ReadingScreen extends StatefulWidget {
   final String username;
   final String targetLanguage;
+  final String nativeLanguage;
 
   const ReadingScreen({
     super.key,
     required this.username,
     required this.targetLanguage,
+    required this.nativeLanguage,
   });
 
   @override
@@ -69,7 +71,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
         body: jsonEncode({
           "text": _originalText,
           "target_language": widget.targetLanguage,
-          "native_language": "Turkish",
+          "native_language": widget.nativeLanguage,
         }),
       );
 
@@ -111,7 +113,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
         body: jsonEncode({
           "text": currentText,
           "target_language": widget.targetLanguage,
-          "native_language": "Turkish",
+          "native_language": widget.nativeLanguage,
         }),
       );
 
@@ -133,6 +135,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 sectionIndex: 999,
                 lessonId: 999,
                 originalText: currentText,
+                nativeLanguage: widget.nativeLanguage,
               ),
             ),
           );
@@ -164,6 +167,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
           "word": wordData['word'],
           "translation": wordData['translation'],
           "cefr_level": wordData['cefr_level'],
+          "target_language": widget.targetLanguage,
         }),
       );
     } catch (e) {
