@@ -755,5 +755,61 @@
   "roleplayPassportControlTitle": "🛂 Control de pasaporte",
   "roleplayPassportControlTopic": "Usted es un cuidadoso y serio funcionario de control de pasaportes. Pregunte por qué he venido al país, donde me quedaré, y si tengo un billete de vuelta, uno a la vez. Recuerde mis respuestas anteriores y no repita la misma pregunta.",
   "roleplayHotelProblemTitle": "🏨 Problema del Hotel",
-  "roleplayHotelProblemTopic": "El personal del hotel es muy amable y atento. Pida los detalles uno a la vez y ofrezca una solución apropiada. No vuelva a pedir la información que ya he proporcionado."
+  "roleplayHotelProblemTopic": "El personal del hotel es muy amable y atento. Pida los detalles uno a la vez y ofrezca una solución apropiada. No vuelva a pedir la información que ya he proporcionado.",
+  "levelUpTitle": "EXAM NIVEL-UP",
+  "levelUpLoading": "Tu examen de nivelación está siendo preparado...",
+  "levelUpLoadFailed": "El examen de nivelación no pudo ser cargado.",
+  "levelUpNoQuestions": "No se encontraron preguntas para este examen.",
+  "levelUpRetry": "Inténtalo de nuevo",
+  "levelUpQuestionCounter": "Pregunta {current} / {total}",
+  "@levelUpQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "levelUpAnswer": "Respuesta",
+  "levelUpAnswerRequired": "Completa tu respuesta antes de continuar.",
+  "levelUpCorrect": "✅ ¡Correcto!",
+  "levelUpWrong": "❌ ¡Incorrecto!",
+  "levelUpFillBlank": "Rellena el blanco",
+  "levelUpBuildSentence": "Construye la oración",
+  "levelUpListenAndWrite": "Escuchar y escribir",
+  "levelUpReadAloud": "Leer en voz alta",
+  "levelUpAnswerHint": "Escribe tu respuesta...",
+  "levelUpWriteInLanguage": "Escribe en {language}...",
+  "@levelUpWriteInLanguage": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "levelUpMicrophoneHint": "Toca el micrófono...",
+  "levelUpListening": "Escuchando...",
+  "levelUpPassedTitle": "¡NIVEL DESLOQUEADO!",
+  "levelUpFailedTitle": "NO PASAS",
+  "levelUpScore": "Tu puntuación: {score} / 100",
+  "@levelUpScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "levelUpPassedMessage": "¡Buen trabajo! El nivel {level} ha sido desbloqueado.",
+  "@levelUpPassedMessage": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "levelUpFailedMessage": "No has alcanzado 70 puntos. Revisa tus zonas débiles y vuelve a probar el examen de nivelación.",
+  "levelUpNextMap": "Ir al nuevo mapa 🚀",
+  "levelUpBackToMap": "Volver al mapa"
 }

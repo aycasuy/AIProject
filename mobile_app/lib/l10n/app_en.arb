@@ -755,5 +755,61 @@
   "roleplayPassportControlTitle": "🛂 Passport Control",
   "roleplayPassportControlTopic": "You are a careful and serious passport control officer. Ask why I have come to the country, where I will stay, and whether I have a return ticket, one at a time. Remember my previous answers and do not repeat the same question.",
   "roleplayHotelProblemTitle": "🏨 Hotel Problem",
-  "roleplayHotelProblemTopic": "You are a hotel receptionist. Listen to my complaint about the air conditioning and hot water in my room. Ask for details one at a time and offer an appropriate solution. Do not ask again for information I have already provided."
+  "roleplayHotelProblemTopic": "You are a hotel receptionist. Listen to my complaint about the air conditioning and hot water in my room. Ask for details one at a time and offer an appropriate solution. Do not ask again for information I have already provided.",
+  "levelUpTitle": "LEVEL-UP EXAM",
+  "levelUpLoading": "Your level-up exam is being prepared...",
+  "levelUpLoadFailed": "The level-up exam could not be loaded.",
+  "levelUpNoQuestions": "No questions were found for this exam.",
+  "levelUpRetry": "Try Again",
+  "levelUpQuestionCounter": "Question {current} / {total}",
+  "@levelUpQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "levelUpAnswer": "Answer",
+  "levelUpAnswerRequired": "Complete your answer before continuing.",
+  "levelUpCorrect": "✅ Correct!",
+  "levelUpWrong": "❌ Incorrect!",
+  "levelUpFillBlank": "Fill in the Blank",
+  "levelUpBuildSentence": "Build the Sentence",
+  "levelUpListenAndWrite": "Listen and Write",
+  "levelUpReadAloud": "Read Aloud",
+  "levelUpAnswerHint": "Write your answer...",
+  "levelUpWriteInLanguage": "Write in {language}...",
+  "@levelUpWriteInLanguage": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "levelUpMicrophoneHint": "Tap the microphone...",
+  "levelUpListening": "Listening...",
+  "levelUpPassedTitle": "LEVEL UNLOCKED!",
+  "levelUpFailedTitle": "YOU DID NOT PASS",
+  "levelUpScore": "Your score: {score} / 100",
+  "@levelUpScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "levelUpPassedMessage": "Great job! Level {level} is now unlocked.",
+  "@levelUpPassedMessage": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "levelUpFailedMessage": "You did not reach 70 points. Review your weak areas and try the level-up exam again.",
+  "levelUpNextMap": "Go to the New Map 🚀",
+  "levelUpBackToMap": "Return to Map"
 }
