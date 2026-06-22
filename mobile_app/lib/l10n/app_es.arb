@@ -727,9 +727,9 @@
       }
     }
   },
-  "settingsPracticeLevelHint": "Geçmiş seviyelere dönüp pratik yapabilirsin. Ulaşmadığın seviyeler kilitli kalır.",
-  "settingsSavedMessage": "Ayarlar başarıyla kaydedildi! 🎉",
-  "settingsSaveError": "Ayarlar kaydedilemedi: {error}",
+  "settingsPracticeLevelHint": "Puedes volver a niveles anteriores para practicar. Los niveles que aún no has alcanzado permanecerán bloqueados.",
+  "settingsSavedMessage": "¡Los ajustes se guardaron correctamente! 🎉",
+  "settingsSaveError": "No se pudieron guardar los ajustes: {error}",
   "@settingsSaveError": {
     "placeholders": {
       "error": {
@@ -737,7 +737,7 @@
       }
     }
   },
-  "settingsLogoutTitle": "Çıkış Yap",
-  "settingsLogoutConfirmMessage": "Hesabından çıkmak istediğine emin misin?",
-  "settingsCancel": "İptal"
+  "settingsLogoutTitle": "Cerrar sesión",
+  "settingsLogoutConfirmMessage": "¿Seguro que quieres cerrar sesión en tu cuenta?",
+  "settingsCancel": "Cancelar"
 }
