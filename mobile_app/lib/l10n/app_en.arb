@@ -739,5 +739,21 @@
   },
   "settingsLogoutTitle": "Log out",
   "settingsLogoutConfirmMessage": "Are you sure you want to log out of your account?",
-  "settingsCancel": "Cancel"
+  "settingsCancel": "Cancel",
+  "navMap": "Map",
+  "navRoleplay": "Roleplay",
+  "navWordHunt": "Word Hunt",
+  "navProfile": "Profile",
+  "roleplayFirstMeetingTitle": "👋 First Meeting",
+  "roleplayFirstMeetingTopic": "You are a very friendly person I have just met. Ask me my name, how I am, and where I am from, one at a time. Use very simple and short sentences. Do not repeat a question I have already answered.",
+  "roleplayCafeOrderTitle": "☕ Ordering at a Café",
+  "roleplayCafeOrderTopic": "You are a barista and I have entered the café. Ask what I would like to drink and eat, confirm my order, and ask how I would like to pay. Use simple and short sentences. Do not repeat the same question.",
+  "roleplayTaxiDriverTitle": "🚕 Taxi Driver",
+  "roleplayTaxiDriverTopic": "You are a talkative taxi driver and we are going to the airport. Ask where I am flying, what my job is, and how my journey has been, one at a time. Remember the information I have already provided and do not repeat the same question.",
+  "roleplayClothingStoreTitle": "🛍️ Clothes Shopping",
+  "roleplayClothingStoreTopic": "You are a shop assistant. Ask how you can help me, what item I am looking for, my size, and my preferred color, one at a time. Remember my answers and do not repeat the same question.",
+  "roleplayPassportControlTitle": "🛂 Passport Control",
+  "roleplayPassportControlTopic": "You are a careful and serious passport control officer. Ask why I have come to the country, where I will stay, and whether I have a return ticket, one at a time. Remember my previous answers and do not repeat the same question.",
+  "roleplayHotelProblemTitle": "🏨 Hotel Problem",
+  "roleplayHotelProblemTopic": "You are a hotel receptionist. Listen to my complaint about the air conditioning and hot water in my room. Ask for details one at a time and offer an appropriate solution. Do not ask again for information I have already provided."
 }
