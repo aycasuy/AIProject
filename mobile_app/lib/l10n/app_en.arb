@@ -602,5 +602,129 @@
   "flashcardPracticeNativeTranslation": "NATIVE LANGUAGE TRANSLATION",
   "flashcardPracticeDoneTitle": "Great Job!",
   "flashcardPracticeDoneMessage": "You reviewed all the new words assigned for today. Return to your profile to check your statistics.",
-  "flashcardPracticeBackToProfile": "Back to Profile"
+  "flashcardPracticeBackToProfile": "Back to Profile",
+  "wordHuntTitle": "Word Hunt",
+  "wordHuntIntroTitle": "Paste your text and let’s catch the words!",
+  "wordHuntIntroDescription": "Analyze difficult words, check their levels, and take a quiz based on the text.",
+  "wordHuntTextReady": "Text ready",
+  "wordHuntTextField": "Text area",
+  "wordHuntClear": "Clear",
+  "wordHuntPasteHint": "Paste your {language} text here...",
+  "@wordHuntPasteHint": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntWordCount": "{count} words",
+  "@wordHuntWordCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntAnalysisPending": "Waiting for analysis",
+  "wordHuntLevel": "Level: {level}",
+  "@wordHuntLevel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntAnalysisCompleted": "Analysis completed",
+  "wordHuntHighlightedWords": "{count} words highlighted",
+  "@wordHuntHighlightedWords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntTapColoredWords": "Tap the highlighted words",
+  "wordHuntAnalyzeButton": "Analyze Words",
+  "wordHuntQuizButton": "Take a Quiz with This Text",
+  "wordHuntExampleUsage": "Example usage",
+  "wordHuntAddToBank": "Add to My Word Bank",
+  "wordHuntAddedToBank": "Word added to your word bank! 🚀",
+  "wordHuntAnalyzeEmpty": "Paste a text before starting the analysis. 📝",
+  "wordHuntAnalyzeFailed": "Analysis failed: {status}",
+  "@wordHuntAnalyzeFailed": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntConnectionError": "Could not connect to the server: {error}",
+  "@wordHuntConnectionError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntQuizEmpty": "Paste a text before creating a quiz. 📝",
+  "wordHuntQuizGenerationFailed": "The AI could not create questions from this text. Try a longer text! 📝",
+  "wordHuntQuizCreateFailed": "Quiz could not be created: {status}",
+  "@wordHuntQuizCreateFailed": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntQuizTitle": "Word Hunt Quiz",
+  "wordHuntOriginalTextTitle": "Original Text",
+  "wordHuntOriginalTextSubtitle": "You can review the text while answering the questions.",
+  "wordHuntOriginalTextMissing": "There is no text available for this quiz.",
+  "wordHuntQuestionNumber": "Question {current}",
+  "@wordHuntQuestionNumber": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntTypeFillBlank": "Fill in the Blank",
+  "wordHuntTypeMultipleChoice": "Multiple Choice",
+  "wordHuntChooseMissingWord": "Choose the correct word and complete the blank",
+  "wordHuntWordBank": "Word bank",
+  "wordHuntAnswerQuestion": "Answer the question",
+  "wordHuntExplanationMissing": "No explanation is available.",
+  "wordHuntCorrectFeedback": "Great! Correct answer.\\n{explanation}",
+  "@wordHuntCorrectFeedback": {
+    "placeholders": {
+      "explanation": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntRetryFeedback": "Let’s review it again.\\n{explanation}",
+  "@wordHuntRetryFeedback": {
+    "placeholders": {
+      "explanation": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntExcellentTitle": "Excellent!",
+  "wordHuntCompletedTitle": "Quiz Completed!",
+  "wordHuntExcellentMessage": "You did a great job in the word hunt.",
+  "wordHuntCompletedMessage": "You will get faster with more practice.",
+  "wordHuntScore": "Score",
+  "wordHuntXp": "XP",
+  "wordHuntContinue": "Continue",
+  "wordHuntNoQuestions": "No questions found.",
+  "wordHuntSeeResult": "See Result",
+  "wordHuntXpSaveError": "An error occurred while saving XP: {error}",
+  "@wordHuntXpSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }

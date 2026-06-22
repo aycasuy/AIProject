@@ -602,5 +602,129 @@
   "flashcardPracticeNativeTranslation": "TRADUCCIÓN A LA LENGUA MATERNA",
   "flashcardPracticeDoneTitle": "¡Buen trabajo!",
   "flashcardPracticeDoneMessage": "Has repasado todas las palabras nuevas asignadas para hoy. Vuelve a tu perfil para consultar tus estadísticas.",
-  "flashcardPracticeBackToProfile": "Volver al perfil"
+  "flashcardPracticeBackToProfile": "Volver al perfil",
+  "wordHuntTitle": "Cacería de palabras",
+  "wordHuntIntroTitle": "Pega tu texto y vamos a coger las palabras!",
+  "wordHuntIntroDescription": "Analizar palabras difíciles, comprobar sus niveles y hacer un cuestionario basado en el texto.",
+  "wordHuntTextReady": "Texto listo",
+  "wordHuntTextField": "Área de texto",
+  "wordHuntClear": "Claro",
+  "wordHuntPasteHint": "Pega tu texto {language} aquí...",
+  "@wordHuntPasteHint": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntWordCount": "{count} palabras",
+  "@wordHuntWordCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntAnalysisPending": "Esperando análisis",
+  "wordHuntLevel": "Nivel: {level}",
+  "@wordHuntLevel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntAnalysisCompleted": "Análisis completado",
+  "wordHuntHighlightedWords": "{count} palabras resaltadas",
+  "@wordHuntHighlightedWords": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntTapColoredWords": "Toque las palabras resaltadas",
+  "wordHuntAnalyzeButton": "Analizar palabras",
+  "wordHuntQuizButton": "Haz un examen con este texto",
+  "wordHuntExampleUsage": "Uso de ejemplo",
+  "wordHuntAddToBank": "Añadir a mi banco Word",
+  "wordHuntAddedToBank": "¡Palabra añadida a tu banco de palabras! 🚀",
+  "wordHuntAnalyzeEmpty": "Pegar un texto antes de comenzar el análisis. 📝",
+  "wordHuntAnalyzeFailed": "Análisis fallido: {status}",
+  "@wordHuntAnalyzeFailed": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntConnectionError": "No se pudo conectar al servidor: {error}",
+  "@wordHuntConnectionError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntQuizEmpty": "Pegar un texto antes de crear un cuestionario. 📝",
+  "wordHuntQuizGenerationFailed": "La IA no pudo crear preguntas a partir de este texto. ¡Prueba un texto más largo! 📝",
+  "wordHuntQuizCreateFailed": "Prueba no pudo ser creada: {status}",
+  "@wordHuntQuizCreateFailed": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntQuizTitle": "Prueba de Cacería de Palabras",
+  "wordHuntOriginalTextTitle": "Texto original",
+  "wordHuntOriginalTextSubtitle": "Puede revisar el texto mientras responde a las preguntas.",
+  "wordHuntOriginalTextMissing": "No hay texto disponible para este cuestionario.",
+  "wordHuntQuestionNumber": "Pregunta {current}",
+  "@wordHuntQuestionNumber": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      }
+    }
+  },
+  "wordHuntTypeFillBlank": "Completa el espacio",
+  "wordHuntTypeMultipleChoice": "Elección múltiple",
+  "wordHuntChooseMissingWord": "Elige la palabra correcta y completa el espacio en blanco",
+  "wordHuntWordBank": "Banco de palabras",
+  "wordHuntAnswerQuestion": "Responder la pregunta",
+  "wordHuntExplanationMissing": "No hay ninguna explicación disponible.",
+  "wordHuntCorrectFeedback": "¡Genial! Respuesta correcta.\\n{explanation}",
+  "@wordHuntCorrectFeedback": {
+    "placeholders": {
+      "explanation": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntRetryFeedback": "Revisémoslo de nuevo.\\n{explanation}",
+  "@wordHuntRetryFeedback": {
+    "placeholders": {
+      "explanation": {
+        "type": "String"
+      }
+    }
+  },
+  "wordHuntExcellentTitle": "¡Excelente!",
+  "wordHuntCompletedTitle": "¡Prueba completada!",
+  "wordHuntExcellentMessage": "Usted hizo un gran trabajo en la palabra caza.",
+  "wordHuntCompletedMessage": "Se hará más rápido con más prácticas.",
+  "wordHuntScore": "Puntaje",
+  "wordHuntXp": "EP",
+  "wordHuntContinue": "Continuar",
+  "wordHuntNoQuestions": "No se encontraron preguntas.",
+  "wordHuntSeeResult": "Ver Resultados",
+  "wordHuntXpSaveError": "Se produjo un error al guardar los XP: {error}",
+  "@wordHuntXpSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }
