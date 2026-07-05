@@ -361,7 +361,7 @@ Aşağıdaki alanlara uygulama ekran görüntüleri eklenebilir.
 
 | Ders Haritası | Roleplay |
 |---|---|
-| ![Ders Haritası](docs/screenshots/path.png) | ![Roleplay](docs/screenshots/roleplay.png) |
+| ![Ders Haritası](C:\Projelerim\AIProject\docs\screenshots\path.png) | ![Roleplay](docs/screenshots/roleplay.png) |
 
 | Profil | Kelime Avı |
 |---|---|
