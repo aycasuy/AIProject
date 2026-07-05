@@ -359,11 +359,13 @@ GEMINI_API_KEY=GEMINI_API_ANAHTARINIZ
 
 Aşağıdaki alanlara uygulama ekran görüntüleri eklenebilir.
 
-```markdown
-| Ana Sayfa | Ders Haritası | Roleplay |
-|---|---|---|
-| ![Ana Sayfa](docs/screenshots/home.png) | ![Ders Haritası](docs/screenshots/path.png) | ![Roleplay](docs/screenshots/roleplay.png) |
-```
+| Ders Haritası | Roleplay |
+|---|---|
+| ![Ders Haritası](docs/screenshots/path.png) | ![Roleplay](docs/screenshots/roleplay.png) |
+
+| Profil | Kelime Avı |
+|---|---|
+| ![Profil](docs/screenshots/profile.png) | ![Kelime Avı](docs/screenshots/word_hunt.png) |
 
 Örnek klasör yapısı:
 
