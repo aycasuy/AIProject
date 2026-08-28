@@ -357,7 +357,6 @@ GEMINI_API_KEY=GEMINI_API_ANAHTARINIZ
 
 ## Ekran Görüntüleri
 
-Aşağıdaki alanlara uygulama ekran görüntüleri eklenebilir.
 
 | Ders Haritası | Roleplay |
 |---|---|
